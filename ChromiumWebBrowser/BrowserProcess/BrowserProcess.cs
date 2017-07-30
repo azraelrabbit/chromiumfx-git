@@ -7,6 +7,8 @@
 using System;
 using Chromium;
 using Chromium.Event;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Chromium.WebBrowser {
     internal static class BrowserProcess {
@@ -35,8 +37,33 @@ namespace Chromium.WebBrowser {
             app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowser.RaiseOnRegisterCustomSchemes(e);
 
             var settings = new CfxSettings();
-            settings.MultiThreadedMessageLoop = true;
+			//FIXED different default settings based on platform
+
+			switch (CfxRuntime.PlatformOS)
+
+			{
+
+			case CfxPlatformOS.Linux:
+
+				settings.MultiThreadedMessageLoop = false;
+
+
+				//TODO less demanding way of using DoMessageLoopWork, ExernalMessageLoop = true doesn't seem to work
+
+				Application.Idle += BrowserMessageLoopStep;
+
+				break;
+
+			default:
+
+				settings.MultiThreadedMessageLoop = true;
+
+				break;
+
+			}
+
             settings.NoSandbox = true;
+
 
             ChromiumWebBrowser.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
@@ -45,5 +72,12 @@ namespace Chromium.WebBrowser {
 
             initialized = true;
         }
+
+		private static void BrowserMessageLoopStep(object sender, EventArgs e)
+		{
+			CfxRuntime.DoMessageLoopWork();
+			Thread.Yield();
+		}
+
     }
 }

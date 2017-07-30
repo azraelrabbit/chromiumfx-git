@@ -5,6 +5,8 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
+using Chromium.Event;
+
 namespace Chromium {
     /// <summary>
     /// Collection of global static CEF functions.
@@ -179,6 +181,16 @@ namespace Chromium {
                 case CfxPlatformOS.Windows:
                     return InitializePrivate(null, settings, application, IntPtr.Zero);
                 case CfxPlatformOS.Linux:
+					// if no BrowserSubProcessPath is given we set it here in order to prevent execution of /usr/bin/mono
+
+					if (settings.BrowserSubprocessPath == null)
+					{
+						settings.BrowserSubprocessPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+					}
+
+					// render and utility processes need a mono prefix or else they won't launch
+					application.OnBeforeCommandLineProcessing += AddMonoCmdPrefix;
+
                     using(var mainArgs = CfxMainArgs.ForLinux()) {
                         var retval = InitializePrivate(mainArgs, settings, application, IntPtr.Zero);
                         mainArgs.mainArgsLinux.Free();
@@ -188,6 +200,24 @@ namespace Chromium {
                     throw new CfxException();
             }
         }
+
+		private static void AddMonoCmdPrefix(object sender, CfxOnBeforeCommandLineProcessingEventArgs e)
+		{
+			if (!e.CommandLine.HasSwitch("--renderer-cmd-prefix"))
+			{
+				e.CommandLine.AppendSwitchWithValue("--renderer-cmd-prefix", "mono");
+			}
+
+			if (!e.CommandLine.HasSwitch("--gpu-launcher"))
+			{
+				e.CommandLine.AppendSwitchWithValue("--gpu-launcher", "mono");
+			}
+
+			if (!e.CommandLine.HasSwitch("--utility-cmd-prefix"))
+			{
+				e.CommandLine.AppendSwitchWithValue("--utility-cmd-prefix", "mono");
+			}
+		}
 
         public static string GetCefVersion() {
             CfxApi.Probe();
