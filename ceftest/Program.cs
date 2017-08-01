@@ -46,7 +46,7 @@ namespace ceftest
             else
                 CfxRuntime.LibCefDirPath = @"cef/Release";
 
-           
+
             
 
             Chromium.WebBrowser.ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
@@ -57,7 +57,7 @@ namespace ceftest
             //Walkthrough01.Main();
             //return;
             //CfxRuntime.RunMessageLoop();
-
+		
 
             Application.ApplicationExit += Application_ApplicationExit;
             Application.EnableVisualStyles();
@@ -79,26 +79,36 @@ namespace ceftest
         static void ChromiumWebBrowser_OnBeforeCommandLineProcessing(CfxOnBeforeCommandLineProcessingEventArgs e)
         {
             Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
-             e.CommandLine.AppendArgument("--disable-gpu");
+            e.CommandLine.AppendArgument("--disable-gpu");
 
             //e.CommandLine.AppendSwitchWithValue("renderer-cmd-prefix", "spawnscript");
             //e.CommandLine.AppendSwitchWithValue("utility-cmd-prefix", "spawnscript");
-   
+
             e.CommandLine.AppendSwitch("disable-gpu-compositing");
-            e.CommandLine.AppendSwitch("disable-gpu-vsync");
+           // e.CommandLine.AppendSwitch("disable-gpu-vsync");
             Console.WriteLine(e.CommandLine.CommandLineString);
+
         }
 
         static void ChromiumWebBrowser_OnBeforeCfxInitialize(OnBeforeCfxInitializeEventArgs e)
         {
            // e.Settings.MultiThreadedMessageLoop = false;
            // e.Settings.ExternalMessagePump = true;//ExternalMessagePump= true;
+			var lang=e.Settings.AcceptLanguageList;
+			Console.WriteLine ("lang-list"+lang);
+			Console.WriteLine ("ua"+e.Settings.UserAgent);
             e.Settings.NoSandbox = true;
             e.Settings.CachePath = cachePath;
             e.Settings.UserDataPath = userPath;
             e.Settings.LogFile = logPath;
-            
-            e.Settings.LogSeverity=CfxLogSeverity.Verbose;
+			e.Settings.WindowlessRenderingEnabled = false;
+
+			e.Settings.LogSeverity=CfxLogSeverity.Verbose;
+			e.Settings.AcceptLanguageList = "*";
+			e.Settings.IgnoreCertificateErrors = true;
+			e.Settings.EnableNetSecurityExpiration = false;
+			e.Settings.PersistUserPreferences = false;
+			e.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 
             e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/Resources/locales");
             e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef/Resources");

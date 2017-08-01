@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromiumWebBrowser", "Chrom
 EndProject
 Project("{2857B73E-F847-4B02-9238-064979017E93}") = "libcfx64-Mono", "libcfx64\libcfx64-Mono.cproj", "{660A63B1-3101-4AB4-9BFD-AB5110458D44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ceftest-mono", "ceftest\ceftest-mono.csproj", "{7D309C8E-15B1-4988-BE6B-49037C57E69F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ceftest", "ceftest\ceftest.csproj", "{7D309C8E-15B1-4988-BE6B-49037C57E69F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
