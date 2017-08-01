@@ -23,21 +23,35 @@ namespace ceftest
         private void Form1_Load(object sender, EventArgs e)
         {
             webBrowser=new ChromiumWebBrowser();
+
+		
            webBrowser.Dock=DockStyle.Fill;
            
             
             panel1.Controls.Add(webBrowser);
             panel1.Refresh();
             //CfxRuntime.DoMessageLoopWork();
+			//var callback=new CfxCompletionCallback();
+			//callback.OnComplete += callbackComplete;
+			//CfxRuntime.BeginTracing ("mytrace",callback);
+
+
         }
  
+		void callbackComplete(object sender,CfxEventArgs e){
+
+			 
+		}
 
         private void button1_Click_1(object sender, EventArgs e)
         {
             var url = textBox1.Text;
 
             webBrowser.LoadUrl(url);
-            webBrowser.Refresh();
+          
+			webBrowser.Show ();
+			webBrowser.BringToFront ();
+			this.RaisePaintEvent (webBrowser, new PaintEventArgs (this.CreateGraphics (), webBrowser.ClientRectangle));
         }
     }
 }

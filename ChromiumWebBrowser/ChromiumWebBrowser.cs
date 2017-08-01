@@ -342,7 +342,8 @@ namespace Chromium.WebBrowser {
             var windowInfo = new CfxWindowInfo();
             // in order to avoid focus issues when creating browsers offscreen,
             // the browser must be created with a disabled child window.
-            windowInfo.SetAsDisabledChild(Handle);
+			windowInfo.SetAsDisabledChild(Handle);
+			//windowInfo.SetAsChild ();
 
             if(!CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, DefaultBrowserSettings, requestContext))
                 throw new ChromiumWebBrowserException("Failed to create browser instance.");
@@ -474,6 +475,8 @@ namespace Chromium.WebBrowser {
                     }
                 }
             }
+
+			ResizeBrowserWindow ();
         }
 
         /// <summary>
@@ -494,6 +497,7 @@ namespace Chromium.WebBrowser {
                     }
                 }
             }
+			ResizeBrowserWindow ();
         }
 
         /// <summary>
@@ -1189,6 +1193,7 @@ namespace Chromium.WebBrowser {
 				if(browserWindowHandle != IntPtr.Zero)
 					NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED);
 			}
+			this.Update ();
 		}
 
 
