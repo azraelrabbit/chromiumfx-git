@@ -128,6 +128,10 @@ namespace Chromium.WebBrowser
 
 			public override void SetPosition(IntPtr wnd, int x, int y, int w, int h)
 			{
+			    var ws = System.Windows.Forms.NativeWindow.FromHandle(wnd);
+               
+               
+
 				XMoveResizeWindow(CfxRuntime.Linux.GetXDisplay(), wnd, x, y, w, h);
 			}
 
