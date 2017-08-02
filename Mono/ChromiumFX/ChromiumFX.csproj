@@ -1,0 +1,913 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C135345E-9F5A-44E5-8609-037C178FEAF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ChromiumFX</RootNamespace>
+    <AssemblyName>ChromiumFX</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxAccessibilityHandler.cs">
+      <Link>Generated\CfxAccessibilityHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxApi.cs">
+      <Link>Generated\CfxApi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxApiLoader.cs">
+      <Link>Generated\CfxApiLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxApp.cs">
+      <Link>Generated\CfxApp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxAuthCallback.cs">
+      <Link>Generated\CfxAuthCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBeforeDownloadCallback.cs">
+      <Link>Generated\CfxBeforeDownloadCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBinaryValue.cs">
+      <Link>Generated\CfxBinaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBoxLayoutSettings.cs">
+      <Link>Generated\CfxBoxLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBrowser.cs">
+      <Link>Generated\CfxBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBrowserHost.cs">
+      <Link>Generated\CfxBrowserHost.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBrowserProcessHandler.cs">
+      <Link>Generated\CfxBrowserProcessHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxBrowserSettings.cs">
+      <Link>Generated\CfxBrowserSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCallback.cs">
+      <Link>Generated\CfxCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxClient.cs">
+      <Link>Generated\CfxClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCommandLine.cs">
+      <Link>Generated\CfxCommandLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCompletionCallback.cs">
+      <Link>Generated\CfxCompletionCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCompositionUnderline.cs">
+      <Link>Generated\CfxCompositionUnderline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxContextMenuHandler.cs">
+      <Link>Generated\CfxContextMenuHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxContextMenuParams.cs">
+      <Link>Generated\CfxContextMenuParams.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCookie.cs">
+      <Link>Generated\CfxCookie.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCookieManager.cs">
+      <Link>Generated\CfxCookieManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCookieVisitor.cs">
+      <Link>Generated\CfxCookieVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxCursorInfo.cs">
+      <Link>Generated\CfxCursorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDeleteCookiesCallback.cs">
+      <Link>Generated\CfxDeleteCookiesCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDialogHandler.cs">
+      <Link>Generated\CfxDialogHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDictionaryValue.cs">
+      <Link>Generated\CfxDictionaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDisplayHandler.cs">
+      <Link>Generated\CfxDisplayHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDomDocument.cs">
+      <Link>Generated\CfxDomDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDomNode.cs">
+      <Link>Generated\CfxDomNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDomVisitor.cs">
+      <Link>Generated\CfxDomVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDownloadHandler.cs">
+      <Link>Generated\CfxDownloadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDownloadImageCallback.cs">
+      <Link>Generated\CfxDownloadImageCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDownloadItem.cs">
+      <Link>Generated\CfxDownloadItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDownloadItemCallback.cs">
+      <Link>Generated\CfxDownloadItemCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDragData.cs">
+      <Link>Generated\CfxDragData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDraggableRegion.cs">
+      <Link>Generated\CfxDraggableRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxDragHandler.cs">
+      <Link>Generated\CfxDragHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxEndTracingCallback.cs">
+      <Link>Generated\CfxEndTracingCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxEnums.cs">
+      <Link>Generated\CfxEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxFileDialogCallback.cs">
+      <Link>Generated\CfxFileDialogCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxFindHandler.cs">
+      <Link>Generated\CfxFindHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxFocusHandler.cs">
+      <Link>Generated\CfxFocusHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxFrame.cs">
+      <Link>Generated\CfxFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxGeolocationCallback.cs">
+      <Link>Generated\CfxGeolocationCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxGeolocationHandler.cs">
+      <Link>Generated\CfxGeolocationHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxGeoposition.cs">
+      <Link>Generated\CfxGeoposition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxGetGeolocationCallback.cs">
+      <Link>Generated\CfxGetGeolocationCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxImage.cs">
+      <Link>Generated\CfxImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxInsets.cs">
+      <Link>Generated\CfxInsets.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxJsDialogCallback.cs">
+      <Link>Generated\CfxJsDialogCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxJsDialogHandler.cs">
+      <Link>Generated\CfxJsDialogHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxKeyboardHandler.cs">
+      <Link>Generated\CfxKeyboardHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxKeyEvent.cs">
+      <Link>Generated\CfxKeyEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxLifeSpanHandler.cs">
+      <Link>Generated\CfxLifeSpanHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxListValue.cs">
+      <Link>Generated\CfxListValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxLoadHandler.cs">
+      <Link>Generated\CfxLoadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxMainArgsLinux.cs">
+      <Link>Generated\CfxMainArgsLinux.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxMainArgsWindows.cs">
+      <Link>Generated\CfxMainArgsWindows.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxMenuModel.cs">
+      <Link>Generated\CfxMenuModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxMenuModelDelegate.cs">
+      <Link>Generated\CfxMenuModelDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxMouseEvent.cs">
+      <Link>Generated\CfxMouseEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxNavigationEntry.cs">
+      <Link>Generated\CfxNavigationEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxNavigationEntryVisitor.cs">
+      <Link>Generated\CfxNavigationEntryVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPdfPrintCallback.cs">
+      <Link>Generated\CfxPdfPrintCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPdfPrintSettings.cs">
+      <Link>Generated\CfxPdfPrintSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPoint.cs">
+      <Link>Generated\CfxPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPopupFeatures.cs">
+      <Link>Generated\CfxPopupFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPostData.cs">
+      <Link>Generated\CfxPostData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPostDataElement.cs">
+      <Link>Generated\CfxPostDataElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPrintDialogCallback.cs">
+      <Link>Generated\CfxPrintDialogCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPrintHandler.cs">
+      <Link>Generated\CfxPrintHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPrintJobCallback.cs">
+      <Link>Generated\CfxPrintJobCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxPrintSettings.cs">
+      <Link>Generated\CfxPrintSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxProcessMessage.cs">
+      <Link>Generated\CfxProcessMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRange.cs">
+      <Link>Generated\CfxRange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxReadHandler.cs">
+      <Link>Generated\CfxReadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRect.cs">
+      <Link>Generated\CfxRect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRegisterCdmCallback.cs">
+      <Link>Generated\CfxRegisterCdmCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRenderHandler.cs">
+      <Link>Generated\CfxRenderHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRenderProcessHandler.cs">
+      <Link>Generated\CfxRenderProcessHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequest.cs">
+      <Link>Generated\CfxRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequestCallback.cs">
+      <Link>Generated\CfxRequestCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequestContext.cs">
+      <Link>Generated\CfxRequestContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequestContextHandler.cs">
+      <Link>Generated\CfxRequestContextHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequestContextSettings.cs">
+      <Link>Generated\CfxRequestContextSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRequestHandler.cs">
+      <Link>Generated\CfxRequestHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResolveCallback.cs">
+      <Link>Generated\CfxResolveCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResourceBundle.cs">
+      <Link>Generated\CfxResourceBundle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResourceBundleHandler.cs">
+      <Link>Generated\CfxResourceBundleHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResourceHandler.cs">
+      <Link>Generated\CfxResourceHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResponse.cs">
+      <Link>Generated\CfxResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxResponseFilter.cs">
+      <Link>Generated\CfxResponseFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRunContextMenuCallback.cs">
+      <Link>Generated\CfxRunContextMenuCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRunFileDialogCallback.cs">
+      <Link>Generated\CfxRunFileDialogCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxRuntime.cs">
+      <Link>Generated\CfxRuntime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSchemeHandlerFactory.cs">
+      <Link>Generated\CfxSchemeHandlerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSchemeRegistrar.cs">
+      <Link>Generated\CfxSchemeRegistrar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxScreenInfo.cs">
+      <Link>Generated\CfxScreenInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSelectClientCertificateCallback.cs">
+      <Link>Generated\CfxSelectClientCertificateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSetCookieCallback.cs">
+      <Link>Generated\CfxSetCookieCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSettings.cs">
+      <Link>Generated\CfxSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSize.cs">
+      <Link>Generated\CfxSize.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSslInfo.cs">
+      <Link>Generated\CfxSslInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxSslStatus.cs">
+      <Link>Generated\CfxSslStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxStreamReader.cs">
+      <Link>Generated\CfxStreamReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxStreamWriter.cs">
+      <Link>Generated\CfxStreamWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxStringVisitor.cs">
+      <Link>Generated\CfxStringVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxTask.cs">
+      <Link>Generated\CfxTask.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxTaskRunner.cs">
+      <Link>Generated\CfxTaskRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxThread.cs">
+      <Link>Generated\CfxThread.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxTime.cs">
+      <Link>Generated\CfxTime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxUrlParts.cs">
+      <Link>Generated\CfxUrlParts.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxUrlRequest.cs">
+      <Link>Generated\CfxUrlRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxUrlRequestClient.cs">
+      <Link>Generated\CfxUrlRequestClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Accessor.cs">
+      <Link>Generated\CfxV8Accessor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Context.cs">
+      <Link>Generated\CfxV8Context.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Exception.cs">
+      <Link>Generated\CfxV8Exception.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Handler.cs">
+      <Link>Generated\CfxV8Handler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Interceptor.cs">
+      <Link>Generated\CfxV8Interceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8StackFrame.cs">
+      <Link>Generated\CfxV8StackFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8StackTrace.cs">
+      <Link>Generated\CfxV8StackTrace.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxV8Value.cs">
+      <Link>Generated\CfxV8Value.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxValue.cs">
+      <Link>Generated\CfxValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWaitableEvent.cs">
+      <Link>Generated\CfxWaitableEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWebPluginInfo.cs">
+      <Link>Generated\CfxWebPluginInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWebPluginInfoVisitor.cs">
+      <Link>Generated\CfxWebPluginInfoVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWebPluginUnstableCallback.cs">
+      <Link>Generated\CfxWebPluginUnstableCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWindowInfoLinux.cs">
+      <Link>Generated\CfxWindowInfoLinux.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWindowInfoWindows.cs">
+      <Link>Generated\CfxWindowInfoWindows.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxWriteHandler.cs">
+      <Link>Generated\CfxWriteHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxX509Certificate.cs">
+      <Link>Generated\CfxX509Certificate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxX509CertPrincipal.cs">
+      <Link>Generated\CfxX509CertPrincipal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxXmlReader.cs">
+      <Link>Generated\CfxXmlReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\CfxZipReader.cs">
+      <Link>Generated\CfxZipReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrApp.cs">
+      <Link>Generated\Remote\CfrApp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrBinaryValue.cs">
+      <Link>Generated\Remote\CfrBinaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrBrowser.cs">
+      <Link>Generated\Remote\CfrBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrCommandLine.cs">
+      <Link>Generated\Remote\CfrCommandLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrDictionaryValue.cs">
+      <Link>Generated\Remote\CfrDictionaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrDomDocument.cs">
+      <Link>Generated\Remote\CfrDomDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrDomNode.cs">
+      <Link>Generated\Remote\CfrDomNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrDomVisitor.cs">
+      <Link>Generated\Remote\CfrDomVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrFrame.cs">
+      <Link>Generated\Remote\CfrFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrListValue.cs">
+      <Link>Generated\Remote\CfrListValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrLoadHandler.cs">
+      <Link>Generated\Remote\CfrLoadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrPostData.cs">
+      <Link>Generated\Remote\CfrPostData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrPostDataElement.cs">
+      <Link>Generated\Remote\CfrPostDataElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrProcessMessage.cs">
+      <Link>Generated\Remote\CfrProcessMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrReadHandler.cs">
+      <Link>Generated\Remote\CfrReadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrRect.cs">
+      <Link>Generated\Remote\CfrRect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrRenderProcessHandler.cs">
+      <Link>Generated\Remote\CfrRenderProcessHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrRequest.cs">
+      <Link>Generated\Remote\CfrRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrResourceBundle.cs">
+      <Link>Generated\Remote\CfrResourceBundle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrResourceBundleHandler.cs">
+      <Link>Generated\Remote\CfrResourceBundleHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrResponse.cs">
+      <Link>Generated\Remote\CfrResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrRuntime.cs">
+      <Link>Generated\Remote\CfrRuntime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrSchemeRegistrar.cs">
+      <Link>Generated\Remote\CfrSchemeRegistrar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrStreamReader.cs">
+      <Link>Generated\Remote\CfrStreamReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrStreamWriter.cs">
+      <Link>Generated\Remote\CfrStreamWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrStringVisitor.cs">
+      <Link>Generated\Remote\CfrStringVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrTask.cs">
+      <Link>Generated\Remote\CfrTask.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrTaskRunner.cs">
+      <Link>Generated\Remote\CfrTaskRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrThread.cs">
+      <Link>Generated\Remote\CfrThread.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrTime.cs">
+      <Link>Generated\Remote\CfrTime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Accessor.cs">
+      <Link>Generated\Remote\CfrV8Accessor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Context.cs">
+      <Link>Generated\Remote\CfrV8Context.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Exception.cs">
+      <Link>Generated\Remote\CfrV8Exception.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Handler.cs">
+      <Link>Generated\Remote\CfrV8Handler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Interceptor.cs">
+      <Link>Generated\Remote\CfrV8Interceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8StackFrame.cs">
+      <Link>Generated\Remote\CfrV8StackFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8StackTrace.cs">
+      <Link>Generated\Remote\CfrV8StackTrace.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrV8Value.cs">
+      <Link>Generated\Remote\CfrV8Value.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrValue.cs">
+      <Link>Generated\Remote\CfrValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrWaitableEvent.cs">
+      <Link>Generated\Remote\CfrWaitableEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrWriteHandler.cs">
+      <Link>Generated\Remote\CfrWriteHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrXmlReader.cs">
+      <Link>Generated\Remote\CfrXmlReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfrZipReader.cs">
+      <Link>Generated\Remote\CfrZipReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxAppRemoteCalls.cs">
+      <Link>Generated\Remote\CfxAppRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxAppRemoteClient.cs">
+      <Link>Generated\Remote\CfxAppRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxBinaryValueRemoteCalls.cs">
+      <Link>Generated\Remote\CfxBinaryValueRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxBrowserRemoteCalls.cs">
+      <Link>Generated\Remote\CfxBrowserRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxCommandLineRemoteCalls.cs">
+      <Link>Generated\Remote\CfxCommandLineRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxDictionaryValueRemoteCalls.cs">
+      <Link>Generated\Remote\CfxDictionaryValueRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxDomDocumentRemoteCalls.cs">
+      <Link>Generated\Remote\CfxDomDocumentRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxDomNodeRemoteCalls.cs">
+      <Link>Generated\Remote\CfxDomNodeRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxDomVisitorRemoteCalls.cs">
+      <Link>Generated\Remote\CfxDomVisitorRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxDomVisitorRemoteClient.cs">
+      <Link>Generated\Remote\CfxDomVisitorRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxFrameRemoteCalls.cs">
+      <Link>Generated\Remote\CfxFrameRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxListValueRemoteCalls.cs">
+      <Link>Generated\Remote\CfxListValueRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxLoadHandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxLoadHandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxLoadHandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxLoadHandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxPostDataElementRemoteCalls.cs">
+      <Link>Generated\Remote\CfxPostDataElementRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxPostDataRemoteCalls.cs">
+      <Link>Generated\Remote\CfxPostDataRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxProcessMessageRemoteCalls.cs">
+      <Link>Generated\Remote\CfxProcessMessageRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxReadHandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxReadHandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxReadHandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxReadHandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxRectRemoteCalls.cs">
+      <Link>Generated\Remote\CfxRectRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxRenderProcessHandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxRenderProcessHandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxRenderProcessHandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxRenderProcessHandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxRequestRemoteCalls.cs">
+      <Link>Generated\Remote\CfxRequestRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxResourceBundleHandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxResourceBundleHandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxResourceBundleHandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxResourceBundleHandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxResourceBundleRemoteCalls.cs">
+      <Link>Generated\Remote\CfxResourceBundleRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxResponseRemoteCalls.cs">
+      <Link>Generated\Remote\CfxResponseRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxRuntimeRemoteCalls.cs">
+      <Link>Generated\Remote\CfxRuntimeRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxSchemeRegistrarRemoteCalls.cs">
+      <Link>Generated\Remote\CfxSchemeRegistrarRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxStreamReaderRemoteCalls.cs">
+      <Link>Generated\Remote\CfxStreamReaderRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxStreamWriterRemoteCalls.cs">
+      <Link>Generated\Remote\CfxStreamWriterRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxStringVisitorRemoteCalls.cs">
+      <Link>Generated\Remote\CfxStringVisitorRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxStringVisitorRemoteClient.cs">
+      <Link>Generated\Remote\CfxStringVisitorRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxTaskRemoteCalls.cs">
+      <Link>Generated\Remote\CfxTaskRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxTaskRemoteClient.cs">
+      <Link>Generated\Remote\CfxTaskRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxTaskRunnerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxTaskRunnerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxThreadRemoteCalls.cs">
+      <Link>Generated\Remote\CfxThreadRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxTimeRemoteCalls.cs">
+      <Link>Generated\Remote\CfxTimeRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8AccessorRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8AccessorRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8AccessorRemoteClient.cs">
+      <Link>Generated\Remote\CfxV8AccessorRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8ContextRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8ContextRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8ExceptionRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8ExceptionRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8HandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8HandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8HandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxV8HandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8InterceptorRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8InterceptorRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8InterceptorRemoteClient.cs">
+      <Link>Generated\Remote\CfxV8InterceptorRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8StackFrameRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8StackFrameRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8StackTraceRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8StackTraceRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxV8ValueRemoteCalls.cs">
+      <Link>Generated\Remote\CfxV8ValueRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxValueRemoteCalls.cs">
+      <Link>Generated\Remote\CfxValueRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxWaitableEventRemoteCalls.cs">
+      <Link>Generated\Remote\CfxWaitableEventRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxWriteHandlerRemoteCalls.cs">
+      <Link>Generated\Remote\CfxWriteHandlerRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxWriteHandlerRemoteClient.cs">
+      <Link>Generated\Remote\CfxWriteHandlerRemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxXmlReaderRemoteCalls.cs">
+      <Link>Generated\Remote\CfxXmlReaderRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\CfxZipReaderRemoteCalls.cs">
+      <Link>Generated\Remote\CfxZipReaderRemoteCalls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\RemoteCallFactory.cs">
+      <Link>Generated\Remote\RemoteCallFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Generated\Remote\RemoteCallId.cs">
+      <Link>Generated\Remote\RemoteCallId.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxApi.cs">
+      <Link>Source\CfxApi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxArray.cs">
+      <Link>Source\CfxArray.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxBaseClient.cs">
+      <Link>Source\CfxBaseClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxBaseLibrary.cs">
+      <Link>Source\CfxBaseLibrary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxBaseRefCounted.cs">
+      <Link>Source\CfxBaseRefCounted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxBaseScoped.cs">
+      <Link>Source\CfxBaseScoped.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxBinaryValue.cs">
+      <Link>Source\CfxBinaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxColor.cs">
+      <Link>Source\CfxColor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxDebug.cs">
+      <Link>Source\CfxDebug.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxEventArgs.cs">
+      <Link>Source\CfxEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxException.cs">
+      <Link>Source\CfxException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxMainArgs.cs">
+      <Link>Source\CfxMainArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxMainArgsLinux.cs">
+      <Link>Source\CfxMainArgsLinux.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxObject.cs">
+      <Link>Source\CfxObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxPlatform.cs">
+      <Link>Source\CfxPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxRemoteCallbackManager.cs">
+      <Link>Source\CfxRemoteCallbackManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxRemoteCallContext.cs">
+      <Link>Source\CfxRemoteCallContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxRuntime.cs">
+      <Link>Source\CfxRuntime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxStructure.cs">
+      <Link>Source\CfxStructure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxTime.cs">
+      <Link>Source\CfxTime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxV8Value.cs">
+      <Link>Source\CfxV8Value.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxWindowInfo.cs">
+      <Link>Source\CfxWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\CfxZipReader.cs">
+      <Link>Source\CfxZipReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\NativeFunctionLoader.cs">
+      <Link>Source\NativeFunctionLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\PinnedObject.cs">
+      <Link>Source\PinnedObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\PinnedString.cs">
+      <Link>Source\PinnedString.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrBaseClient.cs">
+      <Link>Source\Remote\CfrBaseClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrBaseLibrary.cs">
+      <Link>Source\Remote\CfrBaseLibrary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrBaseRefCounted.cs">
+      <Link>Source\Remote\CfrBaseRefCounted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrBaseScoped.cs">
+      <Link>Source\Remote\CfrBaseScoped.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrBinaryValue.cs">
+      <Link>Source\Remote\CfrBinaryValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrEventArgs.cs">
+      <Link>Source\Remote\CfrEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrMarshal.cs">
+      <Link>Source\Remote\CfrMarshal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrMayBlockEventArgs.cs">
+      <Link>Source\Remote\CfrMayBlockEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrObject.cs">
+      <Link>Source\Remote\CfrObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrRuntime.cs">
+      <Link>Source\Remote\CfrRuntime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrSeekEventArgs.cs">
+      <Link>Source\Remote\CfrSeekEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrStructure.cs">
+      <Link>Source\Remote\CfrStructure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrTellEventArgs.cs">
+      <Link>Source\Remote\CfrTellEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrTime.cs">
+      <Link>Source\Remote\CfrTime.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\CfrV8Value.cs">
+      <Link>Source\Remote\CfrV8Value.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\DefaultPipeFactory.cs">
+      <Link>Source\Remote\DefaultPipeFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\PipeBufferStream.cs">
+      <Link>Source\Remote\PipeBufferStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\PipeFactory.cs">
+      <Link>Source\Remote\PipeFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemoteCall.cs">
+      <Link>Source\Remote\RemoteCall.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemoteCallBases.cs">
+      <Link>Source\Remote\RemoteCallBases.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemoteClient.cs">
+      <Link>Source\Remote\RemoteClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemoteConnection.cs">
+      <Link>Source\Remote\RemoteConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemotePtr.cs">
+      <Link>Source\Remote\RemotePtr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\RemoteService.cs">
+      <Link>Source\Remote\RemoteService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\StreamHandler.cs">
+      <Link>Source\Remote\StreamHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\Remote\WorkerPool.cs">
+      <Link>Source\Remote\WorkerPool.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\StringFunctions.cs">
+      <Link>Source\StringFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\TimeFunctions.cs">
+      <Link>Source\TimeFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\WeakCache.cs">
+      <Link>Source\WeakCache.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumFX\Source\WindowStyle.cs">
+      <Link>Source\WindowStyle.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
+</Project>

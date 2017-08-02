@@ -27,6 +27,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{64ED684B-187D-4D21-903C-DA5067F8F066}</ProjectGuid>
     <RootNamespace>CfxBindings</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

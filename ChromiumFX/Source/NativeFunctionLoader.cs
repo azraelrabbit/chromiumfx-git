@@ -13,7 +13,14 @@ namespace Chromium {
         internal static NativeFunctionLoader Create() {
             // use path separator character instead of Environment.OSVersion.Platform
             // for platform detection
-            if(System.IO.Path.DirectorySeparatorChar.Equals('\\'))
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                Console.WriteLine("current is window");
+                return new WindowsFunctionLoader();
+            }
+            Console.WriteLine("current is linux or mac");
+            return  new UnixFunctionLoader();
+            if (System.IO.Path.DirectorySeparatorChar.Equals('\\'))
                 return new WindowsFunctionLoader();
             else
                 return new UnixFunctionLoader();

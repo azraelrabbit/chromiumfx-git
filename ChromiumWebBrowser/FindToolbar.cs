@@ -171,8 +171,8 @@ namespace Chromium.WebBrowser {
 
             closeButton.GotFocus += (s, e) => { textBox.Focus(); };
 
-            SendMessage(textBox.Handle, 0x1501, 1, "Find in page");
-
+            //SendMessage(textBox.Handle, 0x1501, 1, "Find in page");
+            NativeWindow.SetWatermark(textBox.Handle, "Find in page");
             // Once a find toolbar is created for a browser, it is kept until the browser is destroyed.
             // So there is no need to unsubscribe from this event.
             wb.FindHandler.OnFindResult += (s, e) => {
@@ -356,8 +356,8 @@ namespace Chromium.WebBrowser {
             textBox.Focus();
         }
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
+        //[DllImport("user32.dll")]
+        //private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
 
     }
 }

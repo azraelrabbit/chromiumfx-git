@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2AB47D9-04A6-4598-96EB-081605302351}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CfxTestApp</RootNamespace>
+    <AssemblyName>CfxTestApp</AssemblyName>
+    <StartupObject>CfxTestApplication.Program</StartupObject>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\ChromiumFX\ChromiumFX.csproj">
+      <Project>{C135345E-9F5A-44E5-8609-037C178FEAF0}</Project>
+      <Name>ChromiumFX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChromiumWebBrowser\ChromiumWebBrowser.csproj">
+      <Project>{2930E03D-89B3-427E-B86C-0B73F76FEB92}</Project>
+      <Name>ChromiumWebBrowser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BrowserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BrowserForm.Designer.cs" />
+    <Compile Include="HttpWebResponseCompatTest.cs" />
+    <Compile Include="JsTestObject.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Walkthrough01.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BrowserForm.resx">
+      <LogicalName>CfxTestApplication.BrowserForm.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

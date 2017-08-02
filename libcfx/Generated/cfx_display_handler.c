@@ -102,7 +102,7 @@ int CEF_CALLBACK cfx_display_handler_on_tooltip(cef_display_handler_t* self, cef
     if(text_tmp_str != text->str) {
         if(text->dtor) text->dtor(text->str);
         cef_string_set(text_tmp_str, text_tmp_length, text, 1);
-        cfx_gc_handle_switch(&(gc_handle_t)text_tmp_str, GC_HANDLE_FREE);
+        cfx_gc_handle_switch((gc_handle_t)text_tmp_str, GC_HANDLE_FREE);
     }
     return __retval;
 }

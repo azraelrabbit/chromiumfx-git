@@ -5,25 +5,30 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
+using System.Threading;
+using System.Windows.Forms;
 using Chromium;
 using Chromium.Event;
 
-namespace Chromium.WebBrowser {
-    internal static class BrowserProcess {
+namespace Chromium.WebBrowser
+{
+    internal static class BrowserProcess
+    {
 
         internal static CfxApp app;
         internal static CfxBrowserProcessHandler processHandler;
 
         internal static bool initialized;
 
-        internal static void Initialize() {
+        internal static void Initialize()
+        {
 
-            if(initialized)
+            if (initialized)
                 throw new ChromiumWebBrowserException("ChromiumWebBrowser library already initialized.");
 
 
             int retval = CfxRuntime.ExecuteProcess();
-            if(retval >= 0)
+            if (retval >= 0)
                 Environment.Exit(retval);
 
 
@@ -35,15 +40,36 @@ namespace Chromium.WebBrowser {
             app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowser.RaiseOnRegisterCustomSchemes(e);
 
             var settings = new CfxSettings();
-            settings.MultiThreadedMessageLoop = true;
+            //settings.MultiThreadedMessageLoop = true;
+
+            //FIXED different default settings based on platform
+            switch (CfxRuntime.PlatformOS)
+            {
+                case CfxPlatformOS.Linux:
+                    settings.MultiThreadedMessageLoop = false;
+
+                    //TODO less demanding way of using DoMessageLoopWork, ExernalMessageLoop = true doesn't seem to work
+                    Application.Idle += BrowserMessageLoopStep;
+                    break;
+                default:
+                    settings.MultiThreadedMessageLoop = true;
+                    break;
+            }
+
             settings.NoSandbox = true;
 
             ChromiumWebBrowser.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-            if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+            if (!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
                 throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
 
             initialized = true;
+        }
+        private static void BrowserMessageLoopStep(object sender, EventArgs e)
+        {
+            CfxRuntime.DoMessageLoopWork();
+
+            Thread.Yield();
         }
     }
 }

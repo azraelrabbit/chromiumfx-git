@@ -5,11 +5,17 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
-namespace Chromium {
+using System.Diagnostics;
+using Chromium.Event;
+
+
+namespace Chromium
+{
     /// <summary>
     /// Collection of global static CEF functions.
     /// </summary>
-    public static partial class CfxRuntime {
+    public static partial class CfxRuntime
+    {
 
         internal static event Action OnCfxShutdown;
 
@@ -17,12 +23,15 @@ namespace Chromium {
         /// Set the path to the directory containing the libcef library.
         /// If left blank the default locations are searched.
         /// </summary>
-        public static string LibCefDirPath {
-            get {
+        public static string LibCefDirPath
+        {
+            get
+            {
                 return CfxApi.libCefDirPath;
             }
-            set {
-                if(CfxApi.librariesLoaded)
+            set
+            {
+                if (CfxApi.librariesLoaded)
                     throw new CfxException("Unable to change libcfx directory path: library already loaded.");
                 CfxApi.libCefDirPath = value;
             }
@@ -32,12 +41,15 @@ namespace Chromium {
         /// Set the path to the directory containing the libcfx library.
         /// If left blank the default locations are searched.
         /// </summary>
-        public static string LibCfxDirPath {
-            get {
+        public static string LibCfxDirPath
+        {
+            get
+            {
                 return CfxApi.libCfxDirPath;
             }
-            set {
-                if(CfxApi.librariesLoaded)
+            set
+            {
+                if (CfxApi.librariesLoaded)
                     throw new CfxException("Unable to change libcef directory path: library already loaded.");
                 CfxApi.libCfxDirPath = value;
             }
@@ -51,8 +63,10 @@ namespace Chromium {
         /// <summary>
         /// The operating system ChromiumFX is currently running on.
         /// </summary>
-        public static CfxPlatformOS PlatformOS {
-            get {
+        public static CfxPlatformOS PlatformOS
+        {
+            get
+            {
                 CfxApi.Probe();
                 return CfxApi.PlatformOS;
             }
@@ -61,9 +75,12 @@ namespace Chromium {
         /// <summary>
         /// The system architecture ChromiumFX is currently running on.
         /// </summary>
-        public static CfxPlatformArch PlatformArch {
-            get {
-                switch(IntPtr.Size) {
+        public static CfxPlatformArch PlatformArch
+        {
+            get
+            {
+                switch (IntPtr.Size)
+                {
                     case 4:
                         return CfxPlatformArch.x86;
                     case 8:
@@ -91,7 +108,8 @@ namespace Chromium {
         /// 
         /// The chromium sandbox is currently not supported within ChromiumFX.
         /// </summary>
-        public static int ExecuteProcess() {
+        public static int ExecuteProcess()
+        {
             return ExecuteProcess(null);
         }
 
@@ -113,30 +131,38 @@ namespace Chromium {
         /// 
         /// The chromium sandbox is currently not supported within ChromiumFX.
         /// </summary>
-        public static int ExecuteProcess(CfxApp application) {
-            
+        public static int ExecuteProcess(CfxApp application)
+        {
+
             CfxApi.Probe();
 
             var cmd = Environment.CommandLine;
             var ex = new System.Text.RegularExpressions.Regex(@"cfxremote=(\w+)");
             var m = ex.Match(cmd);
 
-            if(m.Success) {
-                if(application != null) {
+            if (m.Success)
+            {
+                if (application != null)
+                {
                     throw new Exception("Can't handle user provided CfxApp object when the remote layer IPC bridge is in use.");
                 }
                 return Chromium.Remote.RemoteClient.ExecuteProcess(m.Groups[1].Value);
-            } else {
+            }
+            else
+            {
                 return ExecuteProcessInternal(application);
             }
         }
 
-        internal static int ExecuteProcessInternal(CfxApp application) {
-            switch(CfxApi.PlatformOS) {
+        internal static int ExecuteProcessInternal(CfxApp application)
+        {
+            switch (CfxApi.PlatformOS)
+            {
                 case CfxPlatformOS.Windows:
                     return ExecuteProcessPrivate(null, application, IntPtr.Zero);
                 case CfxPlatformOS.Linux:
-                    using(var mainArgs = CfxMainArgs.ForLinux()) {
+                    using (var mainArgs = CfxMainArgs.ForLinux())
+                    {
                         var retval = ExecuteProcessPrivate(mainArgs, application, IntPtr.Zero);
                         mainArgs.mainArgsLinux.Free();
                         return retval;
@@ -159,7 +185,8 @@ namespace Chromium {
         /// 
         /// The chromium sandbox is currently not supported within ChromiumFX.
         /// </summary>
-        public static bool Initialize(CfxSettings settings, CfxApp application, CfxRenderProcessMainDelegate renderProcessMain) {
+        public static bool Initialize(CfxSettings settings, CfxApp application, CfxRenderProcessMainDelegate renderProcessMain)
+        {
             CfxApi.Probe();
             Chromium.Remote.RemoteService.Initialize(renderProcessMain, ref application);
             return Initialize(settings, application);
@@ -171,15 +198,34 @@ namespace Chromium {
         /// value of true (1) indicates that it succeeded and false (0) indicates that it
         /// failed.
         /// 
+        ///  /// On the Linux platform the runtime will set the correct |BrowserSubProcessPath|
+        /// if settings doesn't have one set. This is done in order to prevent the default
+        /// /usr/bin/mono from being used. If no --renderer-cmd-prefix, --utility-cmd-prefix
+        /// and/or --gpu-laucher commandline switch is provided 'mono' is used as a default
+        /// value. If a custom |BrowserSubProcessPath| is used and it's target is a non-managed
+        /// application set these switches to 'command' in order to disable the use of 'mono' to
+        /// launch subprocesses.
+        /// 
         /// The chromium sandbox is currently not supported within ChromiumFX.
         /// </summary>
-        public static bool Initialize(CfxSettings settings, CfxApp application) {
+        public static bool Initialize(CfxSettings settings, CfxApp application)
+        {
             CfxApi.Probe();
-            switch(CfxApi.PlatformOS) {
+            switch (CfxApi.PlatformOS)
+            {
                 case CfxPlatformOS.Windows:
                     return InitializePrivate(null, settings, application, IntPtr.Zero);
                 case CfxPlatformOS.Linux:
-                    using(var mainArgs = CfxMainArgs.ForLinux()) {
+                    // if no BrowserSubProcessPath is given we set it here in order to prevent execution of /usr/bin/mono
+                    if (settings.BrowserSubprocessPath == null)
+                    {
+                        settings.BrowserSubprocessPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+                    }
+
+                    // render and utility processes need a mono prefix or else they won't launch
+                    application.OnBeforeCommandLineProcessing += AddMonoCmdPrefix;
+                    using (var mainArgs = CfxMainArgs.ForLinux())
+                    {
                         var retval = InitializePrivate(mainArgs, settings, application, IntPtr.Zero);
                         mainArgs.mainArgsLinux.Free();
                         return retval;
@@ -188,13 +234,32 @@ namespace Chromium {
                     throw new CfxException();
             }
         }
+        private static void AddMonoCmdPrefix(object sender, CfxOnBeforeCommandLineProcessingEventArgs e)
+        {
+            if (!e.CommandLine.HasSwitch("--renderer-cmd-prefix"))
+            {
+                e.CommandLine.AppendSwitchWithValue("--renderer-cmd-prefix", "mono");
+            }
 
-        public static string GetCefVersion() {
+            if (!e.CommandLine.HasSwitch("--gpu-launcher"))
+            {
+                e.CommandLine.AppendSwitchWithValue("--gpu-launcher", "mono");
+            }
+
+            if (!e.CommandLine.HasSwitch("--utility-cmd-prefix"))
+            {
+                e.CommandLine.AppendSwitchWithValue("--utility-cmd-prefix", "mono");
+            }
+        }
+
+        public static string GetCefVersion()
+        {
             CfxApi.Probe();
             return String.Format("{0}.{1}.{2}", VersionInfo(0), VersionInfo(4), VersionInfo(1));
         }
 
-        public static string GetChromeVersion() {
+        public static string GetChromeVersion()
+        {
             CfxApi.Probe();
             return String.Format("{0}.{1}.{2}.{3}", VersionInfo(2), VersionInfo(3), VersionInfo(4), VersionInfo(5));
         }
@@ -203,9 +268,10 @@ namespace Chromium {
         /// This function should be called on the main application thread to shut down
         /// the CEF browser process before the application exits.
         /// </summary>
-        public static void Shutdown() {
+        public static void Shutdown()
+        {
             var handler = OnCfxShutdown;
-            if(handler != null)
+            if (handler != null)
                 handler();
             ShutdownPrivate();
         }

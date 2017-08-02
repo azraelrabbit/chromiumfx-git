@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -305,6 +305,9 @@
     <Compile Include="Source\Remote\CfrTellEventArgs.cs" />
     <Compile Include="Source\Remote\CfrSeekEventArgs.cs" />
     <Compile Include="Source\Remote\CfrBaseScoped.cs" />
+    <Compile Include="Source\Remote\DefaultPipeFactory.cs" />
+    <Compile Include="Source\Remote\PipeBufferStream.cs" />
+    <Compile Include="Source\Remote\PipeFactory.cs" />
     <Compile Include="Source\Remote\WorkerPool.cs" />
     <Compile Include="Source\StringFunctions.cs" />
     <Compile Include="Source\CfxZipReader.cs" />
