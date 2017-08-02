@@ -23,7 +23,11 @@ namespace ceftest
         private void Form1_Load(object sender, EventArgs e)
         {
             webBrowser=new ChromiumWebBrowser();
-
+ //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
+            webBrowser.LifeSpanHandler.OnBeforePopup += (s, e) =>
+            {
+                //LogCallback(s, e);
+            };
 		
            webBrowser.Dock=DockStyle.Fill;
            
