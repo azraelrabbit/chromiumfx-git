@@ -5,9 +5,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{660A63B1-3101-4AB4-9BFD-AB5110458D44}</ProjectGuid>
     <Compiler>
-      <Compiler ctype="GppCompiler" />
+      <Compiler ctype="GccCompiler" />
     </Compiler>
-    <Language>CPP</Language>
+    <Language>C</Language>
     <Target>Bin</Target>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -39,6 +39,12 @@
       </Includes>
     </Includes>
     <WarningLevel>All</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'x64|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <OutputName>
+    </OutputName>
+    <CompileTarget>Bin</CompileTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\libcfx\Source\libcfx.c">
