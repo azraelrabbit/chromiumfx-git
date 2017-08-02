@@ -19,11 +19,11 @@ namespace Windowless {
             var assemblyDir = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var projectRoot = assemblyDir;
-            while(!System.IO.File.Exists(System.IO.Path.Combine(projectRoot, "Readme.md")))
-                projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
+            //while(!System.IO.File.Exists(System.IO.Path.Combine(projectRoot, "Readme.md")))
+            //    projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
 
-            CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef", "Release64");
-            CfxRuntime.LibCfxDirPath = System.IO.Path.Combine(projectRoot, "Build", "Release");
+            CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Release64");
+            CfxRuntime.LibCfxDirPath = projectRoot;///System.IO.Path.Combine(projectRoot, "Build", "Release");
 
             var LD_LIBRARY_PATH = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
             Debug.Print(LD_LIBRARY_PATH);
@@ -45,8 +45,8 @@ namespace Windowless {
 
             //settings.LogSeverity = CfxLogSeverity.Disable;
 
-            settings.ResourcesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources");
-            settings.LocalesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources", "locales");
+            settings.ResourcesDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Resources");
+            settings.LocalesDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Resources", "locales");
 
             var app = new CfxApp();
             app.OnBeforeCommandLineProcessing += (s, e) => {
