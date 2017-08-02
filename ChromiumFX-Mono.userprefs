@@ -1,6 +1,14 @@
 ﻿<Properties StartupItem="ceftest/ceftest-mono.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="x64" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="libcfx/Source/libcfx.c">
+    <Files>
+      <File FileName="Tests/Windowless/BrowserControl.cs" Line="66" Column="60" />
+      <File FileName="linux/windowless" Line="1" Column="87" />
+      <File FileName="Tests/Windowless/Program.cs" Line="83" Column="26" />
+      <File FileName="ChromiumFX/Source/Remote/StreamHandler.cs" Line="25" Column="45" />
+      <File FileName="libcfx/Source/libcfx.c" Line="27" Column="33" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="1139" column="1" />

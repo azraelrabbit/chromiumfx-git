@@ -45,6 +45,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\x64</OutputPath>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -11,6 +11,8 @@ Project("{2857B73E-F847-4B02-9238-064979017E93}") = "libcfx64-Mono", "libcfx64\l
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ceftest-mono", "ceftest\ceftest-mono.csproj", "{7D309C8E-15B1-4988-BE6B-49037C57E69F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windowless", "linux\Windowless.csproj", "{48D83F36-CEDD-401F-9E31-295794956424}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,16 @@ Global
 		{36972B7C-3A3A-465F-B064-51B525FD4C14}.Release|x86.ActiveCfg = Release|Any CPU
 		{36972B7C-3A3A-465F-B064-51B525FD4C14}.x64|Any CPU.ActiveCfg = x64|Any CPU
 		{36972B7C-3A3A-465F-B064-51B525FD4C14}.x64|Any CPU.Build.0 = x64|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Debug|x86.Build.0 = Debug|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Release|x86.ActiveCfg = Release|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.Release|x86.Build.0 = Release|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{48D83F36-CEDD-401F-9E31-295794956424}.x64|Any CPU.Build.0 = Release|Any CPU
 		{660A63B1-3101-4AB4-9BFD-AB5110458D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{660A63B1-3101-4AB4-9BFD-AB5110458D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{660A63B1-3101-4AB4-9BFD-AB5110458D44}.Debug|x86.ActiveCfg = Debug|Any CPU

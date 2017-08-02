@@ -23,7 +23,7 @@ namespace Windowless {
             //    projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
 
             CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef", "Release64");
-            CfxRuntime.LibCfxDirPath = System.IO.Path.Combine(projectRoot, "Build", "Release");
+			CfxRuntime.LibCfxDirPath = projectRoot;//System.IO.Path.Combine(projectRoot, "Build", "Release");
 
             var LD_LIBRARY_PATH = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
             Debug.Print(LD_LIBRARY_PATH);
@@ -64,18 +64,23 @@ namespace Windowless {
             f.Width = 900;
             f.Height = 600;
 
-            var c = new BrowserControl();
+            var c = new BrowserControl(f);
             c.Dock = DockStyle.Fill;
-            c.Parent = f;
-
+           // c.Parent = f;
+			Application.ApplicationExit+=	Application_Exit;
             Application.Idle += Application_Idle;
             Application.Run(f);
             
-            CfxRuntime.Shutdown();
+        
         }
 
         static void Application_Idle(object sender, EventArgs e) {
             CfxRuntime.DoMessageLoopWork();
         }
+
+		static void Application_Exit(object sender, EventArgs e) {
+
+			CfxRuntime.Shutdown();
+		}
     }
 }
