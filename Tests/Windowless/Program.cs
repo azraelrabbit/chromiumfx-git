@@ -19,8 +19,8 @@ namespace Windowless {
             var assemblyDir = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var projectRoot = assemblyDir;
-            while(!System.IO.File.Exists(System.IO.Path.Combine(projectRoot, "Readme.md")))
-                projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
+            //while(!System.IO.File.Exists(System.IO.Path.Combine(projectRoot, "Readme.md")))
+            //    projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
 
             CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef", "Release64");
             CfxRuntime.LibCfxDirPath = System.IO.Path.Combine(projectRoot, "Build", "Release");

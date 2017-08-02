@@ -26,12 +26,16 @@ namespace Windowless {
         private Bitmap pixelBuffer;
         private object pbLock = new object();
 
-        public BrowserControl() {
+        public BrowserControl(Control parent)
+        {
+
+            this.Parent = parent;
 
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             lifeSpanHandler = new CfxLifeSpanHandler();
             lifeSpanHandler.OnAfterCreated += lifeSpanHandler_OnAfterCreated;
+            lifeSpanHandler.OnBeforeClose += LifeSpanHandler_OnBeforeClose;
 
             renderHandler = new CfxRenderHandler();
 
@@ -59,12 +63,17 @@ namespace Windowless {
             var settings = new CfxBrowserSettings();
 
             var windowInfo = new CfxWindowInfo();
-            windowInfo.SetAsWindowless(false);
+            windowInfo.SetAsWindowless(this.Parent.Handle);
 
             // Create handle now for InvokeRequired to work properly 
-            CreateHandle();
-            CfxBrowserHost.CreateBrowser(windowInfo, client, "about:blank", settings, null);
+            //CreateHandle();
+            CfxBrowserHost.CreateBrowser(windowInfo, client, "http://www.baidu.com", settings, null);
 
+        }
+
+        private void LifeSpanHandler_OnBeforeClose(object sender, Chromium.Event.CfxOnBeforeCloseEventArgs e)
+        {
+            var br = e.Browser;
         }
 
         void loadHandler_OnLoadError(object sender, Chromium.Event.CfxOnLoadErrorEventArgs e) {
@@ -167,10 +176,20 @@ namespace Windowless {
 
 
         void lifeSpanHandler_OnAfterCreated(object sender, Chromium.Event.CfxOnAfterCreatedEventArgs e) {
-            browser = e.Browser;
-            browser.MainFrame.LoadUrl("about:version");
-            if(Focused) {
-                browser.Host.SendFocusEvent(true);
+            if (browser != null)
+            {
+               
+            }
+            else
+            {
+                browser = e.Browser;
+            }
+
+            var br = e.Browser;
+            //browser.MainFrame.LoadUrl("about:version");
+            if (Focused)
+            {
+                br.Host.SendFocusEvent(true);
             }
         }
 
@@ -266,7 +285,7 @@ namespace Windowless {
         protected override void OnKeyPress(KeyPressEventArgs e) {
             if(e.KeyChar == 7) {
                 // ctrl+g - load google so we have a page with text input
-                browser.MainFrame.LoadUrl("https://www.google.com");
+                browser.MainFrame.LoadUrl("https://www.baidu.com");
             } else {
                 var k = new CfxKeyEvent();
                 k.WindowsKeyCode = e.KeyChar;
