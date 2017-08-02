@@ -1,0 +1,21 @@
+syntax: regexp
+bin/
+gen/
+obj/
+Build/
+build/
+.vs/
+syntax: glob
+*/bin/**
+*/obj/**
+*/build/**
+*/.vs/**
+**/debug/**
+**/release/**
+**/Debug/**
+**/Release/**
+ChromiumFX.sln.DotSettings.user
+libcfx/libcfx.vcxproj.user
+Mono/UpgradeLog.htm
+Mono/UpgradeLog2.htm
+linux/UpgradeLog.htm
