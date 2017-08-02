@@ -14,7 +14,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\Build\Debug</OutputPath>
     <OutputName>libcfx64</OutputName>
-    <CompileTarget>StaticLibrary</CompileTarget>
+    <CompileTarget>SharedLibrary</CompileTarget>
     <DefineSymbols>DEBUG CFX_LINUX</DefineSymbols>
     <SourceDirectory>.</SourceDirectory>
     <WarningLevel>All</WarningLevel>
@@ -41,10 +41,17 @@
     <WarningLevel>All</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'x64|AnyCPU' ">
-    <OutputPath>.\</OutputPath>
-    <OutputName>
-    </OutputName>
-    <CompileTarget>Bin</CompileTarget>
+    <OutputPath>.</OutputPath>
+    <OutputName>libcfx64</OutputName>
+    <CompileTarget>SharedLibrary</CompileTarget>
+    <DefineSymbols>DEBUG CFX_LINUX</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <Includes>
+      <Includes>
+        <Include>${ProjectDir}/../cef</Include>
+        <Include>${ProjectDir}/../libcfx/Generated</Include>
+      </Includes>
+    </Includes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\libcfx\Source\libcfx.c">
