@@ -22,7 +22,7 @@ namespace Windowless {
             //while(!System.IO.File.Exists(System.IO.Path.Combine(projectRoot, "Readme.md")))
             //    projectRoot = System.IO.Path.GetDirectoryName(projectRoot);
 
-            CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Release64");
+            CfxRuntime.LibCefDirPath = System.IO.Path.Combine(projectRoot, "cef", "Release64");
             CfxRuntime.LibCfxDirPath = projectRoot;///System.IO.Path.Combine(projectRoot, "Build", "Release");
 
             var LD_LIBRARY_PATH = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
@@ -45,15 +45,19 @@ namespace Windowless {
 
             //settings.LogSeverity = CfxLogSeverity.Disable;
 
-            settings.ResourcesDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Resources");
-            settings.LocalesDirPath = System.IO.Path.Combine(projectRoot, "cef64", "Resources", "locales");
+            settings.ResourcesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources");
+            settings.LocalesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources", "locales");
 
             var app = new CfxApp();
             app.OnBeforeCommandLineProcessing += (s, e) => {
                 // optimizations following recommendations from issue #84
-                e.CommandLine.AppendSwitch("disable-gpu");
-                e.CommandLine.AppendSwitch("disable-gpu-compositing");
-                e.CommandLine.AppendSwitch("disable-gpu-vsync");
+                if (CfxRuntime.PlatformOS == CfxPlatformOS.Linux)
+                {
+                    e.CommandLine.AppendSwitch("disable-gpu");
+                    e.CommandLine.AppendSwitch("disable-gpu-compositing");
+                    e.CommandLine.AppendSwitch("disable-gpu-vsync");
+                }
+              
             };
 
             if(!CfxRuntime.Initialize(settings, app))
@@ -64,9 +68,9 @@ namespace Windowless {
             f.Width = 900;
             f.Height = 600;
 
-            var c = new BrowserControl();
+            var c = new BrowserControl(f);
             c.Dock = DockStyle.Fill;
-            c.Parent = f;
+            //c.Parent = f;
 
             Application.Idle += Application_Idle;
             Application.Run(f);
