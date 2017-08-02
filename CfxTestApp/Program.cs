@@ -23,9 +23,9 @@ namespace CfxTestApplication
 			Environment.CurrentDirectory = assemblyDir;// System.IO.Path.Combine(assemblyDir, @"..\..\");
 
             if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
-                CfxRuntime.LibCefDirPath = @"cef/Release64";
+                CfxRuntime.LibCefDirPath = @"cef64/Release64";
             else
-                CfxRuntime.LibCefDirPath = @"cef/Release";
+                CfxRuntime.LibCefDirPath = @"cef64/Release";
 
             Chromium.WebBrowser.ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
             ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
@@ -50,9 +50,11 @@ namespace CfxTestApplication
 
         static void ChromiumWebBrowser_OnBeforeCfxInitialize(OnBeforeCfxInitializeEventArgs e)
         {
-            e.Settings.MultiThreadedMessageLoop = false;
-            e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/Resources/locales");
-            e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef/Resources");
+            //e.Settings.MultiThreadedMessageLoop = false;
+            e.Settings.LogSeverity=CfxLogSeverity.Error;
+            e.Settings.LogFile = @"debug.log";
+            e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef64/Resources/locales");
+            e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef64/Resources");
         }
     }
 }
