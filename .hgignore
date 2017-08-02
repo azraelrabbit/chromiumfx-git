@@ -19,3 +19,8 @@ libcfx/libcfx.vcxproj.user
 Mono/UpgradeLog.htm
 Mono/UpgradeLog2.htm
 linux/UpgradeLog.htm
+libcfx64/libcfx64.so
+Mono.System.Drawing.dll
+libcfx64/lib.so
+libcfx64/libcfx.d
+libcfx64/libcfx.o

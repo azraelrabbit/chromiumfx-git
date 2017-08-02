@@ -13,6 +13,7 @@ namespace ceftest
 {
     static class Program
     {
+		static string rootPath;
         static string logPath;
         private static string cachePath;
         private static string userPath;
@@ -20,10 +21,12 @@ namespace ceftest
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+		static void Main(string[] args)
         {
+			Console.WriteLine ("init args:"+string.Join(",",args));
+			
             var assemblyDir = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
+			rootPath = assemblyDir;
             logPath = Path.Combine(assemblyDir, "debug.log");
 
             cachePath = Path.Combine(assemblyDir, "cache");
@@ -53,7 +56,6 @@ namespace ceftest
             ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
             Chromium.WebBrowser.ChromiumWebBrowser.Initialize();
 
-
             //Walkthrough01.Main();
             //return;
             //CfxRuntime.RunMessageLoop();
@@ -72,20 +74,20 @@ namespace ceftest
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
 
-            CfxRuntime.QuitMessageLoop();
+           // CfxRuntime.QuitMessageLoop();
             CfxRuntime.Shutdown();
         }
 
         static void ChromiumWebBrowser_OnBeforeCommandLineProcessing(CfxOnBeforeCommandLineProcessingEventArgs e)
         {
             Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
-            e.CommandLine.AppendArgument("--disable-gpu");
 
-            //e.CommandLine.AppendSwitchWithValue("renderer-cmd-prefix", "spawnscript");
-            //e.CommandLine.AppendSwitchWithValue("utility-cmd-prefix", "spawnscript");
+            e.CommandLine.AppendArgument("--disable-gpu"); 
+           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
+           e.CommandLine.AppendSwitch("disable-gpu-vsync");
 
-            e.CommandLine.AppendSwitch("disable-gpu-compositing");
-           // e.CommandLine.AppendSwitch("disable-gpu-vsync");
+			//e.CommandLine.AppendSwitchWithValue ("renderer-process-limit", "1");
+
             Console.WriteLine(e.CommandLine.CommandLineString);
 
         }
@@ -95,6 +97,7 @@ namespace ceftest
            // e.Settings.MultiThreadedMessageLoop = false;
            // e.Settings.ExternalMessagePump = true;//ExternalMessagePump= true;
 			var lang=e.Settings.AcceptLanguageList;
+
 			Console.WriteLine ("lang-list"+lang);
 			Console.WriteLine ("ua"+e.Settings.UserAgent);
             e.Settings.NoSandbox = true;
@@ -102,13 +105,17 @@ namespace ceftest
             e.Settings.UserDataPath = userPath;
             e.Settings.LogFile = logPath;
 			e.Settings.WindowlessRenderingEnabled = false;
-
-			e.Settings.LogSeverity=CfxLogSeverity.Verbose;
-			e.Settings.AcceptLanguageList = "*";
+			//e.Settings.ExternalMessagePump = true;
+			e.Settings.LogSeverity=CfxLogSeverity.Error;
+			//e.Settings.AcceptLanguageList = "*";
 			e.Settings.IgnoreCertificateErrors = true;
-			e.Settings.EnableNetSecurityExpiration = false;
-			e.Settings.PersistUserPreferences = false;
-			e.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+			//e.Settings.EnableNetSecurityExpiration = false;
+		//	e.Settings.PersistUserPreferences = false;
+			//e.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+
+//			if (CfxRuntime.PlatformOS == CfxPlatformOS.Linux) {
+//				e.Settings.BrowserSubprocessPath = Path.Combine (rootPath, "ceftest.exe");
+//			}
 
             e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/Resources/locales");
             e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef/Resources");
