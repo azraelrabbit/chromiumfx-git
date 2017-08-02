@@ -5,38 +5,43 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
+using System.IO;
+using System.Reflection;
 using Chromium;
 using Chromium.Event;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Chromium.WebBrowser {
-    internal static class BrowserProcess {
+	internal static class BrowserProcess {
 
-        internal static CfxApp app;
-        internal static CfxBrowserProcessHandler processHandler;
+		internal static CfxApp app;
+		internal static CfxBrowserProcessHandler processHandler;
+		private static bool _mono;
+		internal static bool initialized;
 
-        internal static bool initialized;
+		internal static void Initialize() {
+			_mono = Type.GetType("Mono.Runtime") != null;
 
-        internal static void Initialize() {
-
-            if(initialized)
-                throw new ChromiumWebBrowserException("ChromiumWebBrowser library already initialized.");
-
-
-            int retval = CfxRuntime.ExecuteProcess();
-            if(retval >= 0)
-                Environment.Exit(retval);
+			if (initialized)
+				throw new ChromiumWebBrowserException("ChromiumWebBrowser library already initialized.");
 
 
-            app = new CfxApp();
-            processHandler = new CfxBrowserProcessHandler();
+			int retval = CfxRuntime.ExecuteProcess();
+			if(retval >= 0)
+				Environment.Exit(retval);
 
-            app.GetBrowserProcessHandler += (s, e) => e.SetReturnValue(processHandler);
-            app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowser.RaiseOnBeforeCommandLineProcessing(e);
-            app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowser.RaiseOnRegisterCustomSchemes(e);
 
-            var settings = new CfxSettings();
+			app = new CfxApp();
+			processHandler = new CfxBrowserProcessHandler();
+			processHandler.OnBeforeChildProcessLaunch += ProcessHandler_OnBeforeChildProcessLaunch;
+
+
+			app.GetBrowserProcessHandler += (s, e) => e.SetReturnValue(processHandler);
+			app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowser.RaiseOnBeforeCommandLineProcessing(e);
+			app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowser.RaiseOnRegisterCustomSchemes(e);
+
+			var settings = new CfxSettings();
 			//FIXED different default settings based on platform
 
 			switch (CfxRuntime.PlatformOS)
@@ -62,16 +67,56 @@ namespace Chromium.WebBrowser {
 
 			}
 
-            settings.NoSandbox = true;
+			settings.NoSandbox = true;
 
 
-            ChromiumWebBrowser.RaiseOnBeforeCfxInitialize(settings, processHandler);
+			ChromiumWebBrowser.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-            if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
-                throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+			if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+				throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
 
-            initialized = true;
-        }
+			initialized = true;
+		}
+
+		private static void ProcessHandler_OnBeforeChildProcessLaunch(object sender, CfxOnBeforeChildProcessLaunchEventArgs e)
+		{
+			//to fix that the  mono run in linux
+			//Console.WriteLine("child cmdline:"+e.CommandLine.CommandLineString);
+//			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
+//			Console.WriteLine("program: "+e.CommandLine.Program);
+
+			var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
+
+//			Console.WriteLine (programPath);
+
+			if (e.CommandLine.GetSwitchValue("type") == "gpu-process")
+			{
+				e.CommandLine.Program= programPath;
+			}
+			else
+			{
+				if (_mono)
+				{
+					 
+//				    var monoPath = "mono";
+//					e.CommandLine.Program=programPath;
+//				 
+//					e.CommandLine.PrependWrapper("--llvm");
+//					e.CommandLine.Program=monoPath;
+			 
+
+				
+					e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
+
+					e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+ 
+				}
+			}
+
+			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
+			Console.WriteLine("program: "+e.CommandLine.Program);
+		}
 
 		private static void BrowserMessageLoopStep(object sender, EventArgs e)
 		{
@@ -79,5 +124,5 @@ namespace Chromium.WebBrowser {
 			Thread.Yield();
 		}
 
-    }
+	}
 }

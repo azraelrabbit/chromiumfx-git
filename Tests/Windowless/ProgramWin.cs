@@ -55,8 +55,9 @@ namespace Windowless {
             settings.WindowlessRenderingEnabled = true;
             settings.NoSandbox = true;
 
+			settings.LogFile = logPath;
             //settings.SingleProcess = true;
-            settings.BrowserSubprocessPath = System.IO.Path.Combine(assemblyDir, "windowless");
+           // settings.BrowserSubprocessPath = System.IO.Path.Combine(assemblyDir, "Windowless.exe");
 
             //settings.LogSeverity = CfxLogSeverity.Disable;
 

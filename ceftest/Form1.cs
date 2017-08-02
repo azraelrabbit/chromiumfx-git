@@ -22,12 +22,13 @@ namespace ceftest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webBrowser=new ChromiumWebBrowser();
+			this.AllowTransparency = true;
+			//webBrowser.ImeMode = this.ImeMode;
+			panel1.ImeMode=ImeMode.Inherit;
+			//webBrowser.ImeMode = ImeMode.Inherit;
+			webBrowser=new ChromiumWebBrowser();
  //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
-            webBrowser.LifeSpanHandler.OnBeforePopup += (s, e) =>
-            {
-                //LogCallback(s, e);
-            };
+			webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 		
            webBrowser.Dock=DockStyle.Fill;
            
@@ -42,20 +43,35 @@ namespace ceftest
 
         }
  
+		static void beforePop(object sender, EventArgs e){
+		}
+
 		void callbackComplete(object sender,CfxEventArgs e){
 
 			 
 		}
-
+//		protected override void OnPreviewKeyDown (PreviewKeyDownEventArgs e)
+//		{
+//			base.OnPreviewKeyDown (e);
+//			webBrowser.
+//		}
+//		protected override void OnPreviewTextInput(TextCompositionEventArgs e)
+//		{
+//			for (int i = 0; i < e.Text.Length; i++)
+//			{
+//				managedCefBrowserAdapter.SendKeyEvent((int)WM.CHAR, (int)e.Text[i], 0); // or WM.IME_CHAR?
+//			}
+//			base.OnPreviewTextInput(e); // maybe remove this?
+//		}
         private void button1_Click_1(object sender, EventArgs e)
         {
             var url = textBox1.Text;
 
             webBrowser.LoadUrl(url);
           
-			webBrowser.Show ();
-			webBrowser.BringToFront ();
-			this.RaisePaintEvent (webBrowser, new PaintEventArgs (this.CreateGraphics (), webBrowser.ClientRectangle));
+		//	webBrowser.Show ();
+		//	webBrowser.BringToFront ();
+		//	this.RaisePaintEvent (webBrowser, new PaintEventArgs (this.CreateGraphics (), webBrowser.ClientRectangle));
         }
     }
 }
