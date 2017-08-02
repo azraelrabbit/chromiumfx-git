@@ -59,7 +59,7 @@ namespace Windowless {
             var settings = new CfxBrowserSettings();
 
             var windowInfo = new CfxWindowInfo();
-            windowInfo.SetAsWindowless(false);
+            windowInfo.SetAsWindowless(this.Handle);
 
             // Create handle now for InvokeRequired to work properly 
             CreateHandle();
