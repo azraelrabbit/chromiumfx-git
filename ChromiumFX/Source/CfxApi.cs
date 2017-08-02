@@ -143,10 +143,14 @@ namespace Chromium {
             var libcfxPath = System.IO.Path.Combine(libCfxDirPath, libCfx);
             var libcefPath = System.IO.Path.Combine(libCefDirPath, libCef);
 
+            Console.WriteLine("load:libcfxPath:"+libcfxPath);
+            Console.WriteLine("load:libcefPath:"+libcefPath);
             // as of 3.2883, this must be in the path due to libcef dependencies.
 
             var path = Environment.GetEnvironmentVariable("PATH");
             Environment.SetEnvironmentVariable("PATH", libCefDirPath + ";" + path);
+
+            Console.WriteLine("path:"+Environment.GetEnvironmentVariable("PATH"));
 
             libcefPtr = loader.LoadNativeLibrary(libcefPath);
             if(libcefPtr == IntPtr.Zero) {
@@ -209,7 +213,12 @@ namespace Chromium {
             if(libCfxDirPath == null)
                 libCfxDirPath = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
+            Console.WriteLine("libCfxdirPath:"+libCfxDirPath);
+
+
             libCfx = GetLibCfxName(libCfxDirPath);
+
+            Console.WriteLine("libcfx:"+libCfx);
 
             if(libCfx == null) {
                 if(libCefDirPath != null) {
@@ -250,30 +259,31 @@ namespace Chromium {
                     libCefDirPath = System.IO.Path.Combine(libCefDirPath, "cef");
                 }
             }
-
-            if(!System.IO.File.Exists(System.IO.Path.Combine(libCefDirPath, libCef))) {
-                throw new CfxException("libcef library not found.");
-            }
-
             libCefDirPath = System.IO.Path.GetFullPath(libCefDirPath);
             libCfxDirPath = System.IO.Path.GetFullPath(libCfxDirPath);
 
+            if (!System.IO.File.Exists(System.IO.Path.Combine(libCefDirPath, libCef))) {
+                throw new CfxException("libcef library not found.");
+            }
         }
 
         private static string GetLibCfxName(string directory) {
             string name;
+            string retName = null;
             if(CfxRuntime.PlatformArch == CfxPlatformArch.x86)
                 name = "libcfx";
             else
                 name = "libcfx64";
 
             if(System.IO.File.Exists(System.IO.Path.Combine(directory, name + ".dll")))
-                return name + ".dll";
+                retName= name + ".dll";
 
             if(System.IO.File.Exists(System.IO.Path.Combine(directory, name + ".so")))
-                return name + ".so";
+                retName= name + ".so";
 
-            return null;
+
+            Console.WriteLine(retName);
+            return retName;
         }
 
 
@@ -292,8 +302,12 @@ namespace Chromium {
         }
 
         private static Delegate LoadDelegate(NativeFunctionLoader loader, IntPtr hModule, string procName, Type delegateType) {
+            
             IntPtr functionPtr = loader.GetFunctionPointer(hModule, procName);
-            if(functionPtr == IntPtr.Zero) {
+
+            Console.WriteLine("fucntion Ptr:" + functionPtr.ToString());
+            Console.WriteLine("procName:"+procName);
+            if (functionPtr == IntPtr.Zero) {
                 throw new CfxException("Unable to load native function " + procName + ".");
             }
             return Marshal.GetDelegateForFunctionPointer(functionPtr, delegateType);

@@ -1138,30 +1138,39 @@ namespace Chromium.WebBrowser {
 
 
         internal void ResizeBrowserWindow() {
-            if(browserWindowHandle == IntPtr.Zero) return;
-            if(Visible && Height > 0 && Width > 0) {
-                int h;
-                if(m_findToolbar == null || !m_findToolbar.Visible) {
-                    h = Height;
-                } else {
-                    if(InvokeRequired) {
-                        Invoke((MethodInvoker)(() => {
+            if (Visible)
+            {
+                if (browserWindowHandle != IntPtr.Zero && this.Height > 0 && this.Width > 0)
+                {
+                    int h;
+                    if (m_findToolbar == null || !m_findToolbar.Visible)
+                    {
+                        h = Height;
+                    }
+                    else
+                    {
+                        if (InvokeRequired)
+                        {
+                            Invoke((MethodInvoker)(() => {
+                                m_findToolbar.Width = Width;
+                                m_findToolbar.Top = Height - m_findToolbar.Height;
+                            }));
+                        }
+                        else
+                        {
                             m_findToolbar.Width = Width;
                             m_findToolbar.Top = Height - m_findToolbar.Height;
-                        }));
-                    } else {
-                        m_findToolbar.Width = Width;
-                        m_findToolbar.Top = Height - m_findToolbar.Height;
+                        }
+                        h = m_findToolbar.Top;
                     }
-                    h = m_findToolbar.Top;
+                    NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_VISIBLE);
+                    NativeWindow.SetPosition(browserWindowHandle, 0, 0, Width, h);
                 }
-                SetWindowLong(browserWindowHandle, -16, (int)(WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_VISIBLE));
-                SetWindowPos(browserWindowHandle, IntPtr.Zero, 0, 0, Width, h, SWP_NOMOVE | SWP_NOZORDER | SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_ASYNCWINDOWPOS);
-                //Debug.Print($"ResizeBrowserWindow: {Width} {h}");
-            } else {
-                SetWindowLong(browserWindowHandle, -16, (int)(WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED));
-                SetWindowPos(browserWindowHandle, IntPtr.Zero, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW | SWP_ASYNCWINDOWPOS);
-                //Debug.Print($"ResizeBrowserWindow: hide");
+            }
+            else
+            {
+                if (browserWindowHandle != IntPtr.Zero)
+                    NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED);
             }
         }
 

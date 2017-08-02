@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{660A63B1-3101-4AB4-9BFD-AB5110458D44}</ProjectGuid>
+    <Compiler>
+      <Compiler ctype="GccCompiler" />
+    </Compiler>
+    <Language>C</Language>
+    <Target>Bin</Target>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Build\Debug</OutputPath>
+    <OutputName>libcfx64</OutputName>
+    <CompileTarget>SharedLibrary</CompileTarget>
+    <DefineSymbols>DEBUG CFX_LINUX</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <WarningLevel>All</WarningLevel>
+    <Includes>
+      <Includes>
+        <Include>${ProjectDir}/../../cef/</Include>
+        <Include>${ProjectDir}/../../libcfx/Generated</Include>
+      </Includes>
+    </Includes>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\Build\Release</OutputPath>
+    <OutputName>libcfx64</OutputName>
+    <CompileTarget>SharedLibrary</CompileTarget>
+    <OptimizationLevel>3</OptimizationLevel>
+    <DefineSymbols>CFX_LINUX</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <Includes>
+      <Includes>
+        <Include>${ProjectDir}/../../cef/</Include>
+        <Include>${ProjectDir}/../../libcfx/Generated</Include>
+      </Includes>
+    </Includes>
+    <WarningLevel>All</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\libcfx\Source\libcfx.c">
+      <Link>libcfx.c</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

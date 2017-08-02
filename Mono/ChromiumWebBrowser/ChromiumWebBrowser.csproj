@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2930E03D-89B3-427E-B86C-0B73F76FEB92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ChromiumWebBrowser</RootNamespace>
+    <AssemblyName>ChromiumWebBrowser</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\ChromiumWebBrowser\ChromiumWebBrowser.cs">
+      <Link>ChromiumWebBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\ChromiumWebBrowserException.cs">
+      <Link>ChromiumWebBrowserException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\FindToolbar.cs">
+      <Link>FindToolbar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\Images.cs">
+      <Link>Images.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\JSDynamicProperty.cs">
+      <Link>JSDynamicProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\JSFunction.cs">
+      <Link>JSFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\JSObject.cs">
+      <Link>JSObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\JSProperty.cs">
+      <Link>JSProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\WebResource.cs">
+      <Link>WebResource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\BrowserProcess\BrowserClient.cs">
+      <Link>BrowserProcess\BrowserClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\BrowserProcess\BrowserProcess.cs">
+      <Link>BrowserProcess\BrowserProcess.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\BrowserProcess\Events.cs">
+      <Link>BrowserProcess\Events.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\BrowserProcess\LifeSpanHandler.cs">
+      <Link>BrowserProcess\LifeSpanHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\BrowserProcess\RequestHandler.cs">
+      <Link>BrowserProcess\RequestHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\RenderProcess\RenderProcess.cs">
+      <Link>RenderProcess\RenderProcess.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\RenderProcess\RenderProcessHandler.cs">
+      <Link>RenderProcess\RenderProcessHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\NativeWindow.cs">
+      <Link>NativeWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ChromiumWebBrowser\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\ChromiumFX\ChromiumFX.csproj">
+      <Project>{C135345E-9F5A-44E5-8609-037C178FEAF0}</Project>
+      <Name>ChromiumFX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

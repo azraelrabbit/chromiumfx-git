@@ -1,0 +1,14 @@
+﻿<Properties StartupItem="CfxTestApp/CfxTestApplication.csproj">
+  <DisabledProjects>
+    <String>libcfx/libcfx.vcxproj</String>
+    <String>linux/libcfx64.cproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/zfspool/pdata/chromiumfx/CfxTestApp/Program.cs" line="56" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
