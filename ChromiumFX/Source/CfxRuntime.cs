@@ -120,6 +120,8 @@ namespace Chromium {
             CfxApi.Probe();
 
             var cmd = Environment.CommandLine;
+//			Console.WriteLine ("-------------------------------");
+//			Console.WriteLine ("subProcess Evn cmd:"+cmd);
             var ex = new System.Text.RegularExpressions.Regex(@"cfxremote=(\w+)");
             var m = ex.Match(cmd);
 
@@ -180,16 +182,17 @@ namespace Chromium {
             switch(CfxApi.PlatformOS) {
                 case CfxPlatformOS.Windows:
                     return InitializePrivate(null, settings, application, IntPtr.Zero);
-                case CfxPlatformOS.Linux:
+			case CfxPlatformOS.Linux:
 					// if no BrowserSubProcessPath is given we set it here in order to prevent execution of /usr/bin/mono
 
-					if (settings.BrowserSubprocessPath == null)
-					{
-						settings.BrowserSubprocessPath = System.Reflection.Assembly.GetEntryAssembly().Location;
-					}
+//				if (settings.BrowserSubprocessPath == null) {
+//					settings.BrowserSubprocessPath = System.Reflection.Assembly.GetEntryAssembly ().Location;
+//				}
 
-					// render and utility processes need a mono prefix or else they won't launch
+//				if (!settings.WindowlessRenderingEnabled) {
+				////	 render and utility processes need a mono prefix or else they won't launch
 					application.OnBeforeCommandLineProcessing += AddMonoCmdPrefix;
+//				}			
 
                     using(var mainArgs = CfxMainArgs.ForLinux()) {
                         var retval = InitializePrivate(mainArgs, settings, application, IntPtr.Zero);
@@ -203,10 +206,14 @@ namespace Chromium {
 
 		private static void AddMonoCmdPrefix(object sender, CfxOnBeforeCommandLineProcessingEventArgs e)
 		{
-			if (!e.CommandLine.HasSwitch("--renderer-cmd-prefix"))
-			{
-				e.CommandLine.AppendSwitchWithValue("--renderer-cmd-prefix", "mono");
-			}
+//			if (!e.CommandLine.HasSwitch("--renderer-cmd-prefix"))
+//			{
+//				e.CommandLine.AppendSwitchWithValue("--renderer-cmd-prefix", "mono");
+//			}
+
+//			if (!e.CommandLine.HasArguments) {
+			//e.CommandLine.AppendArgument ("\"$@\"");
+//			}
 
 			if (!e.CommandLine.HasSwitch("--gpu-launcher"))
 			{
@@ -217,6 +224,8 @@ namespace Chromium {
 			{
 				e.CommandLine.AppendSwitchWithValue("--utility-cmd-prefix", "mono");
 			}
+
+			Console.WriteLine (e.CommandLine.CommandLineString);
 		}
 
         public static string GetCefVersion() {

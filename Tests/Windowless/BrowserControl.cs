@@ -180,6 +180,7 @@ namespace Windowless {
             else
             {
                 browser = e.Browser;
+				browser.MainFrame.LoadUrl("about:version");
             }
 
             var br = e.Browser;

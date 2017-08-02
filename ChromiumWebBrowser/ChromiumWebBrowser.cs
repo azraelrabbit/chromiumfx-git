@@ -42,6 +42,8 @@ namespace Chromium.WebBrowser {
             }
         }
 
+
+
         /// <summary>
         /// Provides an opportunity to change initialization settings
         /// and subscribe to browser process handler events.
@@ -333,6 +335,7 @@ namespace Chromium.WebBrowser {
         /// </summary>
         public void CreateBrowser(CfxRequestContext requestContext) {
 
+			 
             // avoid illegal cross-thread calls
             if(InvokeRequired) {
                 Invoke((MethodInvoker)(() => CreateBrowser(requestContext)));
@@ -1195,6 +1198,13 @@ namespace Chromium.WebBrowser {
 			}
 			this.Update ();
 		}
+
+//		protected override void OnPreviewKeyDown (PreviewKeyDownEventArgs e)
+//		{
+//			if (Browser != null) {
+//				Browser.Host.SendKeyEvent (new CfxKeyEvent (){ NativeKeyCode = e.KeyValue });
+//			}
+//		}
 
 
         [DllImport("user32", SetLastError = false)]
