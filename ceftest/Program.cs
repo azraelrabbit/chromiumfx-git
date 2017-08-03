@@ -96,7 +96,10 @@ namespace ceftest
 				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
 			}
 			//e.CommandLine.AppendSwitchWithValue ("renderer-process-limit", "1");
-
+			e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+			e.CommandLine.AppendSwitch("no-zygote");
+			//--use-views
+			e.CommandLine.AppendSwitch("use-views");
             Console.WriteLine(e.CommandLine.CommandLineString);
 
         }

@@ -112,7 +112,13 @@ namespace Chromium.WebBrowser {
 					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
 //					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
 					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
- 
+
+					e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+					e.CommandLine.AppendSwitch("no-zygote");
+					e.CommandLine.AppendSwitch("use-views");
+
+					//--no-zygote
+
 				}
 			}
 
