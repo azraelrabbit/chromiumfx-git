@@ -34,15 +34,15 @@ namespace ceftest
            webBrowser.Dock=DockStyle.Fill;
            
             
-            //panel1.Controls.Add(webBrowser);
-           // panel1.Refresh();
+            panel1.Controls.Add(webBrowser);
+            panel1.Refresh();
             //CfxRuntime.DoMessageLoopWork();
 			//var callback=new CfxCompletionCallback();
 			//callback.OnComplete += callbackComplete;
 			//CfxRuntime.BeginTracing ("mytrace",callback);
 
-			this.Controls.Clear ();
-			this.Controls.Add (webBrowser);
+//			this.Controls.Clear ();
+//			this.Controls.Add (webBrowser);
         }
  
 		static void beforePop(object sender, EventArgs e){
