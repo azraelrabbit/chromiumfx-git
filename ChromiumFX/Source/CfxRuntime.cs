@@ -211,6 +211,10 @@ namespace Chromium {
 //				e.CommandLine.AppendSwitchWithValue("--renderer-cmd-prefix", "mono");
 //			}
 
+			if (!e.CommandLine.HasSwitch ("--renderer-cmd-prefix")) {
+				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
+			}
+
 //			if (!e.CommandLine.HasArguments) {
 			//e.CommandLine.AppendArgument ("\"$@\"");
 //			}

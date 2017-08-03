@@ -1,11 +1,15 @@
 ﻿<Properties StartupItem="libcfx64/libcfx64-Mono.cproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ceftest/Form1.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ceftest/Program.cs">
     <Files>
-      <File FileName="ceftest/Form1.cs" Line="25" Column="34" />
-      <File FileName="ceftest/Program.cs" Line="107" Column="50" />
-      <File FileName="ChromiumFX/Source/CfxRuntime.cs" Line="124" Column="52" />
-      <File FileName="Tests/Windowless/Program.cs" Line="62" Column="39" />
+      <File FileName="ceftest/Program.cs" Line="130" Column="5" />
+      <File FileName="ChromiumWebBrowser/BrowserProcess/BrowserProcess.cs" Line="58" Column="5" />
+      <File FileName="ChromiumWebBrowser/ChromiumWebBrowser.cs" Line="1" Column="1" />
+      <File FileName="ChromiumFX/Source/CfxPlatform.cs" Line="1" Column="1" />
+      <File FileName="ChromiumFX/Source/CfxRuntime.cs" Line="216" Column="5" />
+      <File FileName="ChromiumWebBrowser/BrowserProcess/BrowserClient.cs" Line="145" Column="6" />
+      <File FileName="ChromiumWebBrowser/RenderProcess/RenderProcess.cs" Line="17" Column="42" />
+      <File FileName="ceftest/Form1.cs" Line="46" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -18,4 +22,7 @@
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>ceftest/ceftest.csproj</String>
+  </DisabledProjects>
 </Properties>
