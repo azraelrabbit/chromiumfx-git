@@ -13,7 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Chromium.WebBrowser {
-	internal static class BrowserProcess {
+	public static class BrowserProcess {
 
 		internal static CfxApp app;
 		internal static CfxBrowserProcessHandler processHandler;
@@ -106,10 +106,12 @@ namespace Chromium.WebBrowser {
 			 
 
 				
-					e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
+					//e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
+					e.CommandLine.Program=programPath;
 
-					e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
-					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+//					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
  
 				}
 			}

@@ -62,6 +62,7 @@ namespace ceftest
 		
 
             Application.ApplicationExit += Application_ApplicationExit;
+			//Application.Idle += BrowserMessageLoopStep;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
@@ -69,7 +70,12 @@ namespace ceftest
             
             
             
-        }
+		}
+		private static void BrowserMessageLoopStep(object sender, EventArgs e)
+		{
+			CfxRuntime.DoMessageLoopWork();
+			//Thread.Yield();
+		}
 
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
@@ -83,9 +89,12 @@ namespace ceftest
             Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
 
             e.CommandLine.AppendArgument("--disable-gpu"); 
-           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
-           e.CommandLine.AppendSwitch("disable-gpu-vsync");
+//           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
+//           e.CommandLine.AppendSwitch("disable-gpu-vsync");
 
+			if (!e.CommandLine.HasSwitch ("renderer-cmd-prefix")) {
+				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
+			}
 			//e.CommandLine.AppendSwitchWithValue ("renderer-process-limit", "1");
 
             Console.WriteLine(e.CommandLine.CommandLineString);
@@ -109,6 +118,7 @@ namespace ceftest
 			e.Settings.LogSeverity=CfxLogSeverity.Error;
 			//e.Settings.AcceptLanguageList = "*";
 			e.Settings.IgnoreCertificateErrors = true;
+			//e.Settings.SingleProcess = true;
 			//e.Settings.EnableNetSecurityExpiration = false;
 		//	e.Settings.PersistUserPreferences = false;
 			//e.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
@@ -116,6 +126,8 @@ namespace ceftest
 //			if (CfxRuntime.PlatformOS == CfxPlatformOS.Linux) {
 //				e.Settings.BrowserSubprocessPath = Path.Combine (rootPath, "ceftest.exe");
 //			}
+
+		//	e.Settings.MultiThreadedMessageLoop = false;
 
             e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/Resources/locales");
             e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef/Resources");

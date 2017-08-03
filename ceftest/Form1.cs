@@ -18,29 +18,31 @@ namespace ceftest
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 			this.AllowTransparency = true;
 			//webBrowser.ImeMode = this.ImeMode;
-			panel1.ImeMode=ImeMode.Inherit;
+			//panel1.ImeMode=ImeMode.Inherit;
 			//webBrowser.ImeMode = ImeMode.Inherit;
-			webBrowser=new ChromiumWebBrowser();
+			webBrowser=new ChromiumWebBrowser("http://www.baidu.com",true);
  //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
 			webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 		
            webBrowser.Dock=DockStyle.Fill;
            
             
-            panel1.Controls.Add(webBrowser);
-            panel1.Refresh();
+            //panel1.Controls.Add(webBrowser);
+           // panel1.Refresh();
             //CfxRuntime.DoMessageLoopWork();
 			//var callback=new CfxCompletionCallback();
 			//callback.OnComplete += callbackComplete;
 			//CfxRuntime.BeginTracing ("mytrace",callback);
 
-
+			this.Controls.Clear ();
+			this.Controls.Add (webBrowser);
         }
  
 		static void beforePop(object sender, EventArgs e){

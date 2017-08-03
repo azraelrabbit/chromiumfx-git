@@ -28,6 +28,8 @@ namespace Chromium.WebBrowser {
         private CfxJsDialogHandler jsDialogHandler;
         private CfxKeyboardHandler keyboardHandler;
 
+
+
         internal BrowserClient(ChromiumWebBrowser browser) {
             this.browser = browser;
             this.lifeSpanHandler = new LifeSpanHandler(this);
@@ -140,6 +142,7 @@ namespace Chromium.WebBrowser {
             get {
                 if(keyboardHandler == null) {
                     keyboardHandler = new CfxKeyboardHandler();
+
                     this.GetKeyboardHandler += (s, e) => e.SetReturnValue(keyboardHandler);
                 }
                 return keyboardHandler;
