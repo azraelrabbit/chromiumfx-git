@@ -28,6 +28,9 @@ namespace ceftest
 			//panel1.ImeMode=ImeMode.Inherit;
 			//webBrowser.ImeMode = ImeMode.Inherit;
 			webBrowser=new ChromiumWebBrowser(this);
+			webBrowser.KeyboardHandler.OnKeyEvent+= WebBrowser_KeyboardHandler_OnKeyEvent;
+
+			webBrowser.KeyboardHandler.OnPreKeyEvent+= WebBrowser_KeyboardHandler_OnPreKeyEvent;
  //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
 			webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 		
@@ -43,6 +46,21 @@ namespace ceftest
 
 //			this.Controls.Clear ();
 //			this.Controls.Add (webBrowser);
+        }
+
+        void WebBrowser_KeyboardHandler_OnPreKeyEvent (object sender, Chromium.Event.CfxOnPreKeyEventEventArgs e)
+        {
+//			// setting to disable inner cfxbrowser keyboard event. this may be could to resolve input methods issue.  not completed.
+//			e.IsKeyboardShortcut = true;
+//			e.SetReturnValue (false);
+ 
+        }
+
+        void WebBrowser_KeyboardHandler_OnKeyEvent (object sender, Chromium.Event.CfxOnKeyEventEventArgs e)
+        {
+			Console.WriteLine ((char)e.Event.Character);
+			//this.OnKeyPress (new KeyPressEventArgs ((char)e.Event.Character));
+			//base.KeyPress.BeginInvoke (this, new KeyPressEventArgs ((char)e.Event.Character), null, null);
         }
  
 		static void beforePop(object sender, EventArgs e){
