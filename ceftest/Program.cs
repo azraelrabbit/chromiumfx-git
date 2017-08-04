@@ -48,13 +48,12 @@ namespace ceftest
                 CfxRuntime.LibCefDirPath = @"cef/Release64";
             else
                 CfxRuntime.LibCefDirPath = @"cef/Release";
-
-
-            
-
+ 
             Chromium.WebBrowser.ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
             ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
             Chromium.WebBrowser.ChromiumWebBrowser.Initialize();
+
+
 
             //Walkthrough01.Main();
             //return;
@@ -92,14 +91,14 @@ namespace ceftest
 //           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
 //           e.CommandLine.AppendSwitch("disable-gpu-vsync");
 
-			if (!e.CommandLine.HasSwitch ("renderer-cmd-prefix")) {
-				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
-			}
+//			if (!e.CommandLine.HasSwitch ("renderer-cmd-prefix")) {
+//				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
+//			}
 			//e.CommandLine.AppendSwitchWithValue ("renderer-process-limit", "1");
-			e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
-			e.CommandLine.AppendSwitch("no-zygote");
+			//e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+			//e.CommandLine.AppendSwitch("no-zygote");
 			//--use-views
-			e.CommandLine.AppendSwitch("use-views");
+		//	e.CommandLine.AppendSwitch("use-views");
             Console.WriteLine(e.CommandLine.CommandLineString);
 
         }

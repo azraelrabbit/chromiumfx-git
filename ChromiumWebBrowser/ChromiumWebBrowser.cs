@@ -28,6 +28,10 @@ namespace Chromium.WebBrowser {
 
         private static CfxBrowserSettings defaultBrowserSettings;
 
+		public static bool WindowLess { get; set; }
+
+
+
         /// <summary>
         /// The CfxBrowserSettings applied for new instances of ChromiumWebBrowser.
         /// Any changes to these settings will only apply to new browsers,
@@ -226,7 +230,7 @@ namespace Chromium.WebBrowser {
         /// The underlying CfxBrowser is created immediately with the
         /// default CfxRequestContext.
         /// </summary>
-        public ChromiumWebBrowser() : this(null, true) { }
+		public ChromiumWebBrowser(Control parent) : this(null, true,parent) { }
 
         /// <summary>
         /// Creates a ChromiumWebBrowser object with about:blank as initial URL.
@@ -234,21 +238,23 @@ namespace Chromium.WebBrowser {
         /// created immediately with the default CfxRequestContext.
         /// </summary>
         /// <param name="createImmediately"></param>
-        public ChromiumWebBrowser(bool createImmediately) : this(null, createImmediately) { }
+		public ChromiumWebBrowser(bool createImmediately,Control parent) : this(null, createImmediately,parent) { }
 
         /// <summary>
         /// Creates a ChromiumWebBrowser object with the given initial URL.
         /// The underlying CfxBrowser is created immediately with the
         /// default CfxRequestContext.
         /// </summary>
-        public ChromiumWebBrowser(string initialUrl) : this(initialUrl, true) { }
+		public ChromiumWebBrowser(string initialUrl,Control parent) : this(initialUrl, true,parent) { }
 
         /// <summary>
         /// Creates a ChromiumWebBrowser object with the given initial URL.
         /// If createImmediately is true, then the underlying CfxBrowser is 
         /// created immediately with the default CfxRequestContext.
         /// </summary>
-        public ChromiumWebBrowser(string initialUrl, bool createImmediately) {
+		public ChromiumWebBrowser(string initialUrl, bool createImmediately,Control parent) {
+
+			this.Parent = parent;
 
             if(BrowserProcess.initialized) {
 
@@ -342,12 +348,27 @@ namespace Chromium.WebBrowser {
                 return;
             }
 
-            var windowInfo = new CfxWindowInfo();
-            // in order to avoid focus issues when creating browsers offscreen,
-            // the browser must be created with a disabled child window.
-			windowInfo.SetAsDisabledChild(Handle);
-			//windowInfo.SetAsChild ();
+			var parentHandle = this.Handle;
 
+			var rect = this.ClientRectangle;
+
+//			if (this.Parent != null) {
+//				parentHandle = this.Parent.Handle;
+//
+//			}
+
+            var windowInfo = new CfxWindowInfo();
+
+			this.ImeMode = ImeMode.Inherit;
+			if (WindowLess) {
+				
+				// in order to avoid focus issues when creating browsers offscreen,
+				// the browser must be created with a disabled child window.
+				windowInfo.SetAsDisabledChild (parentHandle);
+				//windowInfo.SetAsChild ();
+			} else {
+				windowInfo.SetAsChild (parentHandle,rect.Left,rect.Top,rect.Width,rect.Height);
+			}
             if(!CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, DefaultBrowserSettings, requestContext))
                 throw new ChromiumWebBrowserException("Failed to create browser instance.");
         }
