@@ -27,7 +27,7 @@ namespace ceftest
 			//webBrowser.ImeMode = this.ImeMode;
 			//panel1.ImeMode=ImeMode.Inherit;
 			//webBrowser.ImeMode = ImeMode.Inherit;
-			webBrowser=new ChromiumWebBrowser("http://www.baidu.com",true);
+			webBrowser=new ChromiumWebBrowser(this);
  //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
 			webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 		
