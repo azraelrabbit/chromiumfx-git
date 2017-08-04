@@ -166,7 +166,7 @@ namespace Chromium.WebBrowser {
 
 			var mdCmd = string.Format (mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
 
-			var chExecCmd = "chmod +x " + helperFilePath;
+			//var chExecCmd = "chmod +x " + helperFilePath;
 
 			RunCmd (mdCmd);
 			//RunCmd (chExecCmd);

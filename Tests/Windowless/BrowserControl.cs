@@ -23,6 +23,8 @@ namespace Windowless {
         private CfxLoadHandler loadHandler;
         private CfxRenderHandler renderHandler;
 
+		private CfxKeyboardHandler keyboardHandler;
+
         private Bitmap pixelBuffer;
         private object pbLock = new object();
 
@@ -30,6 +32,10 @@ namespace Windowless {
 
 			this.Parent=parent;
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
+			Console.WriteLine ("can enable ime:"+this.CanEnableIme);
+
+			this.ImeMode = ImeMode.On;
 
             lifeSpanHandler = new CfxLifeSpanHandler();
             lifeSpanHandler.OnAfterCreated += lifeSpanHandler_OnAfterCreated;
@@ -42,6 +48,7 @@ namespace Windowless {
             renderHandler.GetViewRect += renderHandler_GetViewRect;
             renderHandler.OnCursorChange += renderHandler_OnCursorChange;
             renderHandler.OnPaint += renderHandler_OnPaint;
+		
             //renderHandler.OnPopupShow += renderHandler_OnPopupShow;
             //renderHandler.OnPopupSize += renderHandler_OnPopupSize;
             //renderHandler.OnScrollOffsetChanged += renderHandler_OnScrollOffsetChanged;
@@ -52,19 +59,35 @@ namespace Windowless {
 
             loadHandler.OnLoadError += loadHandler_OnLoadError;
 
+
+			keyboardHandler = new CfxKeyboardHandler ();
+
+
+			keyboardHandler.OnPreKeyEvent+= KeyboardHandler_OnPreKeyEvent;
+
             client = new CfxClient();
             client.GetLifeSpanHandler += (sender, e) => e.SetReturnValue(lifeSpanHandler);
             client.GetRenderHandler += (sender, e) => e.SetReturnValue(renderHandler);
             client.GetLoadHandler += (sender, e) => e.SetReturnValue(loadHandler);
+			client.GetKeyboardHandler += (sender, e) => e.SetReturnValue (keyboardHandler);
 
             var settings = new CfxBrowserSettings();
 
             var windowInfo = new CfxWindowInfo();
-            windowInfo.SetAsWindowless(this.Parent.Handle);
+
+			windowInfo.SetAsWindowless (this.Handle);
+            //windowInfo.SetAsWindowless(this.Parent.Handle);
 
             // Create handle now for InvokeRequired to work properly 
-            CreateHandle();
+           // CreateHandle();
             CfxBrowserHost.CreateBrowser(windowInfo, client, "about:blank", settings, null);
+
+        }
+
+        void KeyboardHandler_OnPreKeyEvent (object sender, Chromium.Event.CfxOnPreKeyEventEventArgs e)
+        {
+		//	Console.WriteLine ((char)e.Event.UnmodifiedCharacter);
+
 
         }
 
@@ -277,19 +300,66 @@ namespace Windowless {
             }
         }
 
+		protected override void OnMouseWheel(MouseEventArgs e) {
+			if (browser != null)
+			{
+				SetMouseEvent(e);
+				browser.Host.SendMouseWheelEvent(mouseEventProxy, 0, e.Delta);
+			}
+		}
+
         // key events
         // this is not complete
 
         protected override void OnKeyPress(KeyPressEventArgs e) {
+
+			//Console.WriteLine (e.KeyChar);
             if(e.KeyChar == 7) {
                 // ctrl+g - load google so we have a page with text input
                 browser.MainFrame.LoadUrl("https://www.baidu.com");
             } else {
-                var k = new CfxKeyEvent();
-                k.WindowsKeyCode = e.KeyChar;
-                k.Type = CfxKeyEventType.Char;
-                browser.Host.SendKeyEvent(k);
+
+				var j = new CfxKeyEvent();
+				j.WindowsKeyCode = e.KeyChar;
+				j.Character = (short)e.KeyChar;
+				j.Type = CfxKeyEventType.Keydown;
+
+				browser.Host.SendKeyEvent(j);
+ 
+				var k = new CfxKeyEvent();
+				k.WindowsKeyCode = e.KeyChar;
+				k.Character = (short)e.KeyChar;
+				k.Type = CfxKeyEventType.Char;
+				k.UnmodifiedCharacter = (short)e.KeyChar;
+				browser.Host.SendKeyEvent(k);
+			 
+				base.OnKeyPress(e);
             }
         }
-    }
+
+ 
+	protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			
+			switch (keyData)
+			{
+			case Keys.Down:
+			case Keys.Left:
+			case Keys.Right:
+			case Keys.Up:
+				{
+					var j = new CfxKeyEvent();
+					j.WindowsKeyCode = (int)keyData;
+					j.Type = CfxKeyEventType.RawKeydown;
+					browser.Host.SendKeyEvent(j);
+					return true;
+				}
+			default:
+				{
+					return base.ProcessCmdKey(ref msg, keyData);
+				}
+			}
+			
+		}
+	}
+    
 }

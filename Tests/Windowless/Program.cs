@@ -9,11 +9,14 @@ using System.Windows.Forms;
 using Chromium;
 using System.Diagnostics;
 using System.Reflection;
+using System.IO;
 
 namespace Windowless {
     static class Program {
 		internal static CfxBrowserProcessHandler processHandler;
 		private static bool _mono;
+		internal static bool helperInitialized;
+
         [STAThread]
 		static void Main(string[] args) {
 
@@ -34,6 +37,8 @@ namespace Windowless {
 			}
 			 LD_LIBRARY_PATH = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
 			Console.WriteLine (LD_LIBRARY_PATH);
+
+
             var exitCode = CfxRuntime.ExecuteProcess(null);
             if(exitCode >= 0) {
                 Environment.Exit(exitCode);
@@ -47,7 +52,7 @@ namespace Windowless {
             settings.NoSandbox = true;
 
            // settings.SingleProcess = true;
-			settings.BrowserSubprocessPath =System.IO.Path.Combine(assemblyDir, "windowless");
+		//	settings.BrowserSubprocessPath =System.IO.Path.Combine(assemblyDir, "Windowless.exe");
 
 			settings.LogSeverity = CfxLogSeverity.Error;
 
@@ -59,13 +64,16 @@ namespace Windowless {
                 // optimizations following recommendations from issue #84
 
 				if(args!=null && args.Length>0){
-					e.CommandLine.AppendArgument(args);
+					foreach(var arg in args){
+						e.CommandLine.AppendArgument(arg);
+					}
+
 				}
 				else{
 					//e.CommandLine.AppendSwitch("--type=zygote");
 					e.CommandLine.AppendSwitch("disable-gpu");
-					e.CommandLine.AppendSwitch("disable-gpu-compositing");
-					e.CommandLine.AppendSwitch("disable-gpu-vsync");
+//					e.CommandLine.AppendSwitch("disable-gpu-compositing");
+//					e.CommandLine.AppendSwitch("disable-gpu-vsync");
 				}
 
                 
@@ -81,9 +89,15 @@ namespace Windowless {
             f.Width = 900;
             f.Height = 600;
 
+
             var c = new BrowserControl(f);
+
             c.Dock = DockStyle.Fill;
+			c.ImeMode = ImeMode.Inherit;
             //c.Parent = f;
+			f.KeyPreview=true;
+			f.ImeMode = ImeMode.On;
+			c.Enabled = true; 
 			Application.ApplicationExit+=Application_Exit;
             Application.Idle += Application_Idle;
             Application.Run(f);
@@ -113,19 +127,112 @@ namespace Windowless {
 				if (_mono)
 				{
 					//var monoExeName = Assembly.GetEntryAssembly ().GetName ().Name+".exe";
-					var monoPath = "mono";
-					e.CommandLine.Program=programPath;
+					var currentP = System.Diagnostics.Process.GetCurrentProcess ();
 
-					//e.CommandLine.PrependWrapper(" ");
-					e.CommandLine.PrependWrapper("--llvm");
-					e.CommandLine.Program=monoPath;
-					//	e.CommandLine.Program="/usr/bin/mono-sgen "+programPath;
+
+					//					Console.WriteLine ("Main CMDLINE : -- "+currentP.MainModule.FileName+"|| modulename: "+currentP.MainModule.ModuleName);
+					//					Console.WriteLine ("---------------------------------------------");
+
+					//System.Diagnostics.Process.GetCurrentProcess().StartInfo.FileName
+					if (currentP.MainModule.FileName==currentP.MainModule.ModuleName) {
+
+						Console.WriteLine ("------native mkbundle mode--------------");
+						e.CommandLine.Program = currentP.MainModule.FileName;
+
+					} else {
+
+						Console.WriteLine ("------mono runtime mode--------------");
+						//e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
+						e.CommandLine.Program=ProcessBundleClientHelper();
+						//
+						//					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+						////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+						//					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+
+
+						//e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+						//e.CommandLine.AppendSwitch("no-zygote");
+						//e.CommandLine.AppendSwitchWithValue("type","utility");
+						//e.CommandLine.AppendSwitch("use-views");
+
+						//--no-zygote
+					}
 				}
 			}
 
 			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
 			Console.WriteLine("program: "+e.CommandLine.Program);
         }
+
+		static string ProcessBundleClientHelper(){
+			var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
+
+			var progFi = new FileInfo (programPath);
+			var progName = progFi.Name+"_helper";
+			var helperPath = progFi.Directory.FullName;
+			var helperFilePath = Path.Combine (helperPath, progName);
+
+			if (helperInitialized) {
+				return helperFilePath;
+			}
+
+			var mkbundleCmd = Which ("mkbundle");
+
+			//0:mkbundle command
+			//1: mono_lib_path
+			//2: output for client helper path and name
+			//3: origin app name
+			var mkbundleStr = "{0} --deps -L {1} -o {2} {3}";
+
+			var mdCmd = string.Format (mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
+
+		//	var chExecCmd = "chmod +x " + helperFilePath;
+
+			RunCmd (mdCmd);
+			//RunCmd (chExecCmd);
+
+			helperInitialized = true;
+			return helperFilePath;
+		}
+
+		static void RunCmd(string cmd){
+			var process = new System.Diagnostics.Process ();
+
+			process.StartInfo = new System.Diagnostics.ProcessStartInfo ("bash");
+			process.StartInfo.Arguments=cmd;
+			process.StartInfo.UseShellExecute=false;
+			process.Start ();
+			process.WaitForExit ();
+			process.Dispose ();
+		}
+
+		const string Mono_Lib_Path = "/usr/lib/mono/4.5";
+		const string WhichCommand = "which {0}";
+
+		static string Which(string programName){
+
+			try{
+
+				var cmdStr = string.Format (WhichCommand, programName);
+
+				var process = new System.Diagnostics.Process ();
+				process.StartInfo = new System.Diagnostics.ProcessStartInfo ("bash");
+				process.StartInfo.Arguments=cmdStr;
+				process.StartInfo.RedirectStandardOutput=true;
+				process.StartInfo.UseShellExecute=false;
+				process.Start ();
+				process.WaitForExit ();
+
+				var result = process.StandardOutput.ReadToEnd ();
+
+				process.Dispose ();
+				return result;
+			}catch(Exception ex){
+				Console.WriteLine (ex.Message);
+			}
+
+			return string.Empty;
+		}
 
         static void Application_Idle(object sender, EventArgs e) {
             CfxRuntime.DoMessageLoopWork();

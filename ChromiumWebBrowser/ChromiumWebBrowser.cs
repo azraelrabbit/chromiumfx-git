@@ -256,29 +256,33 @@ namespace Chromium.WebBrowser {
 
 			this.Parent = parent;
 
+			ImeMode = ImeMode.On;
             if(BrowserProcess.initialized) {
-
-                SetStyle(ControlStyles.ContainerControl
-                    | ControlStyles.ResizeRedraw
+				//ControlStyles.ContainerControl
+				// | ControlStyles.EnableNotifyMessage
+				// | ControlStyles.UseTextForAccessibility
+                SetStyle(
+					
+                     ControlStyles.ResizeRedraw
                     | ControlStyles.FixedWidth
                     | ControlStyles.FixedHeight
                     | ControlStyles.StandardClick
                     | ControlStyles.StandardDoubleClick
                     | ControlStyles.UserMouse
                     | ControlStyles.SupportsTransparentBackColor
-                    | ControlStyles.EnableNotifyMessage
+                  
                     | ControlStyles.DoubleBuffer
                     | ControlStyles.OptimizedDoubleBuffer
-                    | ControlStyles.UseTextForAccessibility
+                   
                     | ControlStyles.Opaque
                     , false);
 
-                SetStyle(ControlStyles.UserPaint
-                    | ControlStyles.AllPaintingInWmPaint
-                    | ControlStyles.CacheText
-                    | ControlStyles.Selectable
-                    , true);
-
+//                SetStyle(ControlStyles.UserPaint
+//                    | ControlStyles.AllPaintingInWmPaint
+//                    | ControlStyles.CacheText
+//                    | ControlStyles.Selectable
+//                    , true);
+				SetStyle(ControlStyles.AllPaintingInWmPaint,true);
                 if(initialUrl == null)
                     this.initialUrl = "about:blank";
                 else
@@ -359,16 +363,18 @@ namespace Chromium.WebBrowser {
 
             var windowInfo = new CfxWindowInfo();
 
-			this.ImeMode = ImeMode.Inherit;
+			//this.ImeMode = ImeMode.Inherit;
 			if (WindowLess) {
 				
 				// in order to avoid focus issues when creating browsers offscreen,
 				// the browser must be created with a disabled child window.
-				windowInfo.SetAsDisabledChild (parentHandle);
+				windowInfo.SetAsDisabledChild(parentHandle);
 				//windowInfo.SetAsChild ();
 			} else {
 				windowInfo.SetAsChild (parentHandle,rect.Left,rect.Top,rect.Width,rect.Height);
+				//windowInfo.Style = WindowStyle.WS_CHILD;
 			}
+
             if(!CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, DefaultBrowserSettings, requestContext))
                 throw new ChromiumWebBrowserException("Failed to create browser instance.");
         }
@@ -1226,7 +1232,55 @@ namespace Chromium.WebBrowser {
 //				Browser.Host.SendKeyEvent (new CfxKeyEvent (){ NativeKeyCode = e.KeyValue });
 //			}
 //		}
-
+//		protected override void OnKeyPress(KeyPressEventArgs e) {
+//
+//			Console.WriteLine (e.KeyChar);
+//			if(e.KeyChar == 7) {
+//				// ctrl+g - load google so we have a page with text input
+//				Browser.MainFrame.LoadUrl("https://www.baidu.com");
+//			} else {
+//
+//				var j = new CfxKeyEvent();
+//				j.WindowsKeyCode = e.KeyChar;
+//				j.Character = (short)e.KeyChar;
+//				j.Type = CfxKeyEventType.Keydown;
+//
+//				Browser.Host.SendKeyEvent(j);
+//
+//				var k = new CfxKeyEvent();
+//				k.WindowsKeyCode = e.KeyChar;
+//				k.Character = (short)e.KeyChar;
+//				k.Type = CfxKeyEventType.Char;
+//				k.UnmodifiedCharacter = (short)e.KeyChar;
+//				Browser.Host.SendKeyEvent(k);
+//
+//				base.OnKeyPress(e);
+//			}
+//		}
+//
+//
+//		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+//
+//			switch (keyData)
+//			{
+//			case Keys.Down:
+//			case Keys.Left:
+//			case Keys.Right:
+//			case Keys.Up:
+//				{
+//					var j = new CfxKeyEvent();
+//					j.WindowsKeyCode = (int)keyData;
+//					j.Type = CfxKeyEventType.RawKeydown;
+//					Browser.Host.SendKeyEvent(j);
+//					return true;
+//				}
+//			default:
+//				{
+//					return base.ProcessCmdKey(ref msg, keyData);
+//				}
+//			}
+//
+//		}
 
         [DllImport("user32", SetLastError = false)]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);

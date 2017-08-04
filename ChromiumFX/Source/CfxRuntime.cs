@@ -189,10 +189,10 @@ namespace Chromium {
 //					settings.BrowserSubprocessPath = System.Reflection.Assembly.GetEntryAssembly ().Location;
 //				}
 
-//				if (!settings.WindowlessRenderingEnabled) {
+				if (!settings.WindowlessRenderingEnabled) {
 				////	 render and utility processes need a mono prefix or else they won't launch
 					application.OnBeforeCommandLineProcessing += AddMonoCmdPrefix;
-//				}			
+				}			
 
                     using(var mainArgs = CfxMainArgs.ForLinux()) {
                         var retval = InitializePrivate(mainArgs, settings, application, IntPtr.Zero);
