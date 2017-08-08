@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Chromium;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Threading;
@@ -169,13 +170,112 @@ namespace Windowless {
         }
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
+
             CfxRuntime.QuitMessageLoop();
+
+
+            //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
+
+            var current = Process.GetCurrentProcess();
+
+            var processName = current.ProcessName;
+
+            var sublist = Process.GetProcessesByName(processName);
+
+            var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+
+            foreach (var process in realSublist)
+            {
+                process.Kill();
+            }
+
             CfxRuntime.Shutdown();
         }
 
         static void Application_Idle(object sender, EventArgs e) {
             CfxRuntime.DoMessageLoopWork();
             Thread.Yield();
+        }
+
+
+
+
+
+        static string ProcessBundleClientHelper()
+        {
+            var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
+
+            var progFi = new FileInfo(programPath);
+            var progName = progFi.Name + "_helper";
+            var helperPath = progFi.Directory.FullName;
+            var helperFilePath = Path.Combine(helperPath, progName);
+
+            if (helperInitialized)
+            {
+                return helperFilePath;
+            }
+
+            var mkbundleCmd = Which("mkbundle");
+
+            //0:mkbundle command
+            //1: mono_lib_path
+            //2: output for client helper path and name
+            //3: origin app name
+            var mkbundleStr = "{0} --deps -L {1} -o {2} {3}";
+
+            var mdCmd = string.Format(mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
+
+            //	var chExecCmd = "chmod +x " + helperFilePath;
+
+            RunCmd(mdCmd);
+            //RunCmd (chExecCmd);
+
+            helperInitialized = true;
+            return helperFilePath;
+        }
+
+        static void RunCmd(string cmd)
+        {
+            var process = new System.Diagnostics.Process();
+
+            process.StartInfo = new System.Diagnostics.ProcessStartInfo("bash");
+            process.StartInfo.Arguments = cmd;
+            process.StartInfo.UseShellExecute = false;
+            process.Start();
+            process.WaitForExit();
+            process.Dispose();
+        }
+
+        const string Mono_Lib_Path = "/usr/lib/mono/4.5";
+        const string WhichCommand = "which {0}";
+
+        static string Which(string programName)
+        {
+
+            try
+            {
+
+                var cmdStr = string.Format(WhichCommand, programName);
+
+                var process = new System.Diagnostics.Process();
+                process.StartInfo = new System.Diagnostics.ProcessStartInfo("bash");
+                process.StartInfo.Arguments = cmdStr;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.Start();
+                process.WaitForExit();
+
+                var result = process.StandardOutput.ReadToEnd();
+
+                process.Dispose();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return string.Empty;
         }
     }
 }
