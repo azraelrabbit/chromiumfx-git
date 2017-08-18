@@ -130,12 +130,7 @@ namespace Windowless {
                 {
                     //var monoExeName = Assembly.GetEntryAssembly ().GetName ().Name+".exe";
                     var currentP = System.Diagnostics.Process.GetCurrentProcess();
-
-
-                    //					Console.WriteLine ("Main CMDLINE : -- "+currentP.MainModule.FileName+"|| modulename: "+currentP.MainModule.ModuleName);
-                    //					Console.WriteLine ("---------------------------------------------");
-
-                    //System.Diagnostics.Process.GetCurrentProcess().StartInfo.FileName
+ 
                     if (currentP.MainModule.FileName == currentP.MainModule.ModuleName)
                     {
 
@@ -147,20 +142,9 @@ namespace Windowless {
                     {
 
                         Console.WriteLine("------mono runtime mode--------------");
-                        //e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
+                        
                         e.CommandLine.Program = ProcessBundleClientHelper();
-                        //
-                        //					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
-                        ////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
-                        //					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
-
-
-                        //e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
-                        //e.CommandLine.AppendSwitch("no-zygote");
-                        //e.CommandLine.AppendSwitchWithValue("type","utility");
-                        //e.CommandLine.AppendSwitch("use-views");
-
-                        //--no-zygote
+              
                     }
                 }
             }
