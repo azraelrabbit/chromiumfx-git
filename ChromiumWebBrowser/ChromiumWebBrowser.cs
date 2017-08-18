@@ -1223,7 +1223,7 @@ namespace Chromium.WebBrowser {
 				if(browserWindowHandle != IntPtr.Zero)
 					NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED);
 			}
-			this.Update ();
+			this.InvokeCallback(()=>this.Update());//.Update ();
 		}
 
 //		protected override void OnPreviewKeyDown (PreviewKeyDownEventArgs e)

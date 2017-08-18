@@ -10,7 +10,7 @@ using Chromium.Remote;
 using Chromium.Remote.Event;
 
 namespace Chromium.WebBrowser {
-    internal class RenderProcess {
+    public class RenderProcess {
 
         internal static int RenderProcessMain() {
             try {
