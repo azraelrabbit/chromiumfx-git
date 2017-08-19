@@ -120,9 +120,45 @@ namespace ChromiumFX.Extension
 	    {
 	        webResourceMimeType = resourceMimeType;
 
+	        byte[] headBuff;
+	        byte[] footBuff;
 
             var nonFoundData = Encoding.UTF8.GetBytes($"Content {uri.ToString()} Not Found!");
-	        return new WebResource(nonFoundData, webResourceMimeType);
+
+
+	        if (ChromiumStartup.EnableMaster && uri.ToString().Contains(ChromiumStartup.SubViewPathName))
+	        {
+	            string headMimeType;
+	            string headResourceName;
+
+	            var headAss = GetResourceInfo(new Uri(ChromiumStartup.MasterHeaderFile), out headMimeType,
+	                out headResourceName);
+
+	            headBuff = GetResourceBytes(headAss, headResourceName);
+
+	            string footMimeType;
+	            string footResourceName;
+
+	            var footAss = GetResourceInfo(new Uri(ChromiumStartup.MasterFooterFile), out footMimeType,
+	                out footResourceName);
+
+	            footBuff = GetResourceBytes(footAss, footResourceName);
+
+	            webResourceLength = nonFoundData.Length + headBuff.Length + footBuff.Length;
+	            webResourceData = new byte[webResourceLength];
+
+	            Buffer.BlockCopy(headBuff, 0, webResourceData, 0, headBuff.Length);
+	            Buffer.BlockCopy(nonFoundData, 0, webResourceData, headBuff.Length, nonFoundData.Length);
+	            Buffer.BlockCopy(footBuff, 0, webResourceData, headBuff.Length + nonFoundData.Length, footBuff.Length);
+	        }
+	        else
+	        {
+	            webResourceLength = nonFoundData.Length;
+	            webResourceData = new byte[nonFoundData.Length]; ;
+	            Buffer.BlockCopy(nonFoundData, 0, webResourceData, 0, nonFoundData.Length);
+            }
+	       
+            return new WebResource(webResourceData, webResourceMimeType);
 	    }
         private WebResource GetWebResource(Uri uri,Assembly ass, string resourceName, string resourceMimeType)
 	    {
