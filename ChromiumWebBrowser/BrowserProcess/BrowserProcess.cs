@@ -14,206 +14,226 @@ using Chromium.Event;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Chromium.WebBrowser {
-	public static class BrowserProcess {
+namespace Chromium.WebBrowser
+{
+    public static class BrowserProcess
+    {
 
-		internal static CfxApp app;
-		internal static CfxBrowserProcessHandler processHandler;
-		private static bool _mono;
-		internal static bool initialized;
-		internal static bool helperInitialized;
+        internal static CfxApp app;
+        internal static CfxBrowserProcessHandler processHandler;
+        private static bool _mono;
+        internal static bool initialized;
+        internal static bool helperInitialized;
 
-		internal static void Initialize() {
-			_mono = Type.GetType("Mono.Runtime") != null;
+        internal static void Initialize()
+        {
+            _mono = Type.GetType("Mono.Runtime") != null;
 
-			if (initialized)
-				throw new ChromiumWebBrowserException("ChromiumWebBrowser library already initialized.");
-
-
-			int retval = CfxRuntime.ExecuteProcess();
-			if(retval >= 0)
-				Environment.Exit(retval);
+            if (initialized)
+                throw new ChromiumWebBrowserException("ChromiumWebBrowser library already initialized.");
 
 
-			app = new CfxApp();
-			processHandler = new CfxBrowserProcessHandler();
-			processHandler.OnBeforeChildProcessLaunch += ProcessHandler_OnBeforeChildProcessLaunch;
+            int retval = CfxRuntime.ExecuteProcess();
+            if (retval >= 0)
+                Environment.Exit(retval);
 
 
-			app.GetBrowserProcessHandler += (s, e) => e.SetReturnValue(processHandler);
-			app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowserBase.RaiseOnBeforeCommandLineProcessing(e);
-			app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowserBase.RaiseOnRegisterCustomSchemes(e);
-
-			var settings = new CfxSettings();
-			//FIXED different default settings based on platform
-
-			switch (CfxRuntime.PlatformOS)
-
-			{
-
-			case CfxPlatformOS.Linux:
-
-				settings.MultiThreadedMessageLoop = false;
+            app = new CfxApp();
+            processHandler = new CfxBrowserProcessHandler();
+            processHandler.OnBeforeChildProcessLaunch += ProcessHandler_OnBeforeChildProcessLaunch;
 
 
-				//TODO less demanding way of using DoMessageLoopWork, ExernalMessageLoop = true doesn't seem to work
+            app.GetBrowserProcessHandler += (s, e) => e.SetReturnValue(processHandler);
+            app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowserBase.RaiseOnBeforeCommandLineProcessing(e);
+            app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowserBase.RaiseOnRegisterCustomSchemes(e);
 
-				Application.Idle += BrowserMessageLoopStep;
+            var settings = new CfxSettings();
+            //FIXED different default settings based on platform
 
-				break;
+            switch (CfxRuntime.PlatformOS)
 
-			default:
+            {
 
-				settings.MultiThreadedMessageLoop = true;
-			    Application.ApplicationExit += Application_ApplicationExit;
+                case CfxPlatformOS.Linux:
+
+                    settings.MultiThreadedMessageLoop = false;
+
+
+                    //TODO less demanding way of using DoMessageLoopWork, ExernalMessageLoop = true doesn't seem to work
+
+                    Application.Idle += BrowserMessageLoopStep;
+
                     break;
 
-			}
+                default:
 
-			settings.NoSandbox = true;
+                    settings.MultiThreadedMessageLoop = true;
+                    Application.ApplicationExit += Application_ApplicationExit;
+                    break;
 
+            }
 
-			ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
-
-		    ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
-
-			if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
-				throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
-
-			initialized = true;
-		}
-	    private static void Application_ApplicationExit(object sender, EventArgs e)
-	    {
-
-	        CfxRuntime.QuitMessageLoop();
+            settings.NoSandbox = true;
 
 
-	        //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
+            ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-	        var current = Process.GetCurrentProcess();
+            ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
 
-	        var processName = current.ProcessName;
+            if (!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+                throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
 
-	        var sublist = Process.GetProcessesByName(processName);
+            initialized = true;
+        }
 
-	        var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+        private static void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            if (CfxRuntime.PlatformOS != CfxPlatformOS.Windows)
+            {
+                CfxRuntime.QuitMessageLoop();
+            }
 
-	        foreach (var process in realSublist)
-	        {
-	            process.Kill();
-	        }
 
-	        CfxRuntime.Shutdown();
-	    }
+            if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
+            {
+
+                //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
+
+                var current = Process.GetCurrentProcess();
+
+                var processName = current.ProcessName;
+
+                var sublist = Process.GetProcessesByName(processName);
+
+                var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+
+                foreach (var process in realSublist)
+                {
+                    process.Kill();
+                }
+            }
+
+            CfxRuntime.Shutdown();
+        }
         private static void ProcessHandler_OnBeforeChildProcessLaunch(object sender, CfxOnBeforeChildProcessLaunchEventArgs e)
-		{
-			//to fix that the  mono run in linux
- 
-			var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
- 
-			if (e.CommandLine.GetSwitchValue("type") == "gpu-process")
-			{
-				e.CommandLine.Program= programPath;
-			}
-			else
-			{
-				if (_mono)
-				{
-					var currentP = System.Diagnostics.Process.GetCurrentProcess ();
- 
-					if (currentP.MainModule.FileName==currentP.MainModule.ModuleName) {
+        {
+            //to fix that the  mono run in linux
 
-						Console.WriteLine ("------native mkbundle mode--------------");
-						e.CommandLine.Program = currentP.MainModule.FileName;
+            var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
 
-					} else {
+            if (e.CommandLine.GetSwitchValue("type") == "gpu-process")
+            {
+                e.CommandLine.Program = programPath;
+            }
+            else
+            {
+                if (_mono)
+                {
+                    var currentP = System.Diagnostics.Process.GetCurrentProcess();
 
-						Console.WriteLine ("------mono runtime mode--------------");
-						e.CommandLine.Program=ProcessBundleClientHelper();
-						 
-					}
-				}
-			}
+                    if (currentP.MainModule.FileName == currentP.MainModule.ModuleName)
+                    {
 
-			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
-			Console.WriteLine("program: "+e.CommandLine.Program);
-		}
+                        Console.WriteLine("------native mkbundle mode--------------");
+                        e.CommandLine.Program = currentP.MainModule.FileName;
 
-		static string ProcessBundleClientHelper(){
-			var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
+                    }
+                    else
+                    {
 
-			var progFi = new FileInfo (programPath);
-			var progName = progFi.Name+"_helper";
-			var helperPath = progFi.Directory.FullName;
-			var helperFilePath = Path.Combine (helperPath, progName);
+                        Console.WriteLine("------mono runtime mode--------------");
+                        e.CommandLine.Program = ProcessBundleClientHelper();
 
-			if (helperInitialized) {
-				return helperFilePath;
-			}
+                    }
+                }
+            }
 
-			var mkbundleCmd = Which ("mkbundle");
+            Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
+            Console.WriteLine("program: " + e.CommandLine.Program);
+        }
 
-			//0:mkbundle command
-			//1: mono_lib_path
-			//2: output for client helper path and name
-			//3: origin app name
-			var mkbundleStr = "{0} --deps -L {1} -o {2} {3}";
+        static string ProcessBundleClientHelper()
+        {
+            var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
 
-			var mdCmd = string.Format (mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
+            var progFi = new FileInfo(programPath);
+            var progName = progFi.Name + "_helper";
+            var helperPath = progFi.Directory.FullName;
+            var helperFilePath = Path.Combine(helperPath, progName);
 
-			//var chExecCmd = "chmod +x " + helperFilePath;
+            if (helperInitialized)
+            {
+                return helperFilePath;
+            }
 
-			RunCmd (mdCmd);
-			//RunCmd (chExecCmd);
+            var mkbundleCmd = Which("mkbundle");
 
-			helperInitialized = true;
-			return helperFilePath;
-		}
+            //0:mkbundle command
+            //1: mono_lib_path
+            //2: output for client helper path and name
+            //3: origin app name
+            var mkbundleStr = "{0} --deps -L {1} -o {2} {3}";
 
-		static void RunCmd(string cmd){
-			var process = new System.Diagnostics.Process ();
-	 
-			process.StartInfo = new System.Diagnostics.ProcessStartInfo ("bash");
-			process.StartInfo.Arguments=cmd;
-			process.StartInfo.UseShellExecute=false;
-			process.Start ();
-			process.WaitForExit ();
-			process.Dispose ();
-		}
+            var mdCmd = string.Format(mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
 
-		const string Mono_Lib_Path = "/usr/lib/mono/4.5";
-		const string WhichCommand = "which {0}";
+            //var chExecCmd = "chmod +x " + helperFilePath;
 
-		static string Which(string programName){
+            RunCmd(mdCmd);
+            //RunCmd (chExecCmd);
 
-			try{
-				
-			var cmdStr = string.Format (WhichCommand, programName);
+            helperInitialized = true;
+            return helperFilePath;
+        }
 
-			var process = new System.Diagnostics.Process ();
-			process.StartInfo = new System.Diagnostics.ProcessStartInfo ("bash");
-				process.StartInfo.Arguments=cmdStr;
-				process.StartInfo.RedirectStandardOutput=true;
-				process.StartInfo.UseShellExecute=false;
-			process.Start ();
-			process.WaitForExit ();
+        static void RunCmd(string cmd)
+        {
+            var process = new System.Diagnostics.Process();
 
-			var result = process.StandardOutput.ReadToEnd ();
+            process.StartInfo = new System.Diagnostics.ProcessStartInfo("bash");
+            process.StartInfo.Arguments = cmd;
+            process.StartInfo.UseShellExecute = false;
+            process.Start();
+            process.WaitForExit();
+            process.Dispose();
+        }
 
-			process.Dispose ();
-			return result;
-			}catch(Exception ex){
-				Console.WriteLine (ex.Message);
-			}
+        const string Mono_Lib_Path = "/usr/lib/mono/4.5";
+        const string WhichCommand = "which {0}";
 
-			return string.Empty;
-		}
+        static string Which(string programName)
+        {
 
-		private static void BrowserMessageLoopStep(object sender, EventArgs e)
-		{
-			CfxRuntime.DoMessageLoopWork();
-			Thread.Yield();
-		}
+            try
+            {
 
-	}
+                var cmdStr = string.Format(WhichCommand, programName);
+
+                var process = new System.Diagnostics.Process();
+                process.StartInfo = new System.Diagnostics.ProcessStartInfo("bash");
+                process.StartInfo.Arguments = cmdStr;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.Start();
+                process.WaitForExit();
+
+                var result = process.StandardOutput.ReadToEnd();
+
+                process.Dispose();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return string.Empty;
+        }
+
+        private static void BrowserMessageLoopStep(object sender, EventArgs e)
+        {
+            CfxRuntime.DoMessageLoopWork();
+            Thread.Yield();
+        }
+
+    }
 }
