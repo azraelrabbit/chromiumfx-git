@@ -1,0 +1,5 @@
+Name: libcfx64
+Description: 
+Version: 0.1
+Libs: -L"/zfspool/pdata/chromiumfx/Build/Debug" -lcfx64
+Cflags: -I""
