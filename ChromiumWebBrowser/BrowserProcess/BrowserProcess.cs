@@ -5,7 +5,9 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Chromium;
 using Chromium.Event;
@@ -39,8 +41,8 @@ namespace Chromium.WebBrowser {
 
 
 			app.GetBrowserProcessHandler += (s, e) => e.SetReturnValue(processHandler);
-			app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowser.RaiseOnBeforeCommandLineProcessing(e);
-			app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowser.RaiseOnRegisterCustomSchemes(e);
+			app.OnBeforeCommandLineProcessing += (s, e) => ChromiumWebBrowserBase.RaiseOnBeforeCommandLineProcessing(e);
+			app.OnRegisterCustomSchemes += (s, e) => ChromiumWebBrowserBase.RaiseOnRegisterCustomSchemes(e);
 
 			var settings = new CfxSettings();
 			//FIXED different default settings based on platform
@@ -64,6 +66,8 @@ namespace Chromium.WebBrowser {
 
 				settings.MultiThreadedMessageLoop = true;
 
+                    Application.ApplicationExit += Application_ApplicationExit;
+
 				break;
 
 			}
@@ -71,17 +75,73 @@ namespace Chromium.WebBrowser {
 			settings.NoSandbox = true;
 
 
-			ChromiumWebBrowser.RaiseOnBeforeCfxInitialize(settings, processHandler);
+		    ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-			ChromiumWebBrowser.WindowLess = settings.WindowlessRenderingEnabled;
+			ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
 
-			if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
-				throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+		    Console.WriteLine(" ****************** window Less "+ChromiumWebBrowserBase.WindowLess);
 
-			initialized = true;
+            //if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+            //	throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+
+
+		    if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
+		    {
+		        if (!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+		            throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+		    }
+		    else
+		    {
+
+		        Console.WriteLine("()()*()*(**()*)(*()*))");
+		        if (!CfxRuntime.Initialize(settings, app))
+		            Environment.Exit(-1);
+		    }
+
+            initialized = true;
 		}
 
-		private static void ProcessHandler_OnBeforeChildProcessLaunch(object sender, CfxOnBeforeChildProcessLaunchEventArgs e)
+	    private static void Application_ApplicationExit(object sender, EventArgs e)
+	    {
+
+	       
+
+
+	        //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
+
+	        if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
+	        {
+	            var current = Process.GetCurrentProcess();
+
+	            var processName = current.ProcessName;
+
+	            var sublist = Process.GetProcessesByName(processName);
+
+	            var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+
+	            foreach (var process in realSublist)
+	            {
+	                try
+	                {
+	                    process.Kill();
+
+	                }
+	                catch (Exception ex)
+	                {
+
+	                }
+
+	            }
+
+	        }
+	        else
+	        {
+	            CfxRuntime.QuitMessageLoop();
+            }
+
+	        CfxRuntime.Shutdown();
+	    }
+        private static void ProcessHandler_OnBeforeChildProcessLaunch(object sender, CfxOnBeforeChildProcessLaunchEventArgs e)
 		{
 			//to fix that the  mono run in linux
 			//Console.WriteLine("child cmdline:"+e.CommandLine.CommandLineString);

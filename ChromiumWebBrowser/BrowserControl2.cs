@@ -7,18 +7,19 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Chromium;
+using Chromium.Event;
+using Chromium.WebBrowser.Event;
 
-namespace Windowless
+namespace Chromium.WebBrowser
 {
     /// <summary>
     /// A minimum and very incomplete implementation of a
     /// control with windowless browser.
     /// </summary>
-    class BrowserControl : Control
+    public class BrowserControl2 : ChromiumWebBrowserBase
     {
 
-        internal CfxBrowser browser;
+        //internal CfxBrowser browser;
 
         private CfxClient client;
         private CfxLifeSpanHandler lifeSpanHandler;
@@ -31,7 +32,19 @@ namespace Windowless
         private object pbLock = new object();
 
         private static bool _mono;
-        public BrowserControl(Control parent)
+
+
+        public BrowserControl2(string initUrl, Control parent)
+        {
+            this.initialUrl = initUrl;
+            MyCtor(parent);
+        }
+        public BrowserControl2(Control parent)
+        {
+            MyCtor(parent);
+        }
+
+        private void MyCtor(Control parent)
         {
             _mono = Type.GetType("Mono.Runtime") != null;
             this.Parent = parent;
@@ -75,18 +88,75 @@ namespace Windowless
             client.GetLoadHandler += (sender, e) => e.SetReturnValue(loadHandler);
             client.GetKeyboardHandler += (sender, e) => e.SetReturnValue(keyboardHandler);
 
+      
             var settings = new CfxBrowserSettings();
 
             var windowInfo = new CfxWindowInfo();
 
-            windowInfo.SetAsWindowless(this.Handle);
+            windowInfo.SetAsWindowless(this.Parent.Handle);
             //windowInfo.SetAsWindowless(this.Parent.Handle);
 
             // Create handle now for InvokeRequired to work properly 
             // CreateHandle();
-            CfxBrowserHost.CreateBrowser(windowInfo, client, "http://www.sina.com.cn", settings, null);
 
+            if (string.IsNullOrEmpty(initialUrl))
+            {
+                initialUrl = "about:version";
+            }
+
+            CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, settings, null);
         }
+
+        /// <summary>
+        /// Returns the load handler for this browser.
+        /// </summary>
+        public CfxLoadHandler LoadHandler {
+            get { return loadHandler; }
+        }
+
+        
+
+        protected string initialUrl;
+        protected string m_loadUrlDeferred;
+        protected string m_loadStringDeferred;
+
+        internal readonly object browserSyncRoot = new object();
+
+
+        //public void LoadUrl(string url)
+        //{
+        //    if (Browser != null)
+        //        Browser.MainFrame.LoadUrl(url);
+        //    else
+        //    {
+        //        initialUrl = url;
+        //        lock (browserSyncRoot)
+        //        {
+        //            if (Browser != null)
+        //            {
+        //                Browser.MainFrame.LoadUrl(url);
+        //            }
+        //            else
+        //            {
+        //                m_loadUrlDeferred = url;
+        //            }
+        //        }
+        //    }
+
+        //    OnResize(null);
+        //}
+
+
+        ///// <summary>
+        ///// Initialize the ChromiumWebBrowser and ChromiumFX libraries.
+        ///// The application can change initialization settings by handling
+        ///// the OnBeforeCfxInitialize event.
+        ///// </summary>
+        //public static void Initialize()
+        //{
+        //    BrowserProcess.Initialize();
+        //}
+
 
         protected override void Dispose(bool disposing)
         {
@@ -118,32 +188,7 @@ namespace Windowless
                 });
             }
         }
-
-        void renderHandler_UpdateDragCursor(object sender, Chromium.Event.CfxUpdateDragCursorEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void renderHandler_StartDragging(object sender, Chromium.Event.CfxStartDraggingEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void renderHandler_OnScrollOffsetChanged(object sender, Chromium.Event.CfxOnScrollOffsetChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void renderHandler_OnPopupSize(object sender, Chromium.Event.CfxOnPopupSizeEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void renderHandler_OnPopupShow(object sender, Chromium.Event.CfxOnPopupShowEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
+  
         void renderHandler_OnPaint(object sender, Chromium.Event.CfxOnPaintEventArgs e)
         {
 
@@ -169,15 +214,35 @@ namespace Windowless
 
         void renderHandler_OnCursorChange(object sender, Chromium.Event.CfxOnCursorChangeEventArgs e)
         {
-            switch (e.Type)
+            if (InvokeRequired)
             {
-                case CfxCursorType.Hand:
-                    Cursor = Cursors.Hand;
-                    break;
-                default:
-                    Cursor = Cursors.Default;
-                    break;
+                Invoke((MethodInvoker) (() =>
+                {
+                    switch (e.Type)
+                    {
+                        case CfxCursorType.Hand:
+                            Cursor = Cursors.Hand;
+                            break;
+                        default:
+                            Cursor = Cursors.Default;
+                            break;
+                    }
+
+                }));
             }
+            else
+            {
+                switch (e.Type)
+                {
+                    case CfxCursorType.Hand:
+                        Cursor = Cursors.Hand;
+                        break;
+                    default:
+                        Cursor = Cursors.Default;
+                        break;
+                }
+            }
+            
         }
 
         void renderHandler_GetViewRect(object sender, Chromium.Event.CfxGetViewRectEventArgs e)
@@ -229,34 +294,71 @@ namespace Windowless
 
         void lifeSpanHandler_OnAfterCreated(object sender, Chromium.Event.CfxOnAfterCreatedEventArgs e)
         {
-            //  browser = e.Browser;
-            //  browser.MainFrame.LoadUrl("about:version");
-            //  if(Focused) {
-            //      browser.Host.SendFocusEvent(true);
-            //  }
-            if (browser != null)
+
+
+            if (Browser != null)
             {
 
             }
             else
             {
-                browser = e.Browser;
-                browser.MainFrame.LoadUrl("about:version");
+                Browser = e.Browser;
+                Browser.MainFrame.LoadUrl("about:version");
+                //if (!string.IsNullOrEmpty(initialUrl))
+                //{
+                //    Browser.MainFrame.LoadUrl(initialUrl);
+                //}
+
+                OnBrowserCreated(e);
             }
 
             var br = e.Browser;
-            //browser.MainFrame.LoadUrl("about:version");
-            if (Focused)
+            // browser.MainFrame.LoadUrl("about:version");
+
+
+            Invoke((MethodInvoker)(() =>
             {
-                br.Host.SendFocusEvent(true);
+                if (Focused)
+                {
+                    br.Host.SendFocusEvent(true);
+                }
+            }));
+
+
+
+        }
+
+        /// <summary>
+        /// Raised after the CfxBrowser object for this WebBrowser has been created.
+        /// The event is executed on the thread that owns this browser control's 
+        /// underlying window handle.
+        /// </summary>
+        public new event BrowserCreatedEventHandler BrowserCreated;
+
+        internal void OnBrowserCreated(CfxOnAfterCreatedEventArgs e)
+        {
+
+            Browser = e.Browser;
+            BrowserHost = Browser.Host;
+            //browserWindowHandle = BrowserHost.WindowHandle;
+            //AddToBrowserCache(this);
+            //ResizeBrowserWindow();
+
+            var handler = BrowserCreated;
+            if (handler != null)
+            {
+                var e1 = new BrowserCreatedEventArgs(e.Browser);
+                handler(this, e1);
             }
+
+            //System.Threading.ThreadPool.QueueUserWorkItem(AfterSetBrowserTasks);
         }
 
         protected override void OnGotFocus(EventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
-                browser.Host.SendFocusEvent(true);
+                Browser.Host.SendFocusEvent(true);
             }
         }
 
@@ -264,9 +366,9 @@ namespace Windowless
 
         protected override void OnResize(EventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
-                browser.Host.WasResized();
+                Browser.Host.WasResized();
             }
         }
 
@@ -297,24 +399,24 @@ namespace Windowless
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
                 SetMouseEvent(e);
-                browser.Host.SendMouseMoveEvent(mouseEventProxy, false);
+                Browser.Host.SendMouseMoveEvent(mouseEventProxy, false);
             }
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
-                browser.Host.SendMouseMoveEvent(mouseEventProxy, true);
+                Browser.Host.SendMouseMoveEvent(mouseEventProxy, true);
             }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
                 SetMouseEvent(e);
                 CfxMouseButtonType t;
@@ -330,13 +432,13 @@ namespace Windowless
                         t = CfxMouseButtonType.Left;
                         break;
                 }
-                browser.Host.SendFocusEvent(true);
-                browser.Host.SendMouseClickEvent(mouseEventProxy, t, false, e.Clicks);
+                Browser.Host.SendFocusEvent(true);
+                Browser.Host.SendMouseClickEvent(mouseEventProxy, t, false, e.Clicks);
             }
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
                 SetMouseEvent(e);
                 CfxMouseButtonType t;
@@ -352,16 +454,16 @@ namespace Windowless
                         t = CfxMouseButtonType.Left;
                         break;
                 }
-                browser.Host.SendMouseClickEvent(mouseEventProxy, t, true, e.Clicks);
+                Browser.Host.SendMouseClickEvent(mouseEventProxy, t, true, e.Clicks);
             }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (browser != null)
+            if (Browser != null)
             {
                 SetMouseEvent(e);
-                browser.Host.SendMouseWheelEvent(mouseEventProxy, 0, e.Delta);
+                Browser.Host.SendMouseWheelEvent(mouseEventProxy, 0, e.Delta);
             }
         }
 
@@ -371,11 +473,11 @@ namespace Windowless
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
 
-            //Console.WriteLine (e.KeyChar);
+            Console.WriteLine(e.KeyChar);
             if (e.KeyChar == 7)
             {
                 // ctrl+g - load google so we have a page with text input
-                browser.MainFrame.LoadUrl("https://www.baidu.com");
+                Browser.MainFrame.LoadUrl("https://www.baidu.com");
             }
             else
             {
@@ -386,7 +488,7 @@ namespace Windowless
                     k.Character = (short)e.KeyChar;
                     k.Type = CfxKeyEventType.Char;
                     k.UnmodifiedCharacter = (short)e.KeyChar;
-                    browser.Host.SendKeyEvent(k);
+                    Browser.Host.SendKeyEvent(k);
 
                     e.Handled = true;
                 }
@@ -401,7 +503,7 @@ namespace Windowless
             j.Character = (short)e.KeyValue;
             j.Type = CfxKeyEventType.Keydown;
 
-            browser.Host.SendKeyEvent(j);
+            Browser.Host.SendKeyEvent(j);
         }
 
 
@@ -418,7 +520,7 @@ namespace Windowless
                         var j = new CfxKeyEvent();
                         j.WindowsKeyCode = (int)keyData;
                         j.Type = CfxKeyEventType.RawKeydown;
-                        browser.Host.SendKeyEvent(j);
+                        Browser.Host.SendKeyEvent(j);
                         return true;
                     }
                 default:
