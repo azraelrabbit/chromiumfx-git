@@ -11,7 +11,7 @@ using Chromium.Event;
 namespace Chromium.WebBrowser {
     internal class BrowserClient : CfxClient  {
 
-        internal ChromiumWebBrowserBase browser;
+        internal ChromiumWebBrowser browser;
 
         internal LifeSpanHandler lifeSpanHandler;
         internal RequestHandler requestHandler;
@@ -30,7 +30,7 @@ namespace Chromium.WebBrowser {
 
 
 
-        internal BrowserClient(ChromiumWebBrowserBase browser) {
+        internal BrowserClient(ChromiumWebBrowser browser) {
             this.browser = browser;
             this.lifeSpanHandler = new LifeSpanHandler(this);
             this.requestHandler = new RequestHandler(this);
