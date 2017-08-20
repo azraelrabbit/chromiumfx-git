@@ -5,10 +5,9 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
-using System.Diagnostics;
 using Chromium.Remote;
 
-namespace Chromium.WebBrowser {
+namespace Windowless {
 
     /// <summary>
     /// The type of a javascript property.
@@ -77,8 +76,8 @@ namespace Chromium.WebBrowser {
                     default:
                         if(m_parent != null)
                             return m_parent.WillInvoke;
-                        //if(m_browser != null)
-                        //    return m_browser.RemoteCallbacksWillInvoke;
+                        if (m_browser != null)
+                            return m_browser.RemoteCallbacksWillInvoke;
                         return true;
                 }
             }
@@ -90,7 +89,7 @@ namespace Chromium.WebBrowser {
         /// </summary>
         public string Name { get; private set; }
 
-        private ChromiumWebBrowserBase m_browser;
+        private BrowserControl m_browser;
         private JSObject m_parent;
 
         internal CfrV8Context v8Context { get; private set; }
@@ -105,7 +104,7 @@ namespace Chromium.WebBrowser {
         /// The browser this javascript property or the parent javascript object belongs to.
         /// May be null if this property or it's parent is still unbound.
         /// </summary>
-        public ChromiumWebBrowserBase Browser {
+        public BrowserControl Browser {
             get {
 
                 if(m_browser != null)
@@ -149,7 +148,7 @@ namespace Chromium.WebBrowser {
             m_parent = parent;
         }
 
-        internal void SetBrowser(string propertyName, ChromiumWebBrowserBase browser) {
+        internal void SetBrowser(string propertyName, BrowserControl browser) {
             CheckUnboundState();
             Name = propertyName;
             m_browser = browser;

@@ -27,9 +27,14 @@ namespace CfxTestApplication
             else
                 CfxRuntime.LibCefDirPath = @"cef64/Release";
 
-            Chromium.WebBrowser.ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
-            ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
-            Chromium.WebBrowser.ChromiumWebBrowser.Initialize();
+            if (CfxRuntime.PlatformOS == CfxPlatformOS.Linux)
+            {
+                ChromiumWebBrowserBase.WindowLess = true;
+            }
+
+            ChromiumWebBrowserBase.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
+            ChromiumWebBrowserBase.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
+            ChromiumWebBrowserBase.Initialize();
 
             //Walkthrough01.Main();
             //return;

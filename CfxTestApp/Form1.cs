@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Chromium;
 using Chromium.WebBrowser;
+using Windowless;
 
 namespace CfxTestApplication
 {
     public partial class Form1 : Form
     {
-        private Chromium.WebBrowser.ChromiumWebBrowser webBrowser;
+        private Chromium.WebBrowser.ChromiumWebBrowserBase webBrowser;
         public Form1()
         {
             InitializeComponent();
@@ -20,7 +22,14 @@ namespace CfxTestApplication
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webBrowser=new ChromiumWebBrowser();
+            if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
+            {
+                webBrowser = new ChromiumWebBrowser(this);
+            }
+            else
+            {
+                webBrowser=new ChromiumWebBrowserWindowless(this);
+            }
            webBrowser.Dock=DockStyle.Fill;
             this.Controls.Add(webBrowser);
             webBrowser.LoadUrl("http://www.baidu.com");

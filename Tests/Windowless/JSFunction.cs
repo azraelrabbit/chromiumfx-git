@@ -4,12 +4,11 @@
 // This software may be modified and distributed under the terms
 // of the BSD license. See the License.txt file for details.
 
-using System;
 using System.Windows.Forms;
 using Chromium.Remote;
 using Chromium.Remote.Event;
 
-namespace Chromium.WebBrowser {
+namespace Windowless {
 
     /// <summary>
     /// Represents a javascript function in the render process to be added as 
@@ -48,7 +47,7 @@ namespace Chromium.WebBrowser {
             var eventHandler = Execute;
             if(eventHandler != null) {
                 if(WillInvoke) {
-                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => { eventHandler(this, e); }));
+                    Browser.RenderThreadInvoke((MethodInvoker)(() => { eventHandler(this, e); }));
                 } else {
                     eventHandler(this, e);
                 }

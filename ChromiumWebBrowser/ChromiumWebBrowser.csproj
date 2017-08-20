@@ -46,10 +46,16 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChromiumWebBrowserWindowless.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BrowserProcess\BrowserClient.cs" />
     <Compile Include="BrowserProcess\BrowserProcess.cs" />
     <Compile Include="BrowserProcess\Events.cs" />
     <Compile Include="BrowserProcess\RequestHandler.cs" />
+    <Compile Include="ChromiumWebBrowserBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ChromiumWebBrowserException.cs" />
     <Compile Include="FindToolbar.cs" />
     <Compile Include="Images.cs" />
