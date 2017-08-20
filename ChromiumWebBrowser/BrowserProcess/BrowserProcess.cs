@@ -65,52 +65,93 @@ namespace Chromium.WebBrowser {
 			default:
 
 				settings.MultiThreadedMessageLoop = true;
-			    Application.ApplicationExit += Application_ApplicationExit;
-                    break;
+
+                    Application.ApplicationExit += Application_ApplicationExit;
+
+				break;
 
 			}
 
 			settings.NoSandbox = true;
 
 
-			ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
+		    ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-		    ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
+			ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
 
-			if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
-				throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+		    Console.WriteLine(" ****************** window Less "+ChromiumWebBrowserBase.WindowLess);
 
-			initialized = true;
+            //if(!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+            //	throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+
+
+		    if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
+		    {
+		        if (!CfxRuntime.Initialize(settings, app, RenderProcess.RenderProcessMain))
+		            throw new ChromiumWebBrowserException("Failed to initialize CEF library.");
+		    }
+		    else
+		    {
+
+		        Console.WriteLine("()()*()*(**()*)(*()*))");
+		        if (!CfxRuntime.Initialize(settings, app))
+		            Environment.Exit(-1);
+		    }
+
+            initialized = true;
 		}
+
 	    private static void Application_ApplicationExit(object sender, EventArgs e)
 	    {
 
-	        CfxRuntime.QuitMessageLoop();
+	       
 
 
 	        //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
 
-	        var current = Process.GetCurrentProcess();
-
-	        var processName = current.ProcessName;
-
-	        var sublist = Process.GetProcessesByName(processName);
-
-	        var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
-
-	        foreach (var process in realSublist)
+	        if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
 	        {
-	            process.Kill();
+	            var current = Process.GetCurrentProcess();
+
+	            var processName = current.ProcessName;
+
+	            var sublist = Process.GetProcessesByName(processName);
+
+	            var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+
+	            foreach (var process in realSublist)
+	            {
+	                try
+	                {
+	                    process.Kill();
+
+	                }
+	                catch (Exception ex)
+	                {
+
+	                }
+
+	            }
+
 	        }
+	        else
+	        {
+	            CfxRuntime.QuitMessageLoop();
+            }
 
 	        CfxRuntime.Shutdown();
 	    }
         private static void ProcessHandler_OnBeforeChildProcessLaunch(object sender, CfxOnBeforeChildProcessLaunchEventArgs e)
 		{
 			//to fix that the  mono run in linux
- 
+			//Console.WriteLine("child cmdline:"+e.CommandLine.CommandLineString);
+//			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
+//			Console.WriteLine("program: "+e.CommandLine.Program);
+
 			var programPath = new Uri(Assembly.GetEntryAssembly().CodeBase).LocalPath;
- 
+
+//			Console.WriteLine (programPath);
+
 			if (e.CommandLine.GetSwitchValue("type") == "gpu-process")
 			{
 				e.CommandLine.Program= programPath;
@@ -119,8 +160,20 @@ namespace Chromium.WebBrowser {
 			{
 				if (_mono)
 				{
+					 
+//				    var monoPath = "mono";
+//					e.CommandLine.Program=programPath;
+//				 
+//					e.CommandLine.PrependWrapper("--llvm");
+//					e.CommandLine.Program=monoPath;
+			 
 					var currentP = System.Diagnostics.Process.GetCurrentProcess ();
- 
+
+
+//					Console.WriteLine ("Main CMDLINE : -- "+currentP.MainModule.FileName+"|| modulename: "+currentP.MainModule.ModuleName);
+//					Console.WriteLine ("---------------------------------------------");
+				
+					//System.Diagnostics.Process.GetCurrentProcess().StartInfo.FileName
 					if (currentP.MainModule.FileName==currentP.MainModule.ModuleName) {
 
 						Console.WriteLine ("------native mkbundle mode--------------");
@@ -129,8 +182,20 @@ namespace Chromium.WebBrowser {
 					} else {
 
 						Console.WriteLine ("------mono runtime mode--------------");
+						//e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
 						e.CommandLine.Program=ProcessBundleClientHelper();
-						 
+						//
+						//					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+						////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+						//					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+
+
+						//e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+						//e.CommandLine.AppendSwitch("no-zygote");
+						//e.CommandLine.AppendSwitchWithValue("type","utility");
+						//e.CommandLine.AppendSwitch("use-views");
+
+						//--no-zygote
 					}
 				}
 			}
