@@ -7,15 +7,14 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Chromium;
 
-namespace Windowless
+namespace Chromium.WebBrowser
 {
     /// <summary>
     /// A minimum and very incomplete implementation of a
     /// control with windowless browser.
     /// </summary>
-    class BrowserControl : Control
+    public class BrowserControl : Control
     {
 
         internal CfxBrowser browser;
@@ -84,8 +83,41 @@ namespace Windowless
 
             // Create handle now for InvokeRequired to work properly 
             // CreateHandle();
-            CfxBrowserHost.CreateBrowser(windowInfo, client, "http://www.sina.com.cn", settings, null);
+            //  CfxBrowserHost.CreateBrowser(windowInfo, client, "about:blank", settings, null);
 
+            //browser = CfxBrowserHost.CreateBrowserSync(windowInfo, client, "about:blank", settings, null);
+
+            if (!CfxBrowserHost.CreateBrowser(windowInfo, client, "about:blank", settings, null))
+                throw new ChromiumWebBrowserException("Failed to create browser instance.");
+
+        }
+
+        protected string initialUrl;
+        protected string m_loadUrlDeferred;
+        protected string m_loadStringDeferred;
+
+        internal readonly object browserSyncRoot = new object();
+        public void LoadUrl(string url)
+        {
+            if (browser != null)
+                browser.MainFrame.LoadUrl(url);
+            else
+            {
+                initialUrl = url;
+                lock (browserSyncRoot)
+                {
+                    if (browser != null)
+                    {
+                        browser.MainFrame.LoadUrl(url);
+                    }
+                    else
+                    {
+                        m_loadUrlDeferred = url;
+                    }
+                }
+            }
+
+            OnResize(null);
         }
 
         protected override void Dispose(bool disposing)
@@ -169,15 +201,18 @@ namespace Windowless
 
         void renderHandler_OnCursorChange(object sender, Chromium.Event.CfxOnCursorChangeEventArgs e)
         {
-            switch (e.Type)
-            {
-                case CfxCursorType.Hand:
-                    Cursor = Cursors.Hand;
-                    break;
-                default:
-                    Cursor = Cursors.Default;
-                    break;
-            }
+            Invoke((MethodInvoker)(() => {
+                switch (e.Type)
+                {
+                    case CfxCursorType.Hand:
+                        Cursor = Cursors.Hand;
+                        break;
+                    default:
+                        Cursor = Cursors.Default;
+                        break;
+                }
+            }));
+            
         }
 
         void renderHandler_GetViewRect(object sender, Chromium.Event.CfxGetViewRectEventArgs e)
@@ -242,14 +277,24 @@ namespace Windowless
             {
                 browser = e.Browser;
                 browser.MainFrame.LoadUrl("about:version");
+                if (!string.IsNullOrEmpty(initialUrl))
+                {
+                    browser.MainFrame.LoadUrl(initialUrl);
+                }
             }
 
             var br = e.Browser;
-            //browser.MainFrame.LoadUrl("about:version");
-            if (Focused)
+            // browser.MainFrame.LoadUrl("about:version");
+
+
+            Invoke((MethodInvoker) (() =>
             {
-                br.Host.SendFocusEvent(true);
-            }
+                if (Focused)
+                {
+                    br.Host.SendFocusEvent(true);
+                }
+            }));
+           
         }
 
         protected override void OnGotFocus(EventArgs e)
@@ -370,9 +415,12 @@ namespace Windowless
 
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
-
+            if (browser == null)
+            {
+                return;
+            }
             //Console.WriteLine (e.KeyChar);
-            if (e.KeyChar == 7)
+                if (e.KeyChar == 7)
             {
                 // ctrl+g - load google so we have a page with text input
                 browser.MainFrame.LoadUrl("https://www.baidu.com");
@@ -395,13 +443,16 @@ namespace Windowless
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (browser != null)
+            {
+                var j = new CfxKeyEvent();
+                j.WindowsKeyCode = e.KeyValue;
+                j.Character = (short)e.KeyValue;
+                j.Type = CfxKeyEventType.Keydown;
 
-            var j = new CfxKeyEvent();
-            j.WindowsKeyCode = e.KeyValue;
-            j.Character = (short)e.KeyValue;
-            j.Type = CfxKeyEventType.Keydown;
-
-            browser.Host.SendKeyEvent(j);
+                browser.Host.SendKeyEvent(j);
+            }
+            
         }
 
 
