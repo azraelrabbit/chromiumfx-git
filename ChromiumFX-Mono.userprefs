@@ -1,10 +1,8 @@
 ﻿<Properties StartupItem="libcfx64/libcfx64-Mono.cproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/Windowless/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/Windowless/BrowserControl.cs">
     <Files>
-      <File FileName="Tests/Windowless/BrowserControl.cs" Line="329" Column="31" />
-      <File FileName="Tests/Windowless/Program.cs" Line="213" Column="4" />
-      <File FileName="ChromiumWebBrowser/BrowserProcess/BrowserProcess.cs" Line="169" Column="6" />
+      <File FileName="Tests/Windowless/BrowserControl.cs" Line="410" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -12,7 +10,6 @@
       <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="999" column="1" />
       <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="686" column="1" />
       <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="643" column="1" />
-      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="367" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

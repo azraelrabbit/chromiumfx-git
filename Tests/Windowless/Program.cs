@@ -58,6 +58,7 @@ namespace Windowless {
 
             settings.ResourcesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources");
             settings.LocalesDirPath = System.IO.Path.Combine(projectRoot, "cef", "Resources", "locales");
+			settings.MultiThreadedMessageLoop = false;
 
             var app = new CfxApp();
             app.OnBeforeCommandLineProcessing += (s, e) => {
@@ -71,12 +72,14 @@ namespace Windowless {
 				}
 				else{
 					//e.CommandLine.AppendSwitch("--type=zygote");
-					e.CommandLine.AppendSwitch("disable-gpu");
+					//e.CommandLine.AppendSwitch("disable-gpu");
 //					e.CommandLine.AppendSwitch("disable-gpu-compositing");
 //					e.CommandLine.AppendSwitch("disable-gpu-vsync");
 				}
 
-                
+				e.CommandLine.AppendSwitch("disable-gpu");
+				e.CommandLine.AppendSwitch("disable-gpu-compositing");
+//									e.CommandLine.AppendSwitch("disable-gpu-vsync");
             };
 
 			app.GetBrowserProcessHandler+= App_GetBrowserProcessHandler;
@@ -157,11 +160,15 @@ namespace Windowless {
 
 						//--no-zygote
 					}
+
+					e.CommandLine.AppendSwitch("disable-gpu");
+					e.CommandLine.AppendSwitch("disable-gpu-compositing");
+//					e.CommandLine.AppendSwitch("disable-gpu-vsync");
 				}
 			}
 
-			Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
-			Console.WriteLine("program: "+e.CommandLine.Program);
+			//Console.WriteLine("child cmdline:" + e.CommandLine.CommandLineString);
+		//	Console.WriteLine("program: "+e.CommandLine.Program);
         }
 
 		static string ProcessBundleClientHelper(){

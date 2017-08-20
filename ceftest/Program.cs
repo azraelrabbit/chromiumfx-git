@@ -115,7 +115,7 @@ namespace ceftest
             e.Settings.CachePath = cachePath;
             e.Settings.UserDataPath = userPath;
             e.Settings.LogFile = logPath;
-			e.Settings.WindowlessRenderingEnabled = true;
+			e.Settings.WindowlessRenderingEnabled = false;
 			//e.Settings.ExternalMessagePump = true;
 			e.Settings.LogSeverity=CfxLogSeverity.Error;
 			//e.Settings.AcceptLanguageList = "*";
