@@ -77,8 +77,13 @@ namespace Chromium.WebBrowser {
                     default:
                         if(m_parent != null)
                             return m_parent.WillInvoke;
-                        if(m_browser != null)
-                            return m_browser.RemoteCallbacksWillInvoke;
+                        if (m_browser != null) { 
+                            var mmbrowser = (ChromiumWebBrowser) m_browser;
+                            if (mmbrowser != null)
+                            {
+                                return mmbrowser.RemoteCallbacksWillInvoke;
+                            }
+                        }
                         return true;
                 }
             }
@@ -90,7 +95,7 @@ namespace Chromium.WebBrowser {
         /// </summary>
         public string Name { get; private set; }
 
-        private ChromiumWebBrowser m_browser;
+        private ChromiumWebBrowserBase m_browser;
         private JSObject m_parent;
 
         internal CfrV8Context v8Context { get; private set; }
@@ -105,7 +110,7 @@ namespace Chromium.WebBrowser {
         /// The browser this javascript property or the parent javascript object belongs to.
         /// May be null if this property or it's parent is still unbound.
         /// </summary>
-        public ChromiumWebBrowser Browser {
+        public ChromiumWebBrowserBase Browser {
             get {
 
                 if(m_browser != null)
@@ -149,7 +154,7 @@ namespace Chromium.WebBrowser {
             m_parent = parent;
         }
 
-        internal void SetBrowser(string propertyName, ChromiumWebBrowser browser) {
+        internal void SetBrowser(string propertyName, ChromiumWebBrowserBase browser) {
             CheckUnboundState();
             Name = propertyName;
             m_browser = browser;
