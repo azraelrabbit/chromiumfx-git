@@ -13,7 +13,7 @@ namespace CfxTestApplication
 {
     public partial class Form1 : Form
     {
-        private Chromium.WebBrowser.BrowserControl2 webBrowser;
+		private Chromium.WebBrowser.ChromiumWebBrowserBase webBrowser;
         public Form1()
         {
             InitializeComponent();
@@ -21,8 +21,8 @@ namespace CfxTestApplication
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //  webBrowser=new ChromiumWebBrowser(this);
-            webBrowser = new BrowserControl2(this);
+              webBrowser=new ChromiumWebBrowser(this);
+           // webBrowser = new BrowserControl2(this);
            webBrowser.Dock=DockStyle.Fill;
             //  this.Controls.Add(webBrowser);
 
@@ -35,7 +35,7 @@ namespace CfxTestApplication
 
             webBrowser.BrowserCreated += WebBrowser_BrowserCreated;
 
-            webBrowser.LoadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
+         //   webBrowser.LoadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
 
         }
 
