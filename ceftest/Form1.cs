@@ -14,7 +14,7 @@ namespace ceftest
 {
     public partial class Form1 : Form
     {
-        private Chromium.WebBrowser.ChromiumWebBrowser webBrowser;
+		private Chromium.WebBrowser.BrowserControl2 webBrowser;
         public Form1()
         {
             InitializeComponent();
@@ -27,12 +27,12 @@ namespace ceftest
 			//webBrowser.ImeMode = this.ImeMode;
 			//panel1.ImeMode=ImeMode.Inherit;
 			//webBrowser.ImeMode = ImeMode.Inherit;
-			webBrowser=new ChromiumWebBrowser(this);
-			webBrowser.KeyboardHandler.OnKeyEvent+= WebBrowser_KeyboardHandler_OnKeyEvent;
+			webBrowser=new BrowserControl2(this);
+			//webBrowser.KeyboardHandler.OnKeyEvent+= WebBrowser_KeyboardHandler_OnKeyEvent;
 
-			webBrowser.KeyboardHandler.OnPreKeyEvent+= WebBrowser_KeyboardHandler_OnPreKeyEvent;
+			//webBrowser.KeyboardHandler.OnPreKeyEvent+= WebBrowser_KeyboardHandler_OnPreKeyEvent;
  //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
-			webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
+			//webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 		
            webBrowser.Dock=DockStyle.Fill;
            
