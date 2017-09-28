@@ -61,9 +61,13 @@ namespace Chromium {
                 WeakReference[] refs = new WeakReference[cache.Count];
                 cache.Values.CopyTo(refs, 0);
                 foreach(WeakReference r in refs) {
-                    var obj = r.Target;
-                    if(obj != null && obj is CfxBaseRefCounted) {
-                        (obj as CfxBaseRefCounted).Dispose();
+                    if (r != null)
+                    {
+                        var obj = r.Target;
+                        if (obj != null && obj is CfxBaseRefCounted)
+                        {
+                            (obj as CfxBaseRefCounted).Dispose();
+                        }
                     }
                 }
             }
