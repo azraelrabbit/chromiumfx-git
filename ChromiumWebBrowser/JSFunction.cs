@@ -48,7 +48,7 @@ namespace Chromium.WebBrowser {
             var eventHandler = Execute;
             if(eventHandler != null) {
                 if(WillInvoke) {
-                    Browser.RenderThreadInvoke((MethodInvoker)(() => { eventHandler(this, e); }));
+                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => { eventHandler(this, e); }));
                 } else {
                     eventHandler(this, e);
                 }

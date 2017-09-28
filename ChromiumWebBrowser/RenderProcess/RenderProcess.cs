@@ -10,7 +10,7 @@ using Chromium.Remote;
 using Chromium.Remote.Event;
 
 namespace Chromium.WebBrowser {
-    internal class RenderProcess {
+    public class RenderProcess {
 
         internal static int RenderProcessMain() {
             try {
@@ -36,7 +36,7 @@ namespace Chromium.WebBrowser {
             app.GetRenderProcessHandler += (s, e) => e.SetReturnValue(processHandler);
         }
 
-        internal void AddBrowserReference(ChromiumWebBrowser browser) {
+        internal void AddBrowserReference(ChromiumWebBrowserBase browser) {
             for(int i = 0; i < browserReferences.Count; ++i) {
                 if(browserReferences[i].Target == null) {
                     browserReferences[i] = new WeakReference(browser);

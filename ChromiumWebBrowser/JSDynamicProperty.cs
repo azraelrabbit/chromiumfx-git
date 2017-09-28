@@ -63,7 +63,7 @@ namespace Chromium.WebBrowser {
                 e.SetReturnValue(true);
             } else {
                 if(WillInvoke) {
-                    Browser.RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
+                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
                 } else {
                     h.Invoke(this, e);
                 }
@@ -77,7 +77,7 @@ namespace Chromium.WebBrowser {
                 e.SetReturnValue(true);
             } else {
                 if(WillInvoke) {
-                    Browser.RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
+                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
                 } else {
                     h.Invoke(this, e);
                 }
