@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Chromium.Remote;
 using Chromium.Remote.Event;
 
-namespace Chromium.WebBrowser {
+namespace Windowless {
 
     /// <summary>
     /// Represents a dynamic javascript property in the render process 
@@ -63,7 +63,7 @@ namespace Chromium.WebBrowser {
                 e.SetReturnValue(true);
             } else {
                 if(WillInvoke) {
-                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
+                    Browser.RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
                 } else {
                     h.Invoke(this, e);
                 }
@@ -77,7 +77,7 @@ namespace Chromium.WebBrowser {
                 e.SetReturnValue(true);
             } else {
                 if(WillInvoke) {
-                    ((ChromiumWebBrowserBase) Browser).RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
+                    Browser.RenderThreadInvoke((MethodInvoker)(() => h.Invoke(this, e)));
                 } else {
                     h.Invoke(this, e);
                 }

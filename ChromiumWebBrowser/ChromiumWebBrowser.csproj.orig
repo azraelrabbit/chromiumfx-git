@@ -46,10 +46,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< working copy
     <Compile Include="BrowserControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="BrowserControl2.cs">
+=======
+    <Compile Include="ChromiumWebBrowserWindowless.cs">
+>>>>>>> merge rev
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="BrowserProcess\BrowserClient.cs" />
