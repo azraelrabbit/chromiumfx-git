@@ -33,9 +33,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChromiumFX">
-      <HintPath>..\..\Build\Release\ChromiumFX.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,8 +48,23 @@
     <Compile Include="BrowserControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="BrowserControl.Ext.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ChromiumWebBrowserException.cs" />
+    <Compile Include="JSDynamicProperty.cs" />
+    <Compile Include="JSFunction.cs" />
+    <Compile Include="JSObject.cs" />
+    <Compile Include="JSProperty.cs" />
+    <Compile Include="ProgramWin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebResource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ChromiumFX\ChromiumFX.csproj">
+      <Project>{36972b7c-3a3a-465f-b064-51b525fd4c14}</Project>
+      <Name>ChromiumFX</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

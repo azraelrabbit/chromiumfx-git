@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{36972B7C-3A3A-465F-B064-51B525FD4C14}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -334,6 +332,9 @@
     <Compile Include="Source\TimeFunctions.cs" />
     <Compile Include="Source\WeakCache.cs" />
     <Compile Include="Source\WindowStyle.cs" />
+    <Compile Include="Source\Remote\DefaultPipeFactory.cs" />
+    <Compile Include="Source\Remote\PipeFactory.cs" />
+    <Compile Include="Source\Remote\PipBufferStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

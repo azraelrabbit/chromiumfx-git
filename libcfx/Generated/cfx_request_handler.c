@@ -141,7 +141,7 @@ void CEF_CALLBACK cfx_request_handler_on_resource_redirect(cef_request_handler_t
     if(new_url_tmp_str != new_url->str) {
         if(new_url->dtor) new_url->dtor(new_url->str);
         cef_string_set(new_url_tmp_str, new_url_tmp_length, new_url, 1);
-        cfx_gc_handle_switch(&(gc_handle_t)new_url_tmp_str, GC_HANDLE_FREE);
+        cfx_gc_handle_switch((gc_handle_t)new_url_tmp_str, GC_HANDLE_FREE);
     }
 }
 
