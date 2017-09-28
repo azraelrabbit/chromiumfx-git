@@ -58,6 +58,10 @@ namespace Windowless {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            int retval = CfxRuntime.ExecuteProcess();
+            if (retval >= 0)
+                Environment.Exit(retval);
+
             var settings = new CfxSettings();
             settings.WindowlessRenderingEnabled = true;
             settings.NoSandbox = true;
@@ -97,6 +101,8 @@ namespace Windowless {
 
             Application.Idle += Application_Idle;
             Application.ApplicationExit += Application_ApplicationExit;
+
+           
             Application.Run(f);
 
             CfxRuntime.Shutdown();
@@ -160,17 +166,30 @@ namespace Windowless {
 
             //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
 
-            var current = Process.GetCurrentProcess();
-
-            var processName = current.ProcessName;
-
-            var sublist = Process.GetProcessesByName(processName);
-
-            var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
-
-            foreach (var process in realSublist)
+            if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
             {
-                process.Kill();
+                var current = Process.GetCurrentProcess();
+
+                var processName = current.ProcessName;
+
+                var sublist = Process.GetProcessesByName(processName);
+
+                var realSublist = sublist.Where(p => p.Id != current.Id).ToList();
+
+                foreach (var process in realSublist)
+                {
+                    try
+                    {
+                        process.Kill();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        
+                    }
+                
+                }
+
             }
 
             CfxRuntime.Shutdown();
