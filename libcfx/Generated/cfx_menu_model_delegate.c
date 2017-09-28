@@ -116,7 +116,7 @@ int CEF_CALLBACK cfx_menu_model_delegate_format_label(cef_menu_model_delegate_t*
     if(label_tmp_str != label->str) {
         if(label->dtor) label->dtor(label->str);
         cef_string_set(label_tmp_str, label_tmp_length, label, 1);
-        cfx_gc_handle_switch(&(gc_handle_t)label_tmp_str, GC_HANDLE_FREE);
+        cfx_gc_handle_switch((gc_handle_t)label_tmp_str, GC_HANDLE_FREE);
     }
     return __retval;
 }

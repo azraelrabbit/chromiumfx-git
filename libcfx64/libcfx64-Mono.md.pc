@@ -1,0 +1,5 @@
+Name: libcfx64-Mono
+Description: 
+Version: 0.1
+Libs: -L"/zfspool/pdata/azraelrabbit/chromiumfx/Build/Debug" -lcfx64
+Cflags: -I""

@@ -28,12 +28,17 @@ namespace Chromium.WebBrowser {
         private CfxJsDialogHandler jsDialogHandler;
         private CfxKeyboardHandler keyboardHandler;
 
+
+
         internal BrowserClient(ChromiumWebBrowser browser) {
             this.browser = browser;
             this.lifeSpanHandler = new LifeSpanHandler(this);
             this.requestHandler = new RequestHandler(this);
             this.GetLifeSpanHandler += (s, e) => e.SetReturnValue(lifeSpanHandler);
             this.GetRequestHandler += (s, e) => e.SetReturnValue(requestHandler);
+			//this.GetKeyboardHandler += (s, e) => e.SetReturnValue (keyboardHandler);
+
+
         }
 
         internal CfxContextMenuHandler ContextMenuHandler {
@@ -140,10 +145,13 @@ namespace Chromium.WebBrowser {
             get {
                 if(keyboardHandler == null) {
                     keyboardHandler = new CfxKeyboardHandler();
+
                     this.GetKeyboardHandler += (s, e) => e.SetReturnValue(keyboardHandler);
                 }
                 return keyboardHandler;
             }
         }
+
+
     }
 }
