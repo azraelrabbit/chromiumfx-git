@@ -1,15 +1,20 @@
 ﻿<Properties StartupItem="libcfx64/libcfx64-Mono.cproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/Windowless/BrowserControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ceftest/Program.cs">
     <Files>
-      <File FileName="Tests/Windowless/BrowserControl.cs" Line="410" Column="4" />
+      <File FileName="ChromiumWebBrowser/BrowserProcess/LifeSpanHandler.cs" Line="15" Column="3" />
+      <File FileName="ChromiumWebBrowser/BrowserProcess/BrowserClient.cs" Line="33" Column="50" />
+      <File FileName="ceftest/Program.cs" Line="47" Column="30" />
+      <File FileName="Tests/Windowless/Program.cs" Line="1" Column="1" />
+      <File FileName="ceftest/Form1.cs" Line="44" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="999" column="1" />
-      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="686" column="1" />
-      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="643" column="1" />
+      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="1375" column="1" />
+      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="1062" column="1" />
+      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="1019" column="1" />
+      <Breakpoint file="/zfspool/pdata/azraelrabbit/chromiumfx/ChromiumWebBrowser/ChromiumWebBrowser.cs" line="743" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
