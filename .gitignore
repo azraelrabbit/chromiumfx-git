@@ -1,0 +1,10 @@
+bin
+obj
+logs
+*.user
+*.suo
+/AIRBox/AIRBox.Web/App_Data/Temps
+.vs
+packages
+/AIRBox/AIRBox.Win/cef
+/AIRBox/AIRBox.Web/wwwroot/lib

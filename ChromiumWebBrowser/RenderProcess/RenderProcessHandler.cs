@@ -24,7 +24,7 @@ namespace Chromium.WebBrowser {
 
         void RenderProcessHandler_OnBrowserCreated(object sender, CfrOnBrowserCreatedEventArgs e) {
             var id = e.Browser.Identifier;
-            var wb = (ChromiumWebBrowser)ChromiumWebBrowser.GetBrowser(id);
+            var wb =  ChromiumWebBrowserBase.GetBrowser(id);
             if(wb != null) {
 
                 var rp = wb.remoteProcess;
@@ -45,7 +45,7 @@ namespace Chromium.WebBrowser {
         }
 
         void RenderProcessHandler_OnContextCreated(object sender, CfrOnContextCreatedEventArgs e) {
-            var wb = (ChromiumWebBrowser)ChromiumWebBrowser.GetBrowser(e.Browser.Identifier);
+            var wb =  ChromiumWebBrowserBase.GetBrowser(e.Browser.Identifier);
             if(wb != null) {
                 if(e.Frame.IsMain) {
                     SetProperties(e.Context, wb.GlobalObject);

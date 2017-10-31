@@ -15,7 +15,7 @@ namespace Chromium.WebBrowser {
         internal static int RenderProcessMain() {
             try {
                 var rp = new RenderProcess();
-                ChromiumWebBrowser.RaiseRemoteProcessCreated(rp.processHandler);
+                ChromiumWebBrowserBase.RaiseRemoteProcessCreated(rp.processHandler);
                 return rp.RemoteMain();
             } catch(CfxRemotingException) {
                 return -1;
@@ -52,7 +52,7 @@ namespace Chromium.WebBrowser {
                 return retval;
             } finally {
                 foreach(var br in browserReferences) {
-                    var b = (ChromiumWebBrowser)br.Target;
+                    var b = (ChromiumWebBrowserBase)br.Target;
                     b?.RemoteProcessExited(this);
                 }
             }

@@ -77,7 +77,7 @@ namespace Chromium.WebBrowser {
 
 		    ChromiumWebBrowserBase.RaiseOnBeforeCfxInitialize(settings, processHandler);
 
-			ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
+			//ChromiumWebBrowserBase.WindowLess = settings.WindowlessRenderingEnabled;
 
 		    Console.WriteLine(" ****************** window Less "+ChromiumWebBrowserBase.WindowLess);
 

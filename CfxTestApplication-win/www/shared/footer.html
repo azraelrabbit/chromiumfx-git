@@ -1,0 +1,106 @@
+﻿ </div>
+<!-- Pop Container -->
+<div class="container row col-md-12">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1 zp-pop-content" style="top:-280px; z-index: 9999;">
+        </div>
+    </div>
+</div>
+<!-- /.Pop Container -->
+        </div>
+    </div>
+<!-- Modal Dialog Container -->
+<div id="zpModalDialog" class="modal fade" data-backdrop="static" aria-labelledby="myModalLabel" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content clearable-content" id="divCustomModalContainer">
+        </div>
+    </div>
+</div>
+<!-- /.Modal Dialog Container -->
+<!-- Mask Layer -->
+<div id="zpMaskLayer" class="modal fade" data-backdrop="static" aria-labelledby="myModalLabel" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="row">
+        <div class="col-md-1 col-md-offset-6" style="margin-top: 200px;">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
+<!-- /.Mask Layer -->
+
+<script type="text/javascript">
+    $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['en-US']);
+ 
+    window.modalLevel = 0;
+
+    function showMask() {
+        $('#zpMaskLayer').modal({
+            keyboard: false
+        });
+    }
+        
+    function hideMask() {
+        $('#zpMaskLayer').modal('hide');
+    }
+
+    $(document).ready(function () {
+        $(document).on('hidden.bs.modal', function (e) {
+            var target = $(e.target);
+            target.removeData('bs.modal').find(".clearable-content").html('');
+        });
+
+        $(window).resize(function() {
+            var height = $('.window-drag').height();
+            var mainWidth = $('.window-drag').width();
+            var left = $('.window-left').offset().left + $('.window-left').width();
+
+            var right = $('.window-right').width();
+
+            //console.log(height);
+            //console.log(mainWidth);
+            //console.log(left);
+            //console.log(right);
+
+            // tell backend to setup the moveable title bar
+
+            SetMoveTitle(height, mainWidth, left, right);
+        });
+
+
+        $(document).resize();
+
+      
+    });
+    //doMinWindow
+    //doMaxWindow
+    //doMinWindow
+    function minWindow(a) {
+        window.MainWindow.doMinWindow();
+        $(a).blur();
+        return false;
+    }
+
+    var ismax = false;
+    function maxWindow(a) {
+        var $btnmaxsize=$('#btnmaxsize');
+
+        if (ismax) {
+            ismax = false;
+            $btnmaxsize.removeClass('fa-window-restore');
+            $btnmaxsize.addClass('fa-window-maximize');
+        } else {
+            ismax = true;
+            $btnmaxsize.removeClass('fa-window-maximize');
+            $btnmaxsize.addClass('fa-window-restore');
+        }
+        window.MainWindow.doMaxWindow();
+        $(a).blur();
+        return false;
+    }
+
+    function closeWindow() {
+        window.MainWindow.doCloseWindow();
+        this.blur();
+    }
+</script>
+</body>
+</html>

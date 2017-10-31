@@ -5,16 +5,18 @@ namespace ChromiumFX.Extension
 {
     internal class LocalSchemeHandlerFactory : CfxSchemeHandlerFactory
     {
-        internal LocalSchemeHandlerFactory()
+        private string _schemaName;
+        internal LocalSchemeHandlerFactory(string schemaName="local")
         {
             this.Create += LocalSchemeHandlerFactory_Create;
+            _schemaName = schemaName;
         }
 
         private void LocalSchemeHandlerFactory_Create(object sender, Chromium.Event.CfxSchemeHandlerFactoryCreateEventArgs e)
         {
-            if (e.SchemeName.Equals("local") && e.Browser != null)
+            if (e.SchemeName.Equals(_schemaName.Trim()) && e.Browser != null)
             {
-                var browser = ChromiumWebBrowser.FromCfxBrowser(e.Browser);
+                var browser = ChromiumWebBrowserBase.FromCfxBrowser(e.Browser);
                 var handler = new LocalResourceHandler(browser);
                 e.SetReturnValue(handler);
             }

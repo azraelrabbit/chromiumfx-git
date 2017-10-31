@@ -25,7 +25,7 @@ namespace ChromiumFX.Extension
 	    private int webResourceLength;
 	    private string webResourceMimeType;
 
-		private ChromiumWebBrowser browser;
+		private ChromiumWebBrowserBase browser;
 
 
 
@@ -43,7 +43,7 @@ namespace ChromiumFX.Extension
 
 		private string domain = null;
 
-		internal EmbeddedResourceHandler(Assembly resourceAssembly, ChromiumWebBrowser browser, string domain = null)
+		internal EmbeddedResourceHandler(Assembly resourceAssembly, ChromiumWebBrowserBase browser, string domain = null)
 		{
 			gcHandle = System.Runtime.InteropServices.GCHandle.Alloc(this);
 			this.domain = domain;
