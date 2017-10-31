@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{660A63B1-3101-4AB4-9BFD-AB5110458D44}</ProjectGuid>
+    <ProjectGuid>{FC6445F1-110D-4680-8A5D-F56E17AB6DC8}</ProjectGuid>
     <Compiler>
       <Compiler ctype="GccCompiler" />
     </Compiler>
@@ -12,24 +12,21 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Build\Debug</OutputPath>
-    <OutputName>libcfx64</OutputName>
+    <OutputPath>..\..\Build</OutputPath>
+    <OutputName>libcfx</OutputName>
     <CompileTarget>SharedLibrary</CompileTarget>
     <DefineSymbols>DEBUG CFX_LINUX</DefineSymbols>
     <SourceDirectory>.</SourceDirectory>
-    <WarningLevel>All</WarningLevel>
     <Includes>
       <Includes>
         <Include>${ProjectDir}/../cef/</Include>
         <Include>${ProjectDir}/../libcfx/Generated</Include>
       </Includes>
     </Includes>
-    <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-m32</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Build\Release</OutputPath>
-    <OutputName>libcfx64</OutputName>
+    <OutputPath>..\..\Build\Release</OutputPath>
+    <OutputName>libcfx</OutputName>
     <CompileTarget>SharedLibrary</CompileTarget>
     <OptimizationLevel>3</OptimizationLevel>
     <DefineSymbols>CFX_LINUX</DefineSymbols>
@@ -40,13 +37,22 @@
         <Include>${ProjectDir}/../libcfx/Generated</Include>
       </Includes>
     </Includes>
-    <WarningLevel>All</WarningLevel>
+    <ExtraCompilerArguments> </ExtraCompilerArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'for-x86|x86|AnyCPU' ">
-    <OutputPath>.\</OutputPath>
+    <OutputPath>.</OutputPath>
     <OutputName>
     </OutputName>
-    <CompileTarget>Bin</CompileTarget>
+    <CompileTarget>SharedLibrary</CompileTarget>
+    <Includes>
+      <Includes>
+        <Include>${ProjectDir}/../cef/</Include>
+        <Include>${ProjectDir}/../libcfx/Generated</Include>
+      </Includes>
+    </Includes>
+    <DefineSymbols>DEBUG CFX_LINUX</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <ExtraCompilerArguments> </ExtraCompilerArguments>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\libcfx\Source\libcfx.c">

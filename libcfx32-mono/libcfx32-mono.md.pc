@@ -1,0 +1,5 @@
+Name: libcfx32-mono
+Description: 
+Version: 0.1
+Libs: -L"/zfspool/pdata/github/Build" -lcfx
+Cflags: -I""
