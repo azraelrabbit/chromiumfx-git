@@ -28,7 +28,19 @@ namespace CfxTestApplication
             ChromiumStartup.MasterHeaderFile = "local://local/www/shared/header.html";
             ChromiumStartup.MasterFooterFile = "local://local/www/shared/footer.html";
 
+
+            //on windows use ChromiumfxWebBrowser set to false
             ChromiumStartup.RequireWindowLess = false;
+
+            //on linux use chromiumfxWebBrowserWindowless set to true
+            //ChromiumStartup.RequireWindowLess = true;
+
+            // you can use your custome cef lib path 
+            //var basePath = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            //ChromiumStartup.LibCefPath = Path.Combine(basePath, "cef");
+            //ChromiumStartup.LibCfxPath = Path.Combine(basePath, "cef");
+            //ChromiumStartup.CefResourcePath = Path.Combine(basePath, "cef");// or Path.Combine(basePath, "cef","Resource");
+ 
 
             ChromiumStartup.Initialize();
 
