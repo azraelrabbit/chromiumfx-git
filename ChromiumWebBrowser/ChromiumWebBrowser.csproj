@@ -49,9 +49,6 @@
     <Compile Include="BrowserControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BrowserControl2.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="BrowserProcess\BrowserClient.cs" />
     <Compile Include="BrowserProcess\BrowserProcess.cs" />
     <Compile Include="BrowserProcess\Events.cs" />
@@ -60,6 +57,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ChromiumWebBrowserException.cs" />
+    <Compile Include="ChromiumWebBrowserWindowless.cs" />
     <Compile Include="FindToolbar.cs" />
     <Compile Include="Images.cs" />
     <Compile Include="JSDynamicProperty.cs" />

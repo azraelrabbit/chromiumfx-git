@@ -16,7 +16,7 @@ namespace ChromiumFX.Extension
         string requestUrl = null;
 
         private WebResource webResource;
-        private ChromiumWebBrowser browser;
+        private ChromiumWebBrowserBase browser;
         private byte[] webResourceData;
 
         private int webResourceLength;
@@ -24,7 +24,7 @@ namespace ChromiumFX.Extension
 
         private System.Runtime.InteropServices.GCHandle gcHandle;
 
-        internal LocalResourceHandler(ChromiumWebBrowser browser)
+        internal LocalResourceHandler(ChromiumWebBrowserBase browser)
         {
             gcHandle = System.Runtime.InteropServices.GCHandle.Alloc(this);
 

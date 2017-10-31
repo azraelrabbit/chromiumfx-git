@@ -42,7 +42,7 @@ namespace Chromium.WebBrowser
 			platform.SetPosition(wnd, x, y, w, h);
 		}
 
-		public static void SetStyle(IntPtr wnd, WindowStyle style)
+		public static void SetStyle(IntPtr wnd, int style)
 		{
 			platform.SetStyle(wnd, style);
 		}
@@ -67,7 +67,7 @@ namespace Chromium.WebBrowser
 				}
 			}
 
-			public abstract void SetStyle(IntPtr wnd, WindowStyle style);
+			public abstract void SetStyle(IntPtr wnd, int style);
 			public abstract void SetPosition(IntPtr wnd, int x, int y, int w, int h);
 			public abstract void SetWatermark(IntPtr wnd, string str);
 		}
@@ -80,7 +80,7 @@ namespace Chromium.WebBrowser
 				SetWindowPos(wnd, IntPtr.Zero, x, y, w, h, SWP_NOMOVE | SWP_NOZORDER);
 			}
 
-			public override void SetStyle(IntPtr wnd, WindowStyle style)
+			public override void SetStyle(IntPtr wnd, int style)
 			{
 				SetWindowLong(wnd, -16, (int)style);
 			}
@@ -135,7 +135,7 @@ namespace Chromium.WebBrowser
 				XMoveResizeWindow(CfxRuntime.Linux.GetXDisplay(), wnd, x, y, w, h);
 			}
 
-			public override void SetStyle(IntPtr wnd, WindowStyle style)
+			public override void SetStyle(IntPtr wnd, int style)
 			{
 				//TODO locate X11 SetWindowLong alternative!
 			}

@@ -78,7 +78,7 @@ namespace Chromium.WebBrowser {
                         if(m_parent != null)
                             return m_parent.WillInvoke;
                         if (m_browser != null) { 
-                            var mmbrowser = (ChromiumWebBrowser) m_browser;
+                            var mmbrowser = (ChromiumWebBrowserBase)m_browser;
                             if (mmbrowser != null)
                             {
                                 return mmbrowser.RemoteCallbacksWillInvoke;

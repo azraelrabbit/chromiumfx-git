@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{97EB1AFC-8032-4B2D-91D6-0F2E2EF8D9E5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CfxTestApplication_win</RootNamespace>
+    <AssemblyName>CfxTestApplication-win</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="www\content\bootstrap-theme.css.map" />
+    <None Include="www\content\bootstrap.css.map" />
+    <None Include="www\content\bootstrap.min.css.map" />
+    <None Include="www\fonts\fontawesome-webfont.eot" />
+    <None Include="www\fonts\fontawesome-webfont.ttf" />
+    <None Include="www\fonts\fontawesome-webfont.woff" />
+    <None Include="www\fonts\fontawesome-webfont.woff2" />
+    <None Include="www\fonts\FontAwesome.otf" />
+    <None Include="www\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="www\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="www\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="www\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="www\scripts\jquery-3.1.1.min.map" />
+    <None Include="www\scripts\jquery-3.1.1.slim.min.map" />
+    <None Include="www\vs\base\worker\workerMain.js.map" />
+    <None Include="www\vs\editor\editor.main.js.map" />
+    <None Include="www\vs\loader.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChromiumFX.Extension\ChromiumFX.Extension.csproj">
+      <Project>{dbe431c0-7f5a-44ef-ad6a-b45e07e84947}</Project>
+      <Name>ChromiumFX.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChromiumFX\ChromiumFX.csproj">
+      <Project>{36972b7c-3a3a-465f-b064-51b525fd4c14}</Project>
+      <Name>ChromiumFX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChromiumWebBrowser\ChromiumWebBrowser.csproj">
+      <Project>{f94eab75-c33f-4f69-9e26-8c3b48141daa}</Project>
+      <Name>ChromiumWebBrowser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\content\bootstrap-dialog.min.css" />
+    <Content Include="www\content\bootstrap-table\bootstrap-table-locale-all.js" />
+    <Content Include="www\content\bootstrap-table\bootstrap-table.css" />
+    <Content Include="www\content\bootstrap-table\bootstrap-table.js" />
+    <Content Include="www\content\bootstrap-table\extensions\accent-neutralise\bootstrap-table-accent-neutralise.js" />
+    <Content Include="www\content\bootstrap-table\extensions\accent-neutralise\bootstrap-table-accent-neutralise.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\angular\bootstrap-table-angular.js" />
+    <Content Include="www\content\bootstrap-table\extensions\angular\bootstrap-table-angular.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\cookie\bootstrap-table-cookie.js" />
+    <Content Include="www\content\bootstrap-table\extensions\cookie\bootstrap-table-cookie.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\copy-rows\bootstrap-table-copy-rows.js" />
+    <Content Include="www\content\bootstrap-table\extensions\copy-rows\bootstrap-table-copy-rows.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\editable\bootstrap-table-editable.js" />
+    <Content Include="www\content\bootstrap-table\extensions\editable\bootstrap-table-editable.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\export\bootstrap-table-export.js" />
+    <Content Include="www\content\bootstrap-table\extensions\export\bootstrap-table-export.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.js" />
+    <Content Include="www\content\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\filter\bootstrap-table-filter.js" />
+    <Content Include="www\content\bootstrap-table\extensions\filter\bootstrap-table-filter.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\flat-json\bootstrap-table-flat-json.js" />
+    <Content Include="www\content\bootstrap-table\extensions\flat-json\bootstrap-table-flat-json.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.css" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.js" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by\bootstrap-table-group-by.css" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by\bootstrap-table-group-by.js" />
+    <Content Include="www\content\bootstrap-table\extensions\group-by\bootstrap-table-group-by.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\i18n-enhance\bootstrap-table-i18n-enhance.js" />
+    <Content Include="www\content\bootstrap-table\extensions\i18n-enhance\bootstrap-table-i18n-enhance.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\key-events\bootstrap-table-key-events.js" />
+    <Content Include="www\content\bootstrap-table\extensions\key-events\bootstrap-table-key-events.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="www\content\bootstrap-table\extensions\mobile\bootstrap-table-mobile.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multi-column-toggle\bootstrap-table-multi-toggle.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multi-column-toggle\bootstrap-table-multi-toggle.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multiple-search\bootstrap-table-multiple-search.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multiple-search\bootstrap-table-multiple-search.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multiple-sort\bootstrap-table-multiple-sort.js" />
+    <Content Include="www\content\bootstrap-table\extensions\multiple-sort\bootstrap-table-multiple-sort.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\natural-sorting\bootstrap-table-natural-sorting.js" />
+    <Content Include="www\content\bootstrap-table\extensions\natural-sorting\bootstrap-table-natural-sorting.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\reorder-columns\bootstrap-table-reorder-columns.js" />
+    <Content Include="www\content\bootstrap-table\extensions\reorder-columns\bootstrap-table-reorder-columns.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.css" />
+    <Content Include="www\content\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.js" />
+    <Content Include="www\content\bootstrap-table\extensions\reorder-rows\bootstrap-table-reorder-rows.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\resizable\bootstrap-table-resizable.js" />
+    <Content Include="www\content\bootstrap-table\extensions\resizable\bootstrap-table-resizable.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\select2-filter\bootstrap-table-select2-filter.js" />
+    <Content Include="www\content\bootstrap-table\extensions\select2-filter\bootstrap-table-select2-filter.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.css" />
+    <Content Include="www\content\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.js" />
+    <Content Include="www\content\bootstrap-table\extensions\sticky-header\bootstrap-table-sticky-header.min.js" />
+    <Content Include="www\content\bootstrap-table\extensions\toolbar\bootstrap-table-toolbar.js" />
+    <Content Include="www\content\bootstrap-table\extensions\toolbar\bootstrap-table-toolbar.min.js" />
+    <Content Include="www\content\bootstrap-theme.css" />
+    <Content Include="www\content\bootstrap-theme.min.css" />
+    <Content Include="www\content\bootstrap.css" />
+    <Content Include="www\content\bootstrap.min.css" />
+    <Content Include="www\content\bootstrap3-editable\css\bootstrap-editable.css" />
+    <Content Include="www\content\bootstrap3-editable\img\clear.png" />
+    <Content Include="www\content\bootstrap3-editable\img\loading.gif" />
+    <Content Include="www\content\bootstrap3-editable\js\bootstrap-editable.js" />
+    <Content Include="www\content\bootstrap3-editable\js\bootstrap-editable.min.js" />
+    <Content Include="www\content\font-awesome.min.css" />
+    <Content Include="www\content\jquery-confirm.css" />
+    <Content Include="www\content\metisMenu.min.css" />
+    <Content Include="www\content\sb-admin-2.css" />
+    <Content Include="www\content\Site.css" />
+    <Content Include="www\fonts\fontawesome-webfont.svg" />
+    <Content Include="www\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="www\initial.html" />
+    <Content Include="www\scripts\bootstrap-dialog.min.js" />
+    <Content Include="www\scripts\bootstrap.js" />
+    <Content Include="www\scripts\bootstrap.min.js" />
+    <Content Include="www\scripts\echarts.min.js" />
+    <Content Include="www\scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="www\scripts\jquery-3.1.1.js" />
+    <Content Include="www\scripts\jquery-3.1.1.min.js" />
+    <Content Include="www\scripts\jquery-3.1.1.slim.js" />
+    <Content Include="www\scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="www\scripts\jquery-confirm.js" />
+    <Content Include="www\scripts\metisMenu.min.js" />
+    <Content Include="www\scripts\sb-admin-2.js" />
+    <Content Include="www\scripts\zp.common.js" />
+    <Content Include="www\shared\footer.html" />
+    <Content Include="www\shared\header.html" />
+    <Content Include="www\views\dashboard\Index.html" />
+    <Content Include="www\views\Index.html" />
+    <Content Include="www\vs\base\worker\workerMain.js" />
+    <Content Include="www\vs\basic-languages\src\bat.js" />
+    <Content Include="www\vs\basic-languages\src\coffee.js" />
+    <Content Include="www\vs\basic-languages\src\cpp.js" />
+    <Content Include="www\vs\basic-languages\src\csharp.js" />
+    <Content Include="www\vs\basic-languages\src\css.js" />
+    <Content Include="www\vs\basic-languages\src\dockerfile.js" />
+    <Content Include="www\vs\basic-languages\src\fsharp.js" />
+    <Content Include="www\vs\basic-languages\src\go.js" />
+    <Content Include="www\vs\basic-languages\src\handlebars.js" />
+    <Content Include="www\vs\basic-languages\src\html.js" />
+    <Content Include="www\vs\basic-languages\src\ini.js" />
+    <Content Include="www\vs\basic-languages\src\jade.js" />
+    <Content Include="www\vs\basic-languages\src\java.js" />
+    <Content Include="www\vs\basic-languages\src\less.js" />
+    <Content Include="www\vs\basic-languages\src\lua.js" />
+    <Content Include="www\vs\basic-languages\src\markdown.js" />
+    <Content Include="www\vs\basic-languages\src\objective-c.js" />
+    <Content Include="www\vs\basic-languages\src\php.js" />
+    <Content Include="www\vs\basic-languages\src\postiats.js" />
+    <Content Include="www\vs\basic-languages\src\powershell.js" />
+    <Content Include="www\vs\basic-languages\src\python.js" />
+    <Content Include="www\vs\basic-languages\src\r.js" />
+    <Content Include="www\vs\basic-languages\src\razor.js" />
+    <Content Include="www\vs\basic-languages\src\ruby.js" />
+    <Content Include="www\vs\basic-languages\src\scss.js" />
+    <Content Include="www\vs\basic-languages\src\sql.js" />
+    <Content Include="www\vs\basic-languages\src\swift.js" />
+    <Content Include="www\vs\basic-languages\src\vb.js" />
+    <Content Include="www\vs\basic-languages\src\xml.js" />
+    <Content Include="www\vs\basic-languages\src\yaml.js" />
+    <Content Include="www\vs\editor\contrib\quickOpen\browser\symbol-sprite.svg" />
+    <Content Include="www\vs\editor\contrib\suggest\browser\String_16x.svg" />
+    <Content Include="www\vs\editor\contrib\suggest\browser\String_inverse_16x.svg" />
+    <Content Include="www\vs\editor\contrib\suggest\browser\symbol-sprite.svg" />
+    <Content Include="www\vs\editor\editor.main.css" />
+    <Content Include="www\vs\editor\editor.main.js" />
+    <Content Include="www\vs\editor\editor.main.nls.de.js" />
+    <Content Include="www\vs\editor\editor.main.nls.es.js" />
+    <Content Include="www\vs\editor\editor.main.nls.fr.js" />
+    <Content Include="www\vs\editor\editor.main.nls.it.js" />
+    <Content Include="www\vs\editor\editor.main.nls.ja.js" />
+    <Content Include="www\vs\editor\editor.main.nls.js" />
+    <Content Include="www\vs\editor\editor.main.nls.ko.js" />
+    <Content Include="www\vs\editor\editor.main.nls.ru.js" />
+    <Content Include="www\vs\editor\editor.main.nls.zh-cn.js" />
+    <Content Include="www\vs\editor\editor.main.nls.zh-tw.js" />
+    <Content Include="www\vs\language\css\cssMode.js" />
+    <Content Include="www\vs\language\css\cssWorker.js" />
+    <Content Include="www\vs\language\html\htmlMode.js" />
+    <Content Include="www\vs\language\html\htmlWorker.js" />
+    <Content Include="www\vs\language\json\jsonMode.js" />
+    <Content Include="www\vs\language\json\jsonWorker.js" />
+    <Content Include="www\vs\language\typescript\lib\typescriptServices.js" />
+    <Content Include="www\vs\language\typescript\src\mode.js" />
+    <Content Include="www\vs\language\typescript\src\worker.js" />
+    <Content Include="www\vs\loader.js" />
+    <Content Include="www\vs\lua-monaco.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

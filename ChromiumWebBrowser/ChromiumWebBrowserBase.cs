@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using Chromium.Event;
+using Chromium.Remote;
+using Chromium.Remote.Event;
 using Chromium.WebBrowser.Event;
 
 namespace Chromium.WebBrowser
@@ -13,6 +15,10 @@ namespace Chromium.WebBrowser
         protected string m_loadUrlDeferred;
         protected string m_loadStringDeferred;
         public static bool WindowLess { get; set; }
+
+        protected IntPtr browserWindowHandle;
+
+
 
 
         internal readonly Dictionary<string, JSObject> frameGlobalObjects = new Dictionary<string, JSObject>();
@@ -31,6 +37,11 @@ namespace Chromium.WebBrowser
         /// Wait for the BrowserCreated event before accessing this property.
         /// </summary>
         public CfxBrowserHost BrowserHost { get; internal set; }
+
+
+        internal RenderProcess remoteProcess;
+        internal CfrBrowser remoteBrowser;
+
 
         /// <summary>
         /// Returns the URL currently loaded in the main frame.
@@ -89,10 +100,52 @@ namespace Chromium.WebBrowser
         /// </summary>
         public static void Initialize()
         {
-            BrowserProcess.Initialize();
+            //if (!WindowLess)
+            //{
+                BrowserProcess.Initialize();
+            //}
         }
 
+        /// <summary>
+        /// Returns the ChromiumWebBrowser object associated with  the given CfxBrowser, or null
+        /// if the CfxBrowser is not associated with any ChromiumWebBrowser object.
+        /// </summary>
+        public static ChromiumWebBrowserBase FromCfxBrowser(CfxBrowser cfxBrowser)
+        {
+            if (cfxBrowser == null) throw new ArgumentNullException("cfxBrowser");
+            return GetBrowser(cfxBrowser.Identifier);
+        }
+        private static readonly Dictionary<int, WeakReference> browsers = new Dictionary<int, WeakReference>();
 
+        internal static ChromiumWebBrowserBase GetBrowser(int id)
+        {
+            lock (browsers)
+            {
+                WeakReference r;
+                if (browsers.TryGetValue(id, out r))
+                {
+                    return (ChromiumWebBrowserBase)r.Target;
+                }
+                return null;
+            }
+        }
+
+        internal static void AddToBrowserCache(ChromiumWebBrowserBase wb)
+        {
+            lock (browsers)
+            {
+                var deadRefs = new List<int>(browsers.Count);
+                foreach (var b in browsers)
+                {
+                    if (!b.Value.IsAlive) deadRefs.Add(b.Key);
+                }
+                foreach (var r in deadRefs)
+                {
+                    browsers.Remove(r);
+                }
+                browsers[wb.Browser.Identifier] = new WeakReference(wb);
+            }
+        }
         /// <summary>
         /// Provides an opportunity to change initialization settings
         /// and subscribe to browser process handler events.
@@ -146,6 +199,48 @@ namespace Chromium.WebBrowser
             }
         }
 
+
+       internal  virtual void OnBrowserCreated(CfxOnAfterCreatedEventArgs e)
+        {
+
+            Browser = e.Browser;
+            BrowserHost = Browser.Host;
+            AddToBrowserCache(this);
+
+            browserWindowHandle = BrowserHost.WindowHandle;
+
+            ReaiseBrowserCreated(e);
+
+            //System.Threading.ThreadPool.QueueUserWorkItem(AfterSetBrowserTasks);
+        }
+
+        internal void ReaiseBrowserCreated(CfxOnAfterCreatedEventArgs e)
+        {
+            var handler = BrowserCreated;
+            if (handler != null)
+            {
+                var e1 = new BrowserCreatedEventArgs(e.Browser);
+                handler(this, e1);
+            }
+        }
+
+        internal void AfterSetBrowserTasks(object state)
+        {
+            lock (browserSyncRoot)
+            {
+                if (m_loadUrlDeferred != null)
+                {
+                    if (m_loadStringDeferred != null)
+                    {
+                        Browser.MainFrame.LoadString(m_loadStringDeferred, m_loadUrlDeferred);
+                    }
+                    else
+                    {
+                        Browser.MainFrame.LoadUrl(m_loadUrlDeferred);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Load the specified |url| into the main frame.
         /// </summary>
@@ -381,6 +476,144 @@ namespace Chromium.WebBrowser
                 }));
                 Monitor.Wait(waitLock);
             }
+        }
+
+
+
+
+
+        /// <summary>
+        /// For each new render process created, provides an opportunity to subscribe
+        /// to CfrRenderProcessHandler remote callback events.
+        /// </summary>
+        public static event RemoteProcessCreatedEventHandler RemoteProcessCreated;
+        internal static void RaiseRemoteProcessCreated(CfrRenderProcessHandler renderProcessHandler)
+        {
+            var ev = RemoteProcessCreated;
+            if (ev != null)
+            {
+                ev(new RemoteProcessCreatedEventArgs(renderProcessHandler));
+            }
+        }
+
+        [Obsolete("OnRemoteContextCreated is deprecated, use RemoteProcessCreated instead.")]
+        public static event OnRemoteContextCreatedEventHandler OnRemoteContextCreated;
+        internal static void RaiseOnRemoteContextCreated()
+        {
+            var handler = OnRemoteContextCreated;
+            if (handler != null)
+            {
+                handler(EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Called after a remote browser has been created. When browsing cross-origin a new
+        /// browser will be created before the old browser is destroyed.
+        /// 
+        /// Applications may keep a reference to the CfrBrowser object outside the scope 
+        /// of this event, but you have to be aware that those objects become invalid as soon
+        /// as the framework swaps render processes and/or recreates browsers.
+        /// </summary>
+        public event RemoteBrowserCreatedEventHandler RemoteBrowserCreated;
+
+        internal void SetRemoteBrowser(CfrBrowser remoteBrowser, RenderProcess remoteProcess)
+        {
+            this.remoteBrowser = remoteBrowser;
+            this.remoteProcess = remoteProcess;
+            remoteProcess.AddBrowserReference(this);
+            var h = RemoteBrowserCreated;
+            if (h != null)
+            {
+                var e = new RemoteBrowserCreatedEventArgs(remoteBrowser);
+                if (RemoteCallbacksWillInvoke && InvokeRequired)
+                {
+                    RenderThreadInvoke(() => { h(this, e); });
+                }
+                else
+                {
+                    h(this, e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The invoke mode for this browser. See also JSInvokeMode.
+        /// Changes to the invoke mode will be effective after the next
+        /// time the browser creates a V8 context. If this is set to
+        /// "Inherit", then "Invoke" will be assumed. The invoke mode
+        /// also applies to VisitDom and EvaluateJavascript.
+        /// </summary>
+        public JSInvokeMode RemoteCallbackInvokeMode { get; set; }
+
+        /// <summary>
+        /// Indicates whether render process callbacks on this browser
+        /// will be executed on the thread that owns the 
+        /// browser's underlying window handle.
+        /// Depends on the invoke mode. If the invoke mode is set to
+        /// "Inherit", then "Invoke" will be assumed.
+        /// </summary>
+        public bool RemoteCallbacksWillInvoke
+        {
+            get
+            {
+                return RemoteCallbackInvokeMode != JSInvokeMode.DontInvoke;
+            }
+        }
+
+
+        internal void RemoteProcessExited(RenderProcess process)
+        {
+            if (process == this.remoteProcess)
+            {
+                this.remoteBrowser = null;
+                this.remoteProcess = null;
+            }
+        }
+
+
+        // Callbacks from the associated render process handler
+
+        /// <summary>
+        /// Called immediately after the V8 context for a frame has been created. To
+        /// retrieve the JavaScript 'window' object use the
+        /// CfrV8Context.GetGlobal() function. V8 handles can only be accessed
+        /// from the thread on which they are created. A task runner for posting tasks
+        /// on the associated thread can be retrieved via the
+        /// CfrV8Context.GetTaskRunner() function.
+        /// 
+        /// All javascript properties/functions defined through GlobalObject or GlobalObjectForFrame
+        /// are made available before this event is executed.
+        /// 
+        /// If RemoteCallbackInvokeMode is set to Invoke, then this event is executed on the 
+        /// thread that owns the browser's underlying window handle.
+        /// </summary>
+        /// <remarks>
+        /// See also the original CEF documentation in
+        /// <see href="https://bitbucket.org/chromiumfx/chromiumfx/src/tip/cef/include/capi/cef_render_process_handler_capi.h">cef/include/capi/cef_render_process_handler_capi.h</see>.
+        /// </remarks>
+        public event CfrOnContextCreatedEventHandler OnV8ContextCreated;
+
+        internal void RaiseOnV8ContextCreated(CfrOnContextCreatedEventArgs e)
+        {
+            var eventHandler = OnV8ContextCreated;
+            if (eventHandler == null) return;
+            if (RemoteCallbacksWillInvoke)
+                RenderThreadInvoke(() => eventHandler(this, e));
+            else
+                eventHandler(this, e);
+        }
+
+
+
+        // key events
+        // this is not complete
+
+        public event EventHandler<KeyPressEventArgs> OnCGPress;
+
+        protected virtual void OnOnCgPress(KeyPressEventArgs e)
+        {
+            OnCGPress?.Invoke(this, e);
         }
     }
 }

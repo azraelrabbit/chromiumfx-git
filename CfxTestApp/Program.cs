@@ -45,9 +45,9 @@ namespace CfxTestApplication
 			Environment.CurrentDirectory = assemblyDir;//System.IO.Path.Combine(assemblyDir, @"..\..\");
 
 			if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
-				CfxRuntime.LibCefDirPath = @"cef/Release64";
+				CfxRuntime.LibCefDirPath = @"cef";
 			else
-				CfxRuntime.LibCefDirPath = @"cef/Release";
+				CfxRuntime.LibCefDirPath = @"cef32";
 
 			Chromium.WebBrowser.ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
 			ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
@@ -88,8 +88,8 @@ namespace CfxTestApplication
 			Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
 
 			e.CommandLine.AppendArgument("--disable-gpu"); 
-			//           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
-			//           e.CommandLine.AppendSwitch("disable-gpu-vsync");
+			           e.CommandLine.AppendSwitch("disable-gpu-compositing"); 
+			           e.CommandLine.AppendSwitch("disable-gpu-vsync");
 
 			//			if (!e.CommandLine.HasSwitch ("renderer-cmd-prefix")) {
 			//				e.CommandLine.AppendSwitch ("renderer-cmd-prefix");
@@ -115,7 +115,7 @@ namespace CfxTestApplication
 			e.Settings.CachePath = cachePath;
 			e.Settings.UserDataPath = userPath;
 			e.Settings.LogFile = logPath;
-			e.Settings.WindowlessRenderingEnabled = true;
+			e.Settings.WindowlessRenderingEnabled = false;
 			//e.Settings.ExternalMessagePump = true;
 			e.Settings.LogSeverity=CfxLogSeverity.Error;
 			//e.Settings.AcceptLanguageList = "*";
@@ -131,8 +131,8 @@ namespace CfxTestApplication
 
 			//	e.Settings.MultiThreadedMessageLoop = false;
 
-			e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/Resources/locales");
-			e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef/Resources");
+			e.Settings.LocalesDirPath = System.IO.Path.GetFullPath(@"cef/locales");
+			e.Settings.ResourcesDirPath = System.IO.Path.GetFullPath(@"cef");
 		}
     }
 }

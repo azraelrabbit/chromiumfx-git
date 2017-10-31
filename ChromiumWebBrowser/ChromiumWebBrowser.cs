@@ -44,30 +44,6 @@ namespace Chromium.WebBrowser {
         }
 
 
-
-
-
-        /// <summary>
-        /// For each new render process created, provides an opportunity to subscribe
-        /// to CfrRenderProcessHandler remote callback events.
-        /// </summary>
-        public static event RemoteProcessCreatedEventHandler RemoteProcessCreated;
-        internal static void RaiseRemoteProcessCreated(CfrRenderProcessHandler renderProcessHandler) {
-            var ev = RemoteProcessCreated;
-            if(ev != null) {
-                ev(new RemoteProcessCreatedEventArgs(renderProcessHandler));
-            }
-        }
-
-        [Obsolete("OnRemoteContextCreated is deprecated, use RemoteProcessCreated instead.")]
-        public static event OnRemoteContextCreatedEventHandler OnRemoteContextCreated;
-        internal static void RaiseOnRemoteContextCreated() {
-            var handler = OnRemoteContextCreated;
-            if(handler != null) {
-                handler(EventArgs.Empty);
-            }
-        }
-
         
 
         /// <summary>
@@ -88,70 +64,13 @@ namespace Chromium.WebBrowser {
             }
         }
 
-        /// <summary>
-        /// Returns the ChromiumWebBrowser object associated with  the given CfxBrowser, or null
-        /// if the CfxBrowser is not associated with any ChromiumWebBrowser object.
-        /// </summary>
-        public static ChromiumWebBrowser FromCfxBrowser(CfxBrowser cfxBrowser) {
-            if(cfxBrowser == null) throw new ArgumentNullException("cfxBrowser");
-            return GetBrowser(cfxBrowser.Identifier);
-        }
+   
 
-        private static readonly Dictionary<int, WeakReference> browsers = new Dictionary<int, WeakReference>();
-
-        internal static ChromiumWebBrowser GetBrowser(int id) {
-            lock(browsers) {
-                WeakReference r;
-                if(browsers.TryGetValue(id, out r)) {
-                    return (ChromiumWebBrowser)r.Target;
-                }
-                return null;
-            }
-        }
-
-        private static void AddToBrowserCache(ChromiumWebBrowser wb) {
-            lock(browsers) {
-                var deadRefs = new List<int>(browsers.Count);
-                foreach(var b in browsers) {
-                    if(!b.Value.IsAlive) deadRefs.Add(b.Key);
-                }
-                foreach(var r in deadRefs) {
-                    browsers.Remove(r);
-                }
-                browsers[wb.Browser.Identifier] = new WeakReference(wb);
-            }
-        }
+      
 
         private BrowserClient client;
 
-        /// <summary>
-        /// The invoke mode for this browser. See also JSInvokeMode.
-        /// Changes to the invoke mode will be effective after the next
-        /// time the browser creates a V8 context. If this is set to
-        /// "Inherit", then "Invoke" will be assumed. The invoke mode
-        /// also applies to VisitDom and EvaluateJavascript.
-        /// </summary>
-        public JSInvokeMode RemoteCallbackInvokeMode { get; set; }
-
-        /// <summary>
-        /// Indicates whether render process callbacks on this browser
-        /// will be executed on the thread that owns the 
-        /// browser's underlying window handle.
-        /// Depends on the invoke mode. If the invoke mode is set to
-        /// "Inherit", then "Invoke" will be assumed.
-        /// </summary>
-        public bool RemoteCallbacksWillInvoke {
-            get {
-                return RemoteCallbackInvokeMode != JSInvokeMode.DontInvoke;
-            }
-        }
-
-        private IntPtr browserWindowHandle;
-
-
-
-        internal RenderProcess remoteProcess;
-        internal CfrBrowser remoteBrowser;
+ 
 
         /// <summary>
         /// Creates a ChromiumWebBrowser object with about:blank as initial URL.
@@ -186,32 +105,37 @@ namespace Chromium.WebBrowser {
 
 			ImeMode = ImeMode.On;
             if(BrowserProcess.initialized) {
-				//ControlStyles.ContainerControl
-				// | ControlStyles.EnableNotifyMessage
-				// | ControlStyles.UseTextForAccessibility
-                SetStyle(
-					
-                     ControlStyles.ResizeRedraw
-                    | ControlStyles.FixedWidth
-                    | ControlStyles.FixedHeight
-                    | ControlStyles.StandardClick
-                    | ControlStyles.StandardDoubleClick
-                    | ControlStyles.UserMouse
-                    | ControlStyles.SupportsTransparentBackColor
-                  
-                    | ControlStyles.DoubleBuffer
-                    | ControlStyles.OptimizedDoubleBuffer
-                   
-                    | ControlStyles.Opaque
-                    , false);
+                //ControlStyles.ContainerControl
+                // | ControlStyles.EnableNotifyMessage
+                // | ControlStyles.UseTextForAccessibility
+                //SetStyle(
 
-//                SetStyle(ControlStyles.UserPaint
-//                    | ControlStyles.AllPaintingInWmPaint
-//                    | ControlStyles.CacheText
-//                    | ControlStyles.Selectable
-//                    , true);
-				SetStyle(ControlStyles.AllPaintingInWmPaint,true);
-                if(initialUrl == null)
+                //     ControlStyles.ResizeRedraw
+                //    | ControlStyles.FixedWidth
+                //    | ControlStyles.FixedHeight
+                //    | ControlStyles.StandardClick
+                //    | ControlStyles.StandardDoubleClick
+                //    | ControlStyles.UserMouse
+                //    | ControlStyles.SupportsTransparentBackColor
+
+                //    | ControlStyles.DoubleBuffer
+                //    | ControlStyles.OptimizedDoubleBuffer
+
+                //    | ControlStyles.Opaque
+                //    , false);
+
+                //SetStyle(ControlStyles.UserPaint
+                //    | ControlStyles.AllPaintingInWmPaint
+                //    | ControlStyles.CacheText
+                //    | ControlStyles.Selectable
+                //    , true);
+
+
+                base.SetStyle(ControlStyles.ContainerControl | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.FixedWidth | ControlStyles.FixedHeight | ControlStyles.StandardClick | ControlStyles.UserMouse | ControlStyles.SupportsTransparentBackColor | ControlStyles.StandardDoubleClick | ControlStyles.EnableNotifyMessage | ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UseTextForAccessibility, false);
+                //base.SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.AllPaintingInWmPaint | ControlStyles.CacheText, true);
+
+                SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+                if (initialUrl == null)
                     this.initialUrl = "about:blank";
                 else
                     this.initialUrl = initialUrl;
@@ -282,28 +206,33 @@ namespace Chromium.WebBrowser {
 
 			var parentHandle = this.Handle;
 
-			var rect = this.ClientRectangle;
+            //var rect = this.ClientRectangle;
 
-//			if (this.Parent != null) {
-//				parentHandle = this.Parent.Handle;
-//
-//			}
+            //if (this.Parent != null)
+            //{
+            //    parentHandle = this.Parent.Handle;
+            //    rect = this.Parent.ClientRectangle;
+            //}
 
             var windowInfo = new CfxWindowInfo();
 
-			//this.ImeMode = ImeMode.Inherit;
-			if (WindowLess) {
-				
-				// in order to avoid focus issues when creating browsers offscreen,
-				// the browser must be created with a disabled child window.
-				windowInfo.SetAsDisabledChild(parentHandle);
-				//windowInfo.SetAsChild ();
-			} else {
-				windowInfo.SetAsChild (parentHandle,rect.Left,rect.Top,rect.Width,rect.Height);
-				//windowInfo.Style = WindowStyle.WS_CHILD;
-			}
+            //this.ImeMode = ImeMode.Inherit;
+            //if (WindowLess) {
 
-            if(!CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, DefaultBrowserSettings, requestContext))
+            //	// in order to avoid focus issues when creating browsers offscreen,
+            //	// the browser must be created with a disabled child window.
+            //	windowInfo.SetAsDisabledChild(parentHandle);
+            //	//windowInfo.SetAsChild ();
+            //} else {
+            //windowInfo.SetAsChild(parentHandle, rect.Left, rect.Top, rect.Width, rect.Height);
+            //windowInfo.SetAsDisabledChild(parentHandle);
+            //	//windowInfo.Style = WindowStyle.WS_CHILD;
+            //}
+
+            // this work in windows.
+            windowInfo.SetAsDisabledChild(parentHandle);
+
+            if (!CfxBrowserHost.CreateBrowser(windowInfo, client, initialUrl, DefaultBrowserSettings, requestContext))
                 throw new ChromiumWebBrowserException("Failed to create browser instance.");
         }
 
@@ -379,7 +308,7 @@ namespace Chromium.WebBrowser {
         /// </summary>
         public CfxKeyboardHandler KeyboardHandler { get { return client.KeyboardHandler; } }
 
-        internal void OnBrowserCreated(CfxOnAfterCreatedEventArgs e)
+        internal  override void OnBrowserCreated(CfxOnAfterCreatedEventArgs e)
         {
 
             Browser = e.Browser;
@@ -388,12 +317,7 @@ namespace Chromium.WebBrowser {
             AddToBrowserCache(this);
             ResizeBrowserWindow();
 
-            var handler = BrowserCreated;
-            if (handler != null)
-            {
-                var e1 = new BrowserCreatedEventArgs(e.Browser);
-                handler(this, e1);
-            }
+            ReaiseBrowserCreated(e);
 
             System.Threading.ThreadPool.QueueUserWorkItem(AfterSetBrowserTasks);
         }
@@ -632,54 +556,17 @@ namespace Chromium.WebBrowser {
             }
         }
 
-        // Callbacks from the associated render process handler
-
-        /// <summary>
-        /// Called immediately after the V8 context for a frame has been created. To
-        /// retrieve the JavaScript 'window' object use the
-        /// CfrV8Context.GetGlobal() function. V8 handles can only be accessed
-        /// from the thread on which they are created. A task runner for posting tasks
-        /// on the associated thread can be retrieved via the
-        /// CfrV8Context.GetTaskRunner() function.
-        /// 
-        /// All javascript properties/functions defined through GlobalObject or GlobalObjectForFrame
-        /// are made available before this event is executed.
-        /// 
-        /// If RemoteCallbackInvokeMode is set to Invoke, then this event is executed on the 
-        /// thread that owns the browser's underlying window handle.
-        /// </summary>
-        /// <remarks>
-        /// See also the original CEF documentation in
-        /// <see href="https://bitbucket.org/chromiumfx/chromiumfx/src/tip/cef/include/capi/cef_render_process_handler_capi.h">cef/include/capi/cef_render_process_handler_capi.h</see>.
-        /// </remarks>
-        public event CfrOnContextCreatedEventHandler OnV8ContextCreated;
-
-        internal void RaiseOnV8ContextCreated(CfrOnContextCreatedEventArgs e) {
-            var eventHandler = OnV8ContextCreated;
-            if(eventHandler == null) return;
-            if(RemoteCallbacksWillInvoke)
-                RenderThreadInvoke(() => eventHandler(this, e));
-            else
-                eventHandler(this, e);
-        }
+        
 
 
-        /// <summary>
-        /// Raised after the CfxBrowser object for this WebBrowser has been created.
-        /// The event is executed on the thread that owns this browser control's 
-        /// underlying window handle.
-        /// </summary>
-        public new  event BrowserCreatedEventHandler BrowserCreated;
+        ///// <summary>
+        ///// Raised after the CfxBrowser object for this WebBrowser has been created.
+        ///// The event is executed on the thread that owns this browser control's 
+        ///// underlying window handle.
+        ///// </summary>
+        //public   event BrowserCreatedEventHandler BrowserCreated;
 
-        /// <summary>
-        /// Called after a remote browser has been created. When browsing cross-origin a new
-        /// browser will be created before the old browser is destroyed.
-        /// 
-        /// Applications may keep a reference to the CfrBrowser object outside the scope 
-        /// of this event, but you have to be aware that those objects become invalid as soon
-        /// as the framework swaps render processes and/or recreates browsers.
-        /// </summary>
-        public event RemoteBrowserCreatedEventHandler RemoteBrowserCreated;
+       
 
         [Obsolete("OnLoadingStateChange is deprecated. Please use LoadHandler.OnLoadingStateChange and check for invalid cross-thread operations.")]
         public event CfxOnLoadingStateChangeEventHandler OnLoadingStateChange {
@@ -760,43 +647,7 @@ namespace Chromium.WebBrowser {
                 InvokeCallback(() => { handler(this, e); });
             }
         }
-
-
-        private void AfterSetBrowserTasks(object state) {
-            lock(browserSyncRoot) {
-                if(m_loadUrlDeferred != null) {
-                    if(m_loadStringDeferred != null) {
-                        Browser.MainFrame.LoadString(m_loadStringDeferred, m_loadUrlDeferred);
-                    } else {
-                        Browser.MainFrame.LoadUrl(m_loadUrlDeferred);
-                    }
-                }
-            }
-        }
-
-        internal void SetRemoteBrowser(CfrBrowser remoteBrowser, RenderProcess remoteProcess) {
-            this.remoteBrowser = remoteBrowser;
-            this.remoteProcess = remoteProcess;
-            remoteProcess.AddBrowserReference(this);
-            var h = RemoteBrowserCreated;
-            if(h != null) {
-                var e = new RemoteBrowserCreatedEventArgs(remoteBrowser);
-                if(RemoteCallbacksWillInvoke && InvokeRequired) {
-                    RenderThreadInvoke(() => { h(this, e); });
-                } else {
-                    h(this, e);
-                }
-            }
-        }
-
-        internal void RemoteProcessExited(RenderProcess process) {
-            if(process == this.remoteProcess) {
-                this.remoteBrowser = null;
-                this.remoteProcess = null;
-            }
-        }
-
-
+ 
         //protected override void WndProc(ref Message m) {
         //    base.WndProc(ref m);
         //    Debug.Print(m.ToString());
@@ -815,10 +666,9 @@ namespace Chromium.WebBrowser {
         }
 
         protected override void OnResize(System.EventArgs e) {
-            
             ResizeBrowserWindow();
-
             base.OnResize(e);
+        
         }
 
 
@@ -868,14 +718,14 @@ namespace Chromium.WebBrowser {
 						}
 						h = m_findToolbar.Top;
 					}
-					NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_VISIBLE);
+					NativeWindow.SetStyle(browserWindowHandle, (int)(WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_VISIBLE));
 					NativeWindow.SetPosition(browserWindowHandle, 0, 0, Width, h);
 				}
 			} else {
 				if(browserWindowHandle != IntPtr.Zero)
-					NativeWindow.SetStyle(browserWindowHandle, WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED);
+					NativeWindow.SetStyle(browserWindowHandle, (int)(WindowStyle.WS_CHILD | WindowStyle.WS_CLIPCHILDREN | WindowStyle.WS_CLIPSIBLINGS | WindowStyle.WS_TABSTOP | WindowStyle.WS_DISABLED));
 			}
-			this.InvokeCallback(()=>this.Update());//.Update ();
+			//this.InvokeCallback(()=>this.Update());//.Update ();
 		}
 
 //		protected override void OnPreviewKeyDown (PreviewKeyDownEventArgs e)

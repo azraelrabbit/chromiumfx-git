@@ -5,6 +5,7 @@
 // of the BSD license. See the License.txt file for details.
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Chromium.Event;
@@ -16,6 +17,7 @@ namespace Chromium.WebBrowser
     /// A minimum and very incomplete implementation of a
     /// control with windowless browser.
     /// </summary>
+    [DesignerCategory("")]
     public class BrowserControl2 : ChromiumWebBrowserBase
     {
 

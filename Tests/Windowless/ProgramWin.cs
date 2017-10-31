@@ -49,9 +49,9 @@ namespace Windowless {
             Environment.CurrentDirectory = assemblyDir;//System.IO.Path.Combine(assemblyDir, @"..\..\");
 
             if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
-                CfxRuntime.LibCefDirPath = @"cef/Release64";
+                CfxRuntime.LibCefDirPath = Path.Combine(exePath,"cef");
             else
-                CfxRuntime.LibCefDirPath = @"cef/Release";
+                CfxRuntime.LibCefDirPath = Path.Combine(exePath,"cef32");
 
 
 
@@ -72,8 +72,8 @@ namespace Windowless {
 
             //settings.LogSeverity = CfxLogSeverity.Disable;
 
-            settings.ResourcesDirPath = System.IO.Path.Combine(exePath, "cef", "Resources");
-            settings.LocalesDirPath = System.IO.Path.Combine(exePath, "cef", "Resources", "locales");
+            settings.ResourcesDirPath = System.IO.Path.Combine(CfxRuntime.LibCefDirPath);
+            settings.LocalesDirPath = System.IO.Path.Combine(CfxRuntime.LibCefDirPath, "locales");
 
              
 
@@ -160,10 +160,7 @@ namespace Windowless {
         }
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
-
-            CfxRuntime.QuitMessageLoop();
-
-
+ 
             //to kill subprocess in windows . because on windows when application exited,will left a subprocess can not auto shutdown.
 
             if (CfxRuntime.PlatformOS == CfxPlatformOS.Windows)
@@ -185,11 +182,15 @@ namespace Windowless {
                     }
                     catch (Exception ex)
                     {
-                        
+
                     }
-                
+
                 }
 
+            }
+            else
+            {
+                CfxRuntime.QuitMessageLoop();
             }
 
             CfxRuntime.Shutdown();

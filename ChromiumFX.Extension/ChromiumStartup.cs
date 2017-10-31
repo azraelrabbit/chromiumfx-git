@@ -59,8 +59,23 @@ namespace Chromium.WebBrowser
         public static string SubViewPathName { get; set; }
 
 
-        private static readonly Dictionary<int, ChromiumWebBrowser> browsers = new Dictionary<int, ChromiumWebBrowser>();
-        internal static Dictionary<int, ChromiumWebBrowser> CurrentBrowsers
+        /// <summary>
+        /// 是否开启windowless渲染模式,要配合chromiumwebbrowser 和 chromiumwebbrowserwindowless 使用
+        /// </summary>
+        public static bool RequireWindowLess {
+            get { return ChromiumWebBrowserBase.WindowLess; }
+            set { ChromiumWebBrowserBase.WindowLess = value; } }
+
+
+        static string logPath;
+        private static string cachePath;
+        private static string userPath;
+
+        private static string libCefDirPath;
+
+
+        private static readonly Dictionary<int, ChromiumWebBrowserBase> browsers = new Dictionary<int, ChromiumWebBrowserBase>();
+        internal static Dictionary<int, ChromiumWebBrowserBase> CurrentBrowsers
         {
             get
             {
@@ -68,15 +83,15 @@ namespace Chromium.WebBrowser
             }
         }
 
-        internal static ChromiumWebBrowser GetBrowser(int id)
+        internal static ChromiumWebBrowserBase GetBrowser(int id)
         {
-            ChromiumWebBrowser wb;
+            ChromiumWebBrowserBase wb;
             CurrentBrowsers.TryGetValue(id, out wb);
             return wb;
         }
 
 
-        public static void Initialize(string domain = "airbox.local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettingsCallback=null)
+        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettingsCallback=null)
         {
             if (initialized)
             {
@@ -89,39 +104,63 @@ namespace Chromium.WebBrowser
             var cachePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName, "Cache");
             if (!System.IO.Directory.Exists(cachePath))
                 System.IO.Directory.CreateDirectory(cachePath);
+ 
+            var assemblyDir = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            //rootPath = assemblyDir;
+              logPath = Path.Combine(assemblyDir, "debug.log");
 
-            Application.ApplicationExit += Application_ApplicationExit;
+            cachePath = Path.Combine(assemblyDir, "cache");
 
+            if (!Directory.Exists(cachePath))
+            {
+                Directory.CreateDirectory(cachePath);
+            }
+              userPath = Path.Combine(assemblyDir, "temp");
+            if (!Directory.Exists(userPath))
+            {
+                Directory.CreateDirectory(userPath);
+            }
 
-            //if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
-            //    CfxRuntime.LibCefDirPath = @"cef64/Release64";
-            //else
-            //    CfxRuntime.LibCefDirPath = @"cef64/Release";
+          
 
+            var basePath = assemblyDir;//AppDomain.CurrentDomain.BaseDirectory;
 
-            var basePath = AppDomain.CurrentDomain.BaseDirectory;
-
-            var libCefDirPath = Path.Combine(basePath, "cef");
+              libCefDirPath = Path.Combine(basePath, "cef");
 
             if (!Environment.Is64BitProcess)
             {
-                libCefDirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cef32");
+                libCefDirPath = Path.Combine(basePath, "cef32");
             }
 
-            //var libCefLocalesPath = Path.Combine(libCefDirPath, "locales");
+            ////var libCefLocalesPath = Path.Combine(libCefDirPath, "locales");
             CfxRuntime.LibCefDirPath = libCefDirPath;
             CfxRuntime.LibCfxDirPath = libCefDirPath;
 
-            ChromiumWebBrowser.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
-            ChromiumWebBrowser.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
-            ChromiumWebBrowser.Initialize();
+            //if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
+            //    CfxRuntime.LibCefDirPath = Path.Combine(libCefDirPath,"Release64");
+            //else
+            //    CfxRuntime.LibCefDirPath = Path.Combine(libCefDirPath, "Release");
+
+
+            ChromiumWebBrowserBase.OnBeforeCfxInitialize += ChromiumWebBrowser_OnBeforeCfxInitialize;
+            ChromiumWebBrowserBase.OnBeforeCommandLineProcessing += ChromiumWebBrowser_OnBeforeCommandLineProcessing;
+            ChromiumWebBrowserBase.Initialize();
 
             RegisterLocalScheme();
 
             RegisterEmbeddedScheme(System.Reflection.Assembly.GetEntryAssembly(), domainName: domain);
 
+
+            //if (CfxRuntime.PlatformOS != CfxPlatformOS.Windows)
+            //{
+            //    Application.Idle += Application_Idle;
+            //}
+            Application.ApplicationExit += Application_ApplicationExit;
+
             initialized = true;
         }
+
+      
 
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
@@ -145,20 +184,13 @@ namespace Chromium.WebBrowser
             if (!System.IO.Directory.Exists(cachePath))
                 System.IO.Directory.CreateDirectory(cachePath);
 
-            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var basePath = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);// AppDomain.CurrentDomain.BaseDirectory;
 
-            var libCefDirPath = Path.Combine(basePath, "cef");
+ 
+            var resourcePath = Path.Combine(libCefDirPath);
 
-            if (!Environment.Is64BitProcess)
-            {
-                libCefDirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cef32");
-            }
-
-
-            var libCefLocalesPath = Path.Combine(libCefDirPath, "locales");
-            //CfxRuntime.LibCefDirPath = libCefDirPath;
-
-
+            var libCefLocalesPath = Path.Combine(libCefDirPath,"locales");
+ 
 
             if (enableDevTools)
             {
@@ -166,33 +198,46 @@ namespace Chromium.WebBrowser
             }
  
             e.Settings.Locale = "zh-CN";
-            e.Settings.CachePath = cachePath;
-
+ 
             e.Settings.LocalesDirPath = libCefLocalesPath;
-            e.Settings.ResourcesDirPath = libCefDirPath;
-            e.Settings.ResourcesDirPath = libCefDirPath;//System.IO.Path.GetFullPath(@"cef64/Resources");
-            //args.Settings.LocalesDirPath = ChromiumStartupSettings.LocalesDir;
-            //args.Settings.ResourcesDirPath = ChromiumStartupSettings.ResourcesDir;
-            e.Settings.Locale = "zh-CN";
+            e.Settings.ResourcesDirPath = resourcePath;
+ 
+             
+                e.Settings.WindowlessRenderingEnabled = ChromiumWebBrowserBase.WindowLess;
+            
+ 
             e.Settings.CachePath = cachePath;
-            e.Settings.LogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "debug.log1");
-            e.Settings.LogSeverity = CfxLogSeverity.Error;
+            e.Settings.LogFile = Path.Combine(basePath, "debug.log1");
+            e.Settings.LogSeverity = CfxLogSeverity.Verbose;
 
             onBeforeCfxInitializeCallback?.Invoke(new OnCSBeforeCfxInitializeEventArgs(e.Settings, e.ProcessHandler));
  
         }
-        private static void RegisterLocalScheme(string schemeName = "local")
+
+        /// <summary>
+        /// Register your filesystem content schema,and the content folder muse be same as your application path.
+        /// </summary>
+        /// <param name="schemeName">prefix schema name, default: res, usage: local://</param>
+        /// <param name="domainName">domain name ,default:local,useage with default schema: local://local</param>
+        /// <remarks>usage: local://local/yourcontentfolder/yourviewpath/index.html</remarks>
+        public static void RegisterLocalScheme(string schemeName = "local",string domainName="local")
         {
             if (string.IsNullOrEmpty(schemeName))
             {
                 throw new ArgumentNullException("schemeName", "必须为scheme指定名称。");
             }
-            var scheme =   new LocalSchemeHandlerFactory();
+            var scheme =   new LocalSchemeHandlerFactory(schemeName);
  
-            RegisterScheme(schemeName, null, scheme);
+            RegisterScheme(schemeName, domainName, scheme);
         }
 
-        private static void RegisterEmbeddedScheme(System.Reflection.Assembly assembly, string schemeName = "http", string domainName = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assembly">Resource Assembly</param>
+        /// <param name="schemeName">prefix schema name, default: res, usage: res://</param>
+        /// <param name="domainName">domain name ,default:local,useage with default schema: res://local</param>
+        public static void RegisterEmbeddedScheme(System.Reflection.Assembly assembly, string schemeName = "res", string domainName = "local")
         {
             if (string.IsNullOrEmpty(schemeName))
             {

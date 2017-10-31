@@ -11,7 +11,7 @@ using Chromium.Event;
 namespace Chromium.WebBrowser {
     internal class BrowserClient : CfxClient  {
 
-        internal ChromiumWebBrowser browser;
+        internal ChromiumWebBrowserBase browser;
 
         internal LifeSpanHandler lifeSpanHandler;
         internal RequestHandler requestHandler;
@@ -28,9 +28,10 @@ namespace Chromium.WebBrowser {
         private CfxJsDialogHandler jsDialogHandler;
         private CfxKeyboardHandler keyboardHandler;
 
+        private CfxRenderHandler renderHandler;
 
 
-        internal BrowserClient(ChromiumWebBrowser browser) {
+        internal BrowserClient(ChromiumWebBrowserBase browser) {
             this.browser = browser;
             this.lifeSpanHandler = new LifeSpanHandler(this);
             this.requestHandler = new RequestHandler(this);
@@ -152,6 +153,20 @@ namespace Chromium.WebBrowser {
             }
         }
 
+
+        internal CfxRenderHandler RenderHandler
+        {
+            get
+            {
+                if (renderHandler == null)
+                {
+                    renderHandler =   new CfxRenderHandler();
+
+                    this.GetRenderHandler += (s, e) => e.SetReturnValue(renderHandler);
+                }
+                return renderHandler;
+            }
+        }
 
     }
 }

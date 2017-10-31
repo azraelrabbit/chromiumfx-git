@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <title></title>
+    <link href="/www/content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/www/content/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="/www/content/font-awesome.min.css" rel="stylesheet" />
+    <link href="/www/content/bootstrap-dialog.min.css" rel="stylesheet" />
+    <link href="/www/content/sb-admin-2.css" rel="stylesheet" />
+    <link href="/www/content/metisMenu.min.css" rel="stylesheet" />
+    <link href="/www/content/jquery-confirm.css" rel="stylesheet" />
+    <link href="/www/content/Site.css" rel="stylesheet" />
+    <link href="/www/content/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+    <link href="/www/content/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+ 
+    
+    <script src="/www/scripts/jquery-3.1.1.min.js"></script>
+    <script src="/www/scripts/bootstrap.min.js"></script>
+
+    <script src="/www/scripts/bootstrap-dialog.min.js"></script>
+    <script src="/www/scripts/jquery-confirm.js"></script>
+    <script src="/www/scripts/metisMenu.min.js"></script>
+    <script src="/www/scripts/sb-admin-2.js"></script>
+    <script src="/www/scripts/zp.common.js"></script>
+    <script src="/www/content/bootstrap-table/bootstrap-table.js"></script>
+    <script src="/www/content/bootstrap-table/bootstrap-table-locale-all.js"></script>
+    <script src="/www/content/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js"></script>
+    <script src="/www/content/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+ 
+</head>
+<body class="wrapper">
+<div id="wrapper">
+<!--Navigation-->
+<nav class="navbar navbar-default navbar-static-top window-drag" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header window-left">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        
+        <a class = "navbar-brand" href="/www/views/Index.html"> Desktop App</a>
+    </div>
+    <!-- /.navbar-header -->
+    <ul class="nav navbar-top-links navbar-right  window-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li>
+                    <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="buttons">
+            <a class="button" href="javascript:void(0);" onclick="javascript: minWindow(this);"><i class="fa fa-window-minimize"></i></a>
+        </li>
+        <li class="buttons">
+            <a  class="button" href="javascript:void(0);" onclick="javascript: maxWindow(this);"><i id="btnmaxsize" class="fa fa-window-maximize"></i></a>
+        </li>
+        <li class="buttons">
+            <a class="button" href="javascript:void(0);" onclick="javascript: closeWindow();"><i class="fa fa-window-close-o"></i></a>
+
+        </li>
+    </ul>
+    <!-- /.navbar-top-links -->
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <!-- /input-group -->
+                </li>
+                <li>
+                    <!--@Html.ActionLinkWithI("fa fa-dashboard fa-fw", "Dashboard", "Index", "Dashboard")-->
+                    <a href="/www/views/dashboard/index.html"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a>
+                </li>
+               
+                 
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+        <div class="sidebar-nav navbar-fixed-bottom" >
+            <span style="color: #23527c;">&nbsp; Powerd by &copy; testing</span>
+        </div>
+    </div>
+    <!-- /.navbar-static-side -->
+</nav>
+
+<div id="page-wrapper">
+<div class="row col-md-12">

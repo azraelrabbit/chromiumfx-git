@@ -39,7 +39,7 @@ namespace ChromiumFX.Extension
 
 			if (e.SchemeName == SchemeName && e.Browser != null)
 			{
-			    var browser = ChromiumWebBrowser.FromCfxBrowser(e.Browser);// ChromiumStartup.BrowserDict[e.Browser.Identifier];
+			    var browser = ChromiumWebBrowserBase.FromCfxBrowser(e.Browser);// ChromiumStartup.BrowserDict[e.Browser.Identifier];
 				var handler = new EmbeddedResourceHandler(resourceAssembly, browser, DomainName);
 				e.SetReturnValue(handler);
 			}
