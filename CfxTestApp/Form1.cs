@@ -13,7 +13,7 @@ namespace CfxTestApplication
 {
     public partial class Form1 : Form
     {
-		private Chromium.WebBrowser.ChromiumWebBrowserBase webBrowser;
+        private Chromium.WebBrowser.ChromiumWebBrowser webBrowser;
         public Form1()
         {
             InitializeComponent();
@@ -21,21 +21,20 @@ namespace CfxTestApplication
 
         private void Form1_Load(object sender, EventArgs e)
         {
-              webBrowser=new ChromiumWebBrowser(this);
-           // webBrowser = new BrowserControl2(this);
-           webBrowser.Dock=DockStyle.Fill;
-            //  this.Controls.Add(webBrowser);
+            webBrowser = new ChromiumWebBrowser(this);
+
+            webBrowser.Dock = DockStyle.Fill;
+
 
             //加上这句,弹出的窗口就会有标题栏,可以关闭,否则无法操作弹出的新窗口,无法关闭...
-            // webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
+            webBrowser.LifeSpanHandler.OnBeforePopup += beforePop;
 
-            //webBrowser.LoadUrl("http://www.baidu.com");
-
+   
             //webBrowser.ExecuteJavascript("alert('aaaa');");
 
-            webBrowser.BrowserCreated += WebBrowser_BrowserCreated;
+              //webBrowser.LoadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
 
-         //   webBrowser.LoadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
+            webBrowser.LoadUrl("http://www.baidu.com");
 
         }
 
@@ -44,22 +43,12 @@ namespace CfxTestApplication
             webBrowser.ExecuteJavascript("alert('aaaa');");
         }
 
-        private void WebBrowser_BrowserCreated(object sender, Chromium.WebBrowser.Event.BrowserCreatedEventArgs e)
-        {
-             webBrowser.LoadUrl("http://www.baidu.com");
-        }
 
         private void beforePop(object sender, CfxOnBeforePopupEventArgs e)
         {
-            
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //webBrowser.LoadUrl("http://www.baidu.com");
-        }
 
-       
-        
     }
 }

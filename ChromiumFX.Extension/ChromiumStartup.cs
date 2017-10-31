@@ -67,12 +67,31 @@ namespace Chromium.WebBrowser
             set { ChromiumWebBrowserBase.WindowLess = value; } }
 
 
-        static string logPath;
+        //static string _logPath;
         private static string cachePath;
         private static string userPath;
 
-        private static string libCefDirPath;
+        private static string _libCefDirPath;
+        private static string _libCfxDirPath;
+        private static string _cefResourcePath;
 
+        public static string LibCefPath
+        {
+            get { return _libCefDirPath; }
+            set { _libCefDirPath = value; }
+        }
+
+        public static string LibCfxPath
+        {
+            get { return _libCfxDirPath; }
+            set { _libCfxDirPath = value; }
+        }
+
+        public static string CefResourcePath
+        {
+            get { return _cefResourcePath; }
+            set { _cefResourcePath = value; }
+        }
 
         private static readonly Dictionary<int, ChromiumWebBrowserBase> browsers = new Dictionary<int, ChromiumWebBrowserBase>();
         internal static Dictionary<int, ChromiumWebBrowserBase> CurrentBrowsers
@@ -107,7 +126,7 @@ namespace Chromium.WebBrowser
  
             var assemblyDir = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             //rootPath = assemblyDir;
-              logPath = Path.Combine(assemblyDir, "debug.log");
+              //_logPath = Path.Combine(assemblyDir, "debug.log");
 
             cachePath = Path.Combine(assemblyDir, "cache");
 
@@ -125,16 +144,27 @@ namespace Chromium.WebBrowser
 
             var basePath = assemblyDir;//AppDomain.CurrentDomain.BaseDirectory;
 
-              libCefDirPath = Path.Combine(basePath, "cef");
 
-            if (!Environment.Is64BitProcess)
+            if (string.IsNullOrEmpty(_libCefDirPath))
             {
-                libCefDirPath = Path.Combine(basePath, "cef32");
+                _libCefDirPath = Path.Combine(basePath, "cef");
+
+                if (!Environment.Is64BitProcess)
+                {
+                    _libCefDirPath = Path.Combine(basePath, "cef32");
+                }
             }
 
+
+            if (string.IsNullOrEmpty(_libCfxDirPath))
+            {
+                _libCfxDirPath = _libCefDirPath;
+            }
+           
+
             ////var libCefLocalesPath = Path.Combine(libCefDirPath, "locales");
-            CfxRuntime.LibCefDirPath = libCefDirPath;
-            CfxRuntime.LibCfxDirPath = libCefDirPath;
+            CfxRuntime.LibCefDirPath = _libCefDirPath;
+            CfxRuntime.LibCfxDirPath = _libCefDirPath;
 
             //if (CfxRuntime.PlatformArch == CfxPlatformArch.x64)
             //    CfxRuntime.LibCefDirPath = Path.Combine(libCefDirPath,"Release64");
@@ -186,10 +216,15 @@ namespace Chromium.WebBrowser
 
             var basePath = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);// AppDomain.CurrentDomain.BaseDirectory;
 
- 
-            var resourcePath = Path.Combine(libCefDirPath);
 
-            var libCefLocalesPath = Path.Combine(libCefDirPath,"locales");
+            if (string.IsNullOrEmpty(_cefResourcePath))
+            {
+                _cefResourcePath = _libCefDirPath;
+            }
+
+            //var resourcePath = Path.Combine(_libCefDirPath);
+
+            var libCefLocalesPath = Path.Combine(_cefResourcePath, "locales");
  
 
             if (enableDevTools)
@@ -200,7 +235,7 @@ namespace Chromium.WebBrowser
             e.Settings.Locale = "zh-CN";
  
             e.Settings.LocalesDirPath = libCefLocalesPath;
-            e.Settings.ResourcesDirPath = resourcePath;
+            e.Settings.ResourcesDirPath = _cefResourcePath;
  
              
                 e.Settings.WindowlessRenderingEnabled = ChromiumWebBrowserBase.WindowLess;
