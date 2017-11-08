@@ -28,15 +28,17 @@ namespace Chromium.WebBrowser
 
         internal static int devtoolPort;
 
-        private static Action<OnCSBeforeCfxInitializeEventArgs> onBeforeCfxInitializeCallback;
+        private static Action<OnCSBeforeCfxInitializeEventArgs> onBeforeCfxInitialize;
+
+        private static Action<CfxOnBeforeCommandLineProcessingEventArgs> OnBeforeCommandLineProcessing;
 
         //public static Dictionary<int,ChromiumWebBrowser> BrowserDict=new Dictionary<int, ChromiumWebBrowser>();
-        
 
-            /// <summary>
-            /// 根虚拟路径
-            /// </summary>
-       public static string VirtualPath { get; set; }
+
+        /// <summary>
+        /// 根虚拟路径
+        /// </summary>
+        public static string VirtualPath { get; set; }
             /// <summary>
             /// 是否开启Master渲染
             /// </summary>
@@ -110,7 +112,7 @@ namespace Chromium.WebBrowser
         }
 
 
-        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettingsCallback=null)
+        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettings=null,Action<CfxOnBeforeCommandLineProcessingEventArgs> beforeCommandLine=null)
         {
             if (initialized)
             {
@@ -119,7 +121,8 @@ namespace Chromium.WebBrowser
 
             enableDevTools = enableDevtools;
             devtoolPort = remoteDevPort;
-            onBeforeCfxInitializeCallback = beforeInitsettingsCallback;
+            onBeforeCfxInitialize = beforeInitsettings;
+            OnBeforeCommandLineProcessing = beforeCommandLine;
             var cachePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName, "Cache");
             if (!System.IO.Directory.Exists(cachePath))
                 System.IO.Directory.CreateDirectory(cachePath);
@@ -206,6 +209,20 @@ namespace Chromium.WebBrowser
         {
             Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
             Console.WriteLine(e.CommandLine.CommandLineString);
+
+            //
+            //					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+            ////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+            //					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+
+
+            //e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+            //e.CommandLine.AppendSwitch("no-zygote");
+            //e.CommandLine.AppendSwitchWithValue("type","utility");
+            //e.CommandLine.AppendSwitch("use-views");
+ 
+
+            OnBeforeCommandLineProcessing?.Invoke(e);
         }
 
         private static void ChromiumWebBrowser_OnBeforeCfxInitialize(Chromium.WebBrowser.Event.OnBeforeCfxInitializeEventArgs e)
@@ -236,16 +253,18 @@ namespace Chromium.WebBrowser
  
             e.Settings.LocalesDirPath = libCefLocalesPath;
             e.Settings.ResourcesDirPath = _cefResourcePath;
- 
-             
-                e.Settings.WindowlessRenderingEnabled = ChromiumWebBrowserBase.WindowLess;
-            
- 
             e.Settings.CachePath = cachePath;
+            e.Settings.UserDataPath = userPath;
+            e.Settings.FrameworkDirPath = _libCefDirPath;
+
+            e.Settings.WindowlessRenderingEnabled = ChromiumWebBrowserBase.WindowLess;
+
+
+            e.Settings.IgnoreCertificateErrors = true;
             e.Settings.LogFile = Path.Combine(basePath, "debug.log1");
             e.Settings.LogSeverity = CfxLogSeverity.Verbose;
 
-            onBeforeCfxInitializeCallback?.Invoke(new OnCSBeforeCfxInitializeEventArgs(e.Settings, e.ProcessHandler));
+            onBeforeCfxInitialize?.Invoke(new OnCSBeforeCfxInitializeEventArgs(e.Settings, e.ProcessHandler));
  
         }
 

@@ -42,7 +42,7 @@ namespace CfxTestApplication
             //ChromiumStartup.CefResourcePath = Path.Combine(basePath, "cef");// or Path.Combine(basePath, "cef","Resource");
  
 
-            ChromiumStartup.Initialize();
+            ChromiumStartup.Initialize(beforeInitsettings:initSettings,beforeCommandLine:initCommandlineArgs);
 
 
             ChromiumStartup.RegisterLocalScheme();
@@ -63,5 +63,25 @@ namespace CfxTestApplication
 
         }
 
+        private static void initCommandlineArgs(CfxOnBeforeCommandLineProcessingEventArgs e)
+        {
+            //
+            //					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
+            ////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+            //					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+
+
+            //e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+            //e.CommandLine.AppendSwitch("no-zygote");
+            //e.CommandLine.AppendSwitchWithValue("type","utility");
+            //e.CommandLine.AppendSwitch("use-views");
+
+            e.CommandLine.AppendArgument("--disable-gpu");
+        }
+
+        private static void initSettings(OnCSBeforeCfxInitializeEventArgs e)
+        {
+            
+        }
     }
 }
