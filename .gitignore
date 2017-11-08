@@ -12,3 +12,5 @@ Build
 /ChromiumFx.Anycpu
 /.vs
 /Release/ChromiumFx.Anycpu
+/Release/ChromiumFx.Anycpu/cef-3.3071.1644
+/Release/ChromiumFx.Anycpu/cef-3.3163.1670
