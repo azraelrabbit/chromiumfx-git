@@ -30,7 +30,7 @@ namespace Chromium.WebBrowser
 
         private static Action<OnCSBeforeCfxInitializeEventArgs> onBeforeCfxInitialize;
 
-        private static Action<CfxOnBeforeCommandLineProcessingEventArgs> OnBeforeCommandLineProcessing;
+        private static Action<OnCSBeforeCfxCommandLineEventArgs> OnBeforeCommandLineProcessing;
 
         //public static Dictionary<int,ChromiumWebBrowser> BrowserDict=new Dictionary<int, ChromiumWebBrowser>();
 
@@ -112,7 +112,7 @@ namespace Chromium.WebBrowser
         }
 
 
-        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettings=null,Action<CfxOnBeforeCommandLineProcessingEventArgs> beforeCommandLine=null)
+        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettings=null,Action<OnCSBeforeCfxCommandLineEventArgs> beforeCommandLine=null)
         {
             if (initialized)
             {
@@ -221,8 +221,9 @@ namespace Chromium.WebBrowser
             //e.CommandLine.AppendSwitchWithValue("type","utility");
             //e.CommandLine.AppendSwitch("use-views");
  
+            
 
-            OnBeforeCommandLineProcessing?.Invoke(e);
+            OnBeforeCommandLineProcessing?.Invoke(new OnCSBeforeCfxCommandLineEventArgs(e));
         }
 
         private static void ChromiumWebBrowser_OnBeforeCfxInitialize(Chromium.WebBrowser.Event.OnBeforeCfxInitializeEventArgs e)
@@ -328,6 +329,15 @@ namespace Chromium.WebBrowser
         {
             Settings = settings;
             ProcessHandler = processHandler;
+        }
+    }
+
+    public class OnCSBeforeCfxCommandLineEventArgs : EventArgs
+    {
+        public  CfxOnBeforeCommandLineProcessingEventArgs CommandLineProcessing;
+        internal OnCSBeforeCfxCommandLineEventArgs(CfxOnBeforeCommandLineProcessingEventArgs e)
+        {
+            CommandLineProcessing = e;
         }
     }
  
