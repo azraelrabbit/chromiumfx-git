@@ -30,9 +30,8 @@ namespace Chromium.WebBrowser
 
         private static Action<OnCSBeforeCfxInitializeEventArgs> onBeforeCfxInitialize;
 
-        private static Action<OnCSBeforeCfxCommandLineEventArgs> OnBeforeCommandLineProcessing;
+        private static Action<OnCSBeforeCfxCommandLineEventArgs> OnBeforeCfxCommandLineProcessing;
 
-        //public static Dictionary<int,ChromiumWebBrowser> BrowserDict=new Dictionary<int, ChromiumWebBrowser>();
 
 
         /// <summary>
@@ -112,7 +111,9 @@ namespace Chromium.WebBrowser
         }
 
 
-        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettings=null,Action<OnCSBeforeCfxCommandLineEventArgs> beforeCommandLine=null)
+        public static void Initialize(string domain = "local",bool enableDevtools=false,int remoteDevPort=10808,
+            Action<OnCSBeforeCfxInitializeEventArgs> beforeInitsettings=null,
+            Action<OnCSBeforeCfxCommandLineEventArgs> beforeCommandLine=null)
         {
             if (initialized)
             {
@@ -122,7 +123,7 @@ namespace Chromium.WebBrowser
             enableDevTools = enableDevtools;
             devtoolPort = remoteDevPort;
             onBeforeCfxInitialize = beforeInitsettings;
-            OnBeforeCommandLineProcessing = beforeCommandLine;
+            OnBeforeCfxCommandLineProcessing = beforeCommandLine;
             var cachePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName, "Cache");
             if (!System.IO.Directory.Exists(cachePath))
                 System.IO.Directory.CreateDirectory(cachePath);
@@ -207,23 +208,26 @@ namespace Chromium.WebBrowser
  
         private static void ChromiumWebBrowser_OnBeforeCommandLineProcessing(Chromium.Event.CfxOnBeforeCommandLineProcessingEventArgs e)
         {
-            Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
-            Console.WriteLine(e.CommandLine.CommandLineString);
 
             //
             //					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
-            ////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
+           					//e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
             //					e.CommandLine.AppendSwitch("renderer-cmd-prefix");
 
 
             //e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
             //e.CommandLine.AppendSwitch("no-zygote");
-            //e.CommandLine.AppendSwitchWithValue("type","utility");
+            //e.CommandLine.AppendSwitchWithValue("type", "utility");
             //e.CommandLine.AppendSwitch("use-views");
- 
-            
 
-            OnBeforeCommandLineProcessing?.Invoke(new OnCSBeforeCfxCommandLineEventArgs(e));
+            //e.CommandLine.AppendSwitch("disable-gpu");
+            //e.CommandLine.AppendArgument("disable-gpu");
+            //e.CommandLine.AppendArgument("off-screen-rendering-enabled");
+
+            OnBeforeCfxCommandLineProcessing?.Invoke(new OnCSBeforeCfxCommandLineEventArgs(e));
+
+            Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
+            Console.WriteLine(e.CommandLine.CommandLineString);
         }
 
         private static void ChromiumWebBrowser_OnBeforeCfxInitialize(Chromium.WebBrowser.Event.OnBeforeCfxInitializeEventArgs e)

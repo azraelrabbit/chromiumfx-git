@@ -177,9 +177,11 @@ namespace Chromium.WebBrowser {
 					if (currentP.MainModule.FileName==currentP.MainModule.ModuleName) {
 
 						Console.WriteLine ("------native mkbundle mode--------------");
-						e.CommandLine.Program = currentP.MainModule.FileName;
+						e.CommandLine.Program = currentP.MainModule.FileName ;
 
-					} else {
+					    //e.CommandLine.AppendSwitch("disable-gpu");
+
+                    } else {
 
 						Console.WriteLine ("------mono runtime mode--------------");
 						//e.CommandLine.Program = Path.Combine (new System.IO.FileInfo (programPath).Directory.FullName, "cef", "Release64", "cefclient");
@@ -187,16 +189,16 @@ namespace Chromium.WebBrowser {
 						//
 						//					//e.CommandLine.AppendSwitch ("multi-threaded-message-loop");
 						////					e.CommandLine.AppendSwitch ("off-screen-rendering-enabled");
-											e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+											//e.CommandLine.AppendSwitch("renderer-cmd-prefix");
+                        //e.CommandLine.AppendSwitch("disable-gpu");
 
+                        //e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
+                        ////e.CommandLine.AppendSwitch("no-zygote");
+                        //e.CommandLine.AppendSwitchWithValue("type", "utility");
+                        //e.CommandLine.AppendSwitch("use-views");
 
-						//e.CommandLine.AppendSwitch("disable-text-input-focus-manager");
-						//e.CommandLine.AppendSwitch("no-zygote");
-						//e.CommandLine.AppendSwitchWithValue("type","utility");
-						//e.CommandLine.AppendSwitch("use-views");
-
-						//--no-zygote
-					}
+                        //--no-zygote
+                    }
 				}
 			}
 
@@ -222,12 +224,14 @@ namespace Chromium.WebBrowser {
 			//1: mono_lib_path
 			//2: output for client helper path and name
 			//3: origin app name
-			var mkbundleStr = "{0} --deps -L {1} -o {2} {3}";
+			var mkbundleStr = "{0} --bundled-header --deps -L {1} -o {2} {3}";
 
 			var mdCmd = string.Format (mkbundleStr, mkbundleCmd, Mono_Lib_Path, helperFilePath, programPath);
 
 			//var chExecCmd = "chmod +x " + helperFilePath;
 
+			Console.WriteLine(mdCmd);
+			
 			RunCmd (mdCmd);
 			//RunCmd (chExecCmd);
 
